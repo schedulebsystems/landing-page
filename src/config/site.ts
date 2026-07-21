@@ -20,9 +20,9 @@ export const SITE = {
   },
   locale: "pt-BR",
   lang: "pt-br",
-  defaultTitle: "Skedoole — Agenda digital para barbearias e salões",
+  defaultTitle: "Skedoole | Sistema de Agendamento e Gestão para Barbearias",
   description:
-    "Agenda digital pra barbearia que quer cliente marcando sozinho, cadeira que não fura e caixa previsível. Lembrete WhatsApp, fila digital e clube de assinatura. Comece grátis.",
+    "Otimize a rotina da sua barbearia com o Skedoole. Controle agendamentos, comissões, pagamentos e clientes em uma única plataforma.",
   ogImage: "/og.svg",
   themeColor: "#FF5A24",
   twitter: "@skedoole",

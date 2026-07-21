@@ -31,7 +31,7 @@ const {
   type = "website",
 } = Astro.props;
 
-const pageTitle = title ? `${title} — Skedoole` : SITE.defaultTitle;
+const pageTitle = title ? `${title} | Skedoole` : SITE.defaultTitle;
 const pageUrl = new URL(canonical ?? Astro.url.pathname, SITE.url).href;
 const ogImageURL = new URL(image, SITE.url).href;
 
@@ -69,6 +69,7 @@ const jsonLdWebsite = {
       name: SITE.name,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
+      description: "Sistema de gestão, agendamento de serviços e ponto de venda para barbearias.",
       offers: {
         "@type": "Offer",
         price: "0",
