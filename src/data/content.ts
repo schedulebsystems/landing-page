@@ -55,10 +55,10 @@ export interface NavLink {
 }
 
 export const NAV_LINKS: NavLink[] = [
-  { label: "Recursos", href: "#recursos" },
+  { label: "Funcionalidades", href: "#recursos" },
   { label: "Como funciona", href: "#como-funciona" },
-  { label: "Preços", href: "#precos" },
-  { label: "Histórias", href: "#historias" },
+  { label: "Planos e preços", href: "#precos" },
+  { label: "Histórias de clientes", href: "#historias" },
   { label: "Blog", href: "/blog" },
 ];
 

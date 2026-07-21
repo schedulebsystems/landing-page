@@ -17,7 +17,7 @@ export const getStaticPaths = (async () => {
 const { post } = Astro.props;
 const { Content } = await post.render();
 const url = `${SITE.url}/blog/${post.slug}`;
-const title = `${post.data.title} · ${SITE.name}`;
+const title = post.data.title;
 const description = post.data.description;
 const ogImageURL = `${SITE.url}${SITE.ogImage}`;
 const jsonLdObject = {

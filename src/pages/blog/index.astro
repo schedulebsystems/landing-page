@@ -8,7 +8,7 @@ import { SITE } from "@config/site";
 const posts = (await getCollection("blog", ({ data }) => !data.noindex)).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
-const title = `Blog · ${SITE.name}`;
+const title = "Blog";
 const description =
   "Histórias e tática para dono de barbearia e salão: no-show, fila digital, clube de assinatura, retenção e WhatsApp.";
 ---
