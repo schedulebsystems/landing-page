@@ -100,6 +100,17 @@ const jsonLdObject =
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
 
+    <script is:inline>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then((rs) => {
+        for (const r of rs) r.unregister();
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then((names) => names.forEach((n) => caches.delete(n)));
+    }
+    </script>
+
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={SITE.keywords.join(", ")} />
