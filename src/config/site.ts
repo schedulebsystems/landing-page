@@ -22,7 +22,7 @@ export const SITE = {
   lang: "pt-br",
   defaultTitle: "Skedoole — Agenda digital para barbearias e salões",
   description:
-    "Agenda online, fila de atendimento, lembrete automático no WhatsApp e clube de assinatura para a sua barbearia ou salão. Comece grátis em 5 minutos.",
+    "Agenda digital pra barbearia que quer cliente marcando sozinho, cadeira que não fura e caixa previsível. Lembrete WhatsApp, fila digital e clube de assinatura. Comece grátis.",
   ogImage: "/og.svg",
   themeColor: "#FF5A24",
   twitter: "@skedoole",

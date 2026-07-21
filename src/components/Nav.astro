@@ -5,6 +5,7 @@ import { NAV_LINKS } from "@data/content";
 import { SITE } from "@config/site";
 
 const app = `${SITE.appUrl}/agendar`;
+const entrar = `${SITE.appUrl}/acessar`;
 const wpp = SITE.whatsapp;
 ---
 <header
@@ -34,6 +35,13 @@ const wpp = SITE.whatsapp;
 
     <div class="hidden md:flex items-center gap-2">
       <a
+        href={entrar}
+        class="text-sm font-medium text-[var(--cor-texto-secundario)] hover:text-[var(--cor-texto-primario)] transition-colors px-2 py-1.5"
+        data-cta="nav-login"
+      >
+        Entrar
+      </a>
+      <a
         href={app}
         class="btn btn-primary px-3 py-1.5 text-xs"
         data-cta="nav-atop"
@@ -43,16 +51,25 @@ const wpp = SITE.whatsapp;
       </a>
     </div>
 
-    <button
-      type="button"
-      id="nav-toggle"
-      class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md text-[var(--cor-texto-primario)] hover:bg-[var(--cor-fundo-elevado)] transition"
-      aria-label="Abrir menu"
-      aria-controls="nav-mobile"
-      aria-expanded="false"
-    >
-      <Icon name="menu" size={22} />
-    </button>
+    <div class="md:hidden flex items-center gap-2">
+      <a
+        href={entrar}
+        class="text-sm font-medium text-[var(--cor-texto-secundario)] hover:text-[var(--cor-texto-primario)] transition-colors px-2 py-1.5"
+        data-cta="nav-mobile-login"
+      >
+        Entrar
+      </a>
+      <button
+        type="button"
+        id="nav-toggle"
+        class="inline-flex items-center justify-center w-10 h-10 rounded-md text-[var(--cor-texto-primario)] hover:bg-[var(--cor-fundo-elevado)] transition"
+        aria-label="Abrir menu"
+        aria-controls="nav-mobile"
+        aria-expanded="false"
+      >
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
   </div>
 
   <div
