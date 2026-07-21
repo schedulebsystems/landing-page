@@ -1,0 +1,98 @@
+---
+import Logo from "@components/Logo.astro";
+import { SITE } from "@config/site";
+
+const year = new Date().getFullYear();
+const app = SITE.appUrl;
+const wpp = SITE.whatsapp;
+---
+<footer class="site-footer">
+  <div class="container-tight">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="flex items-center gap-2 font-bold text-lg">
+          <Logo size={28} variant="mono" />
+          <span>Skedoole</span>
+        </a>
+        <p class="footer-tagline">
+          Agenda digital, fila de atendimento e clube de assinatura para
+          barbearias e salões do Brasil.
+        </p>
+        <a href={app} class="btn btn-primary mt-5 text-sm" data-cta="footer-atop">
+          Começar grátis
+        </a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Produto</h4>
+        <a href="/#recursos">Recursos</a>
+        <a href="/#como-funciona">Como funciona</a>
+        <a href="/#precos">Preços</a>
+        <a href="/#historias">Histórias</a>
+        <a href="/blog">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <a href="/sobre">Sobre</a>
+        <a href="/blog">Conteúdo</a>
+        <a href={wpp} target="_blank" rel="noopener">WhatsApp</a>
+        <a href="/contato">Contato</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/privacidade">Privacidade</a>
+        <a href="/termos">Termos</a>
+        <a href="/lgpd">LGPD</a>
+      </div>
+    </div>
+
+    <div class="footer-base">
+      <p>© {year} {SITE.legalName}. Feito no Brasil para barbearias e salões brasileiros.</p>
+      <p class="footer-base-meta">
+        CNPJ 00.000.000/0001-00 · {SITE.domain}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-top: 64px;
+    padding-bottom: 32px;
+    background: var(--cor-fundo-elevado);
+    border-top: 1px solid var(--cor-borda-geral);
+    margin-top: 32px;
+  }
+  .footer-grid {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+  .footer-brand { display: flex; flex-direction: column; align-items: flex-start; }
+  .footer-tagline {
+    margin-top: 14px;
+    font-size: 0.9rem; color: var(--cor-texto-secundario);
+    max-width: 36ch;
+  }
+  .footer-col { display: flex; flex-direction: column; gap: 10px; }
+  .footer-col h4 {
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--cor-subtitulos); margin-bottom: 6px; font-weight: 700;
+  }
+  .footer-col a {
+    font-size: 0.9rem; color: var(--cor-texto-secundario);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .footer-col a:hover { color: var(--cor-texto-primario); }
+  .footer-base {
+    display: flex; flex-direction: column; gap: 4px;
+    border-top: 1px solid var(--cor-borda-geral);
+    margin-top: 48px; padding-top: 20px;
+    font-size: 0.82rem; color: var(--cor-subtitulos);
+  }
+  @media (min-width: 720px) {
+    .footer-base { flex-direction: row; justify-content: space-between; align-items: center; }
+  }
+</style>

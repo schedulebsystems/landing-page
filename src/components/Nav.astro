@@ -1,0 +1,209 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import { NAV_LINKS } from "@data/content";
+import { SITE } from "@config/site";
+
+const app = `${SITE.appUrl}/agendar`;
+const wpp = SITE.whatsapp;
+---
+<header
+  id="site-header"
+  class="site-nav fixed top-0 inset-x-0 z-50 transition-colors duration-300"
+  data-state="top"
+>
+  <div class="container-tight flex items-center justify-between gap-4 py-3 md:py-4">
+    <a
+      href="/"
+      class="flex items-center gap-2 text-[var(--cor-texto-primario)] font-semibold tracking-tight"
+    >
+      <Logo size={32} />
+      <span class="text-lg font-bold">Skedoole</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-7" aria-label="Principal">
+      {NAV_LINKS.map((l) => (
+        <a
+          href={l.href}
+          class="text-sm font-medium text-[var(--cor-texto-secundario)] hover:text-[var(--cor-texto-primario)] transition-colors"
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="hidden md:flex items-center gap-2">
+      <a
+        href={app}
+        class="btn btn-primary px-3 py-1.5 text-xs"
+        data-cta="nav-atop"
+      >
+        Começar grátis
+        <Icon name="arrow-right" size={14} />
+      </a>
+    </div>
+
+    <button
+      type="button"
+      id="nav-toggle"
+      class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md text-[var(--cor-texto-primario)] hover:bg-[var(--cor-fundo-elevado)] transition"
+      aria-label="Abrir menu"
+      aria-controls="nav-mobile"
+      aria-expanded="false"
+    >
+      <Icon name="menu" size={22} />
+    </button>
+  </div>
+
+  <div
+    id="nav-mobile"
+    class="nav-mobile md:hidden"
+    data-open="false"
+    aria-hidden="true"
+  >
+    <div class="nav-mobile-inner">
+      <div class="flex items-center justify-between p-4 border-b border-[var(--cor-borda-geral)]">
+        <Logo size={28} />
+        <button
+          type="button"
+          id="nav-close"
+          class="inline-flex items-center justify-center w-10 h-10 rounded-md"
+          aria-label="Fechar menu"
+        >
+          <Icon name="x" size={22} />
+        </button>
+      </div>
+      <nav class="p-4 flex flex-col gap-1" aria-label="Mobile">
+        {NAV_LINKS.map((l, i) => (
+          <a
+            href={l.href}
+            class="px-3 py-3 rounded-md text-base font-medium text-[var(--cor-texto-primario)] hover:bg-[var(--cor-fundo-elevado)] transition nav-mobile-item"
+            style={`--i:${i}`}
+            data-mobile-link
+          >
+            {l.label}
+          </a>
+        ))}
+      </nav>
+      <div class="p-4 pt-2 flex flex-col gap-2 border-t border-[var(--cor-borda-geral)]">
+        <a href={app} class="btn btn-primary w-full" data-cta="nav-mobile-atop">
+          Começar grátis
+        </a>
+        <a href={wpp} class="btn btn-ghost w-full" target="_blank" rel="noopener">
+          Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="nav-scrim" class="nav-scrim" data-open="false" hidden></div>
+</header>
+
+<style>
+  .site-nav[data-state="scrolled"] {
+    background: color-mix(in oklab, var(--cor-fundo) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid color-mix(in oklab, var(--cor-borda-geral) 60%, transparent);
+  }
+  .nav-mobile {
+    position: fixed;
+    inset-block: 0 0;
+    inset-inline: 0 0 auto;
+    width: min(86vw, 360px);
+    transform: translateX(-105%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 60;
+  }
+  .nav-mobile[data-open="true"] {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .nav-mobile-inner {
+    height: 100%;
+    background: var(--cor-fundo-elevado);
+    border-right: 1px solid var(--cor-borda-geral);
+    box-shadow: var(--sombra-popover);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+  .nav-mobile-item {
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .nav-mobile[data-open="true"] .nav-mobile-item {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.04s * var(--i, 0) + 0.08s);
+  }
+  .nav-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.32s ease;
+    z-index: 55;
+  }
+  .nav-scrim[data-open="true"] {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const setup = () => {
+    const header = document.getElementById("site-header");
+    const toggle = document.getElementById("nav-toggle");
+    const close = document.getElementById("nav-close");
+    const mobile = document.getElementById("nav-mobile");
+    const scrim = document.getElementById("nav-scrim");
+
+    const applyScroll = () => {
+      if (!header) return;
+      if (window.scrollY > 8) {
+        header.dataset.state = "scrolled";
+      } else {
+        header.dataset.state = "top";
+      }
+    };
+    applyScroll();
+    window.addEventListener("scroll", applyScroll, { passive: true });
+
+    const setOpen = (open: boolean) => {
+      if (!mobile || !scrim || !toggle) return;
+      mobile.dataset.open = String(open);
+      scrim.dataset.open = String(open);
+      if (open) {
+        scrim.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+        mobile.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      } else {
+        toggle.setAttribute("aria-expanded", "false");
+        mobile.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        const finish = () => {
+          if (mobile.dataset.open === "false") scrim.hidden = true;
+          mobile.removeEventListener("transitionend", finish);
+        };
+        mobile.addEventListener("transitionend", finish);
+      }
+    };
+
+    toggle?.addEventListener("click", () => setOpen(true));
+    close?.addEventListener("click", () => setOpen(false));
+    scrim?.addEventListener("click", () => setOpen(false));
+    document.querySelectorAll<HTMLAnchorElement>("[data-mobile-link]").forEach(
+      (a) => a.addEventListener("click", () => setOpen(false))
+    );
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setOpen(false);
+    });
+  };
+  setup();
+  document.addEventListener("astro:after-swap", setup);
+</script>

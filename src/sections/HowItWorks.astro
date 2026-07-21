@@ -1,0 +1,93 @@
+---
+import Icon from "@components/Icon.astro";
+import Reveal from "@components/Reveal.astro";
+import { STEPS } from "@data/content";
+import { SITE } from "@config/site";
+
+const app = `${SITE.appUrl}/agendar`;
+---
+<section id="como-funciona" class="py-24 md:py-32">
+  <div class="container-tight">
+    <Reveal class="max-w-2xl">
+      <span class="eyebrow">Como funciona</span>
+      <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+        Em 5 minutos sua barbearia está online.
+      </h2>
+      <p class="mt-4 text-[var(--cor-texto-secundario)]">
+        Do cadastro ao primeiro horário marcado, é isso que acontece:
+      </p>
+    </Reveal>
+
+    <ol class="cf-timeline mt-14">
+      {STEPS.map((s, i) => (
+        <Reveal as="li" delay={i * 100} class="cf-step">
+          <div class="cf-marker">
+            <span>{String(s.n).padStart(2, "0")}</span>
+          </div>
+          <div class="cf-content">
+            <h3 class="text-lg font-bold">{s.title}</h3>
+            <p class="mt-2 text-sm text-[var(--cor-texto-secundario)]">{s.desc}</p>
+          </div>
+        </Reveal>
+      ))}
+      <Reveal as="li" delay={(STEPS.length * 100)} class="cf-step cf-final">
+        <div class="cf-marker cf-marker-final">
+          <Icon name="check" size={20} />
+        </div>
+        <div class="cf-content">
+          <h3 class="text-lg font-bold">Pronto. Sua barbearia agora agenda sozinha.</h3>
+          <p class="mt-2 text-sm text-[var(--cor-texto-secundario)]">
+            Você só atende. A Skedoole cuida do resto.
+          </p>
+          <a href={app} class="btn btn-primary mt-5 text-sm" data-cta="howto-cta">
+            Começar agora <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+      </Reveal>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .cf-timeline {
+    list-style: none;
+    padding: 0;
+    position: relative;
+    display: grid;
+    gap: 24px;
+    max-width: 720px;
+  }
+  .cf-timeline::before {
+    content: "";
+    position: absolute;
+    left: 23px;
+    top: 16px; bottom: 16px;
+    width: 2px;
+    background: var(--cor-borda-geral);
+  }
+  .cf-step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .cf-marker {
+    width: 48px; height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--cor-cards);
+    border: 2px solid var(--cor-borda-hover);
+    color: var(--cor-primaria);
+    font-weight: 700;
+    font-size: 0.85rem;
+    z-index: 1;
+  }
+  .cf-marker-final {
+    background: var(--cor-primaria);
+    color: #fff;
+    border-color: var(--cor-primaria);
+  }
+  .cf-content { padding-top: 8px; }
+</style>

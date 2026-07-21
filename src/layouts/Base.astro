@@ -1,0 +1,156 @@
+---
+import "@styles/global.css";
+import "@fontsource/bricolage-grotesque/700.css";
+import "@fontsource/bricolage-grotesque/800.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import { SITE } from "@config/site";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** Caminho/canônico alternativo. Default: Astro.url.pathname. */
+  canonical?: string;
+  noindex?: boolean;
+  /** Anular JSON-LD automático (p/ pages custom). */
+  jsonLd?: boolean;
+  /** Tipo de página p/ JSON-LD. */
+  type?: "website" | "article";
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = SITE.ogImage,
+  canonical,
+  noindex = false,
+  jsonLd = true,
+  type = "website",
+} = Astro.props;
+
+const pageTitle = title ? `${title} — Skedoole` : SITE.defaultTitle;
+const pageUrl = new URL(canonical ?? Astro.url.pathname, SITE.url).href;
+const ogImageURL = new URL(image, SITE.url).href;
+
+const jsonLdWebsite = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      description: SITE.description,
+      inLanguage: "pt-BR",
+      publisher: { "@id": `${SITE.url}/#org` },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE.url}/#org`,
+      name: SITE.legalName,
+      url: SITE.url,
+      logo: new URL("/favicon-512.png", SITE.url).href,
+      sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          availableLanguage: ["pt-BR"],
+          areaServed: "BR",
+          url: SITE.whatsapp,
+        },
+      ],
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: SITE.name,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "BRL",
+        url: `${SITE.appUrl}/agendar`,
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        ratingCount: "312",
+        bestRating: "5",
+        worstRating: "1",
+      },
+      inLanguage: "pt-BR",
+      url: SITE.url,
+      publisher: { "@id": `${SITE.url}/#org` },
+    },
+  ],
+};
+const jsonLdObject =
+  type === "article" && Astro.props.jsonLd
+    ? { "@context": "https://schema.org", ...{} } // setado na página de artigo
+    : jsonLdWebsite;
+---
+<!doctype html>
+<html lang={SITE.lang} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={SITE.keywords.join(", ")} />
+    <meta name="author" content={SITE.author} />
+    <meta name="robots" content={noindex ? "noindex,nofollow" : "index,follow,max-image-preview:large"} />
+    <link rel="canonical" href={pageUrl} />
+
+    {noindex ? null : <link rel="sitemap" type="application/xml" title="Mapa do site" href="/sitemap-index.xml" />}
+
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/favicon-48.png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <meta name="theme-color" content="#0E0E10" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="application-name" content="Skedoole" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Skedoole" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    {/* Open Graph */}
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={SITE.twitter} />
+    <meta name="twitter:creator" content={SITE.twitter} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <slot name="head" />
+
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLdObject)} />}
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:z-[100] focus:top-2 focus:left-2 focus:rounded-md focus:px-4 focus:py-2 focus:bg-[var(--cor-primaria)] focus:text-[#0A0A0A] focus:font-semibold"
+    >
+      Pular para o conteúdo
+    </a>
+    <slot />
+  </body>
+</html>

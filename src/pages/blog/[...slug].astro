@@ -1,0 +1,214 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import Base from "@layouts/Base.astro";
+import Reveal from "@components/Reveal.astro";
+import Icon from "@components/Icon.astro";
+import { SITE } from "@config/site";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog", ({ data }) => !data.noindex);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const url = `${SITE.url}/blog/${post.slug}`;
+const title = `${post.data.title} · ${SITE.name}`;
+const description = post.data.description;
+const ogImageURL = `${SITE.url}${SITE.ogImage}`;
+const jsonLdObject = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  author: { "@type": "Organization", name: post.data.author },
+  publisher: {
+    "@type": "Organization",
+    name: SITE.legalName,
+    url: SITE.url,
+  },
+  mainEntityOfPage: url,
+  url,
+  image: ogImageURL,
+  keywords: post.data.tags.join(", "),
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  image={ogImageURL}
+  canonical={url}
+  type="article"
+  jsonLd={false}
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(jsonLdObject)}
+  />
+  <article class="blog-post container-tight">
+    <a href="/blog" class="back-link">
+      <Icon name="arrow" size={16} /> Voltar ao blog
+    </a>
+    <Reveal as="header" class="post-header">
+      <ul class="tags" aria-label="Tags">
+        {post.data.tags.map((tag) => <li class="tag">#{tag}</li>)}
+      </ul>
+      <h1>{post.data.title}</h1>
+      <p class="lede">{post.data.description}</p>
+      <div class="meta">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString(SITE.locale, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{post.data.author}</span>
+        {post.data.readingTime && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{post.data.readingTime} min de leitura</span>
+          </>
+        )}
+      </div>
+    </Reveal>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <footer class="post-footer">
+      <a href={SITE.appUrl} class="btn btn-primary">
+        Começar grátis no Skedoole
+        <Icon name="arrow-right" size={18} />
+      </a>
+      <a href="/blog" class="btn btn-ghost">Mais artigos</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .blog-post {
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--cor-texto-primario);
+    opacity: 0.7;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+  .back-link:hover {
+    opacity: 1;
+    color: var(--cor-texto-primario);
+  }
+  .post-header {
+    margin-bottom: 2.5rem;
+  }
+  .tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    font-size: 0.75rem;
+    color: var(--cor-primaria);
+    background: var(--cor-primaria-soft);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+  }
+  .post-header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    max-width: 22ch;
+  }
+  .lede {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    color: var(--cor-texto-secundario);
+    max-width: 60ch;
+    margin-bottom: 1.25rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--cor-texto-secundario);
+  }
+  .prose {
+    max-width: 68ch;
+    margin-inline: auto;
+  }
+  .prose :global(h2) {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .prose :global(h3) {
+    font-size: 1.15rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose :global(p) {
+    margin-block: 1rem;
+    line-height: 1.7;
+    color: var(--cor-texto-primario);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-block: 1rem 1.5rem;
+    padding-left: 1.25rem;
+  }
+  .prose :global(li) {
+    margin-block: 0.5rem;
+    line-height: 1.65;
+  }
+  .prose :global(a) {
+    color: var(--cor-primaria);
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+  .prose :global(code) {
+    background: var(--cor-cards);
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+  }
+  .prose :global(hr) {
+    border: none;
+    border-top: 1px solid var(--cor-borda, rgba(0, 0, 0, 0.08));
+    margin-block: 2rem;
+  }
+  .post-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--cor-borda, rgba(0, 0, 0, 0.08));
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+</style>

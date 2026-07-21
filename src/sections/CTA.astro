@@ -1,0 +1,80 @@
+---
+import Icon from "@components/Icon.astro";
+import Reveal from "@components/Reveal.astro";
+import { SITE } from "@config/site";
+
+const app = `${SITE.appUrl}/agendar`;
+const wpp = SITE.whatsapp;
+---
+<section id="cta-final" class="py-24 md:py-32">
+  <div class="container-tight">
+    <Reveal class="cta-band">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="cta-content">
+        <span class="eyebrow" style="color: rgba(255,255,255,0.85)">
+          <span style="background: rgba(255,255,255,0.85); width: 1.5rem; height: 1px; display: inline-block;"></span>
+          Comece agora
+        </span>
+        <h2 class="cta-title">
+          Sua barbearia entra em 5 minutos.<br />
+          <span class="cta-title-sub">O primeiro horário marcado sai hoje.</span>
+        </h2>
+        <p class="cta-lede">
+          Teste grátis por 14 dias. Sem cartão, sem instalar nada, sem migrar caderno.
+          Se não fizer sentido, é só sair — não precisa cancelar nada.
+        </p>
+        <div class="cta-actions">
+          <a href={app} class="btn btn-white text-base" data-cta="cta-final-primary">
+            Começar grátis
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a
+            href={wpp}
+            class="btn text-base"
+            style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25);"
+            target="_blank" rel="noopener"
+            data-cta="cta-final-whatsapp"
+          >
+            <Icon name="whatsapp" size={18} />
+            Falar no WhatsApp
+          </a>
+        </div>
+        <p class="cta-fine">14 dias grátis · não pede cartão · começa em 5 minutos</p>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem);
+    background:
+      radial-gradient(120% 120% at 100% 0%, var(--cor-hover) 0%, transparent 50%),
+      radial-gradient(120% 120% at 0% 100%, #B83A12 0%, transparent 60%),
+      linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-dark) 100%);
+    color: #fff;
+    isolation: isolate;
+  }
+  .cta-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 60% at 80% 10%, rgba(255,255,255,0.18), transparent 70%);
+  }
+  .cta-content { position: relative; z-index: 1; max-width: 720px; }
+  .cta-title {
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-top: 16px;
+  }
+  .cta-title-sub { color: rgba(255,255,255,0.85); font-weight: 600; }
+  .cta-lede { font-size: 1.05rem; margin-top: 16px; color: rgba(255,255,255,0.92); max-width: 60ch; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .cta-fine { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 14px; }
+</style>

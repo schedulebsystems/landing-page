@@ -1,0 +1,49 @@
+---
+interface Props {
+  class?: string;
+  variant?: "primaria" | "mono";
+  size?: number;
+}
+const { class: className = "", variant = "primaria", size = 32 } = Astro.props;
+const symbolFill =
+  variant === "mono"
+    ? "currentColor"
+    : "url(#skedoole-grad)";
+---
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 40 40"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Skedoole"
+>
+  <defs>
+    <linearGradient id="skedoole-grad" x1="0" y1="0" x2="40" y2="40"
+      gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF7040" />
+      <stop offset="1" stop-color="#FF5A24" />
+    </linearGradient>
+  </defs>
+  <path
+    d="M8 3.5h17.5a4 4 0 0 1 2.8 1.17l6 6A4 4 0 0 1 35.5 13.5v19A4 4 0 0 1 31.5 36.5h-23.5A4 4 0 0 1 4 32.5v-25A4 4 0 0 1 8 3.5Z"
+    fill={symbolFill}
+  />
+  <path
+    d="M25.5 3.5v5a3.5 3.5 0 0 0 3.5 3.5h6"
+    fill="none"
+    stroke="rgba(255,255,255,0.45)"
+    stroke-width="1.5"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M14.5 23.5l3.4 3.6 7.6-9.2"
+    stroke="var(--cor-fundo)"
+    stroke-width="2.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>

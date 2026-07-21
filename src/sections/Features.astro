@@ -1,0 +1,64 @@
+---
+import Icon from "@components/Icon.astro";
+import Reveal from "@components/Reveal.astro";
+import { FEATURES } from "@data/content";
+---
+<section id="recursos" class="py-24 md:py-32" style="background: var(--cor-fundo-elevado);">
+  <div class="container-tight">
+    <Reveal class="max-w-2xl">
+      <span class="eyebrow">Recursos</span>
+      <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+        Tudo que sua barbearia precisa<br class="hidden md:block" />
+        num painel só.
+      </h2>
+      <p class="mt-4 text-[var(--cor-texto-secundario)]">
+        Nada de planilha, caderninho ou cinco abas abertas no navegador.
+        A Skedoole junta agenda, fila, pagamento e relatório no mesmo lugar.
+      </p>
+    </Reveal>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {FEATURES.map((f, i) => (
+        <Reveal delay={(i % 3) * 80} class="card card-hover p-6 md:p-7">
+          <div class="feature-icon">
+            <Icon name={f.icon} size={22} />
+          </div>
+          <h3 class="mt-5 text-lg font-bold">{f.title}</h3>
+          <p class="mt-2 text-sm text-[var(--cor-texto-secundario)]">{f.desc}</p>
+          <ul class="mt-4 space-y-2">
+            {f.bullets.map((b) => (
+              <li class="feature-bullet">
+                <Icon name="check" size={14} />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px; height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--cor-cards-hover);
+    color: var(--cor-texto-secundario);
+    border: 1px solid var(--cor-borda-geral);
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover .feature-icon {
+    background: var(--cor-cards);
+    border-color: var(--cor-borda-hover);
+    color: var(--cor-texto-primario);
+  }
+  .feature-bullet {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.86rem; color: var(--cor-texto-secundario);
+  }
+  .feature-bullet :global(svg) { color: var(--cor-status-ok); }
+</style>

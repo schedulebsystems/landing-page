@@ -1,0 +1,148 @@
+---
+import { getCollection } from "astro:content";
+import Base from "@layouts/Base.astro";
+import Reveal from "@components/Reveal.astro";
+import Icon from "@components/Icon.astro";
+import { SITE } from "@config/site";
+
+const posts = (await getCollection("blog", ({ data }) => !data.noindex)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+const title = `Blog · ${SITE.name}`;
+const description =
+  "Histórias e tática para dono de barbearia e salão: no-show, fila digital, clube de assinatura, retenção e WhatsApp.";
+---
+
+<Base title={title} description={description} type="website">
+  <section class="blog-index">
+    <div class="container-tight">
+      <Reveal as="header" class="index-header">
+        <p class="eyebrow"><span />Blog Skedoole</p>
+        <h1>Sobre o ofício de cortar e gerir</h1>
+        <p class="lede">
+          Tática para dono de barbearia e salão: o que dá certo, o que não dá,
+          e como executar rápido. Sem hype, sem papo de consultor.
+        </p>
+      </Reveal>
+
+      <ul class="post-list">
+        {
+          posts.map((post) => (
+            <li class="post-card">
+              <a href={`/blog/${post.slug}`} class="card card-hover">
+                <div class="tags">
+                  {post.data.tags.slice(0, 2).map((tag) => (
+                    <span class="tag">#{tag}</span>
+                  ))}
+                </div>
+                <h2>{post.data.title}</h2>
+                <p class="desc">{post.data.description}</p>
+                <div class="meta">
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString(SITE.locale, {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </time>
+                  {post.data.readingTime && (
+                    <>
+                      <span aria-hidden="true">·</span>
+                      <span>{post.data.readingTime} min</span>
+                    </>
+                  )}
+                </div>
+                <span class="read-more">
+                  Ler artigo <Icon name="arrow-right" size={16} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .blog-index {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+  .index-header {
+    margin-bottom: 2.5rem;
+    text-align: left;
+  }
+  .index-header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0.5rem 0 1rem;
+  }
+  .lede {
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    color: var(--cor-texto-secundario);
+    max-width: 60ch;
+  }
+  .post-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+    gap: 1.25rem;
+  }
+  .post-card a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag {
+    font-size: 0.72rem;
+    color: var(--cor-primaria);
+    background: var(--cor-primaria-soft);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+  }
+  .post-card h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .desc {
+    color: var(--cor-texto-secundario);
+    flex-grow: 1;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .meta {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--cor-texto-secundario);
+  }
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--cor-texto-secundario);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-top: auto;
+    transition: color 0.2s ease;
+  }
+  .post-card a:hover .read-more {
+    color: var(--cor-primaria);
+  }
+</style>

@@ -1,0 +1,325 @@
+---
+import Icon from "@components/Icon.astro";
+import Reveal from "@components/Reveal.astro";
+import { SITE } from "@config/site";
+import { STATS } from "@data/content";
+
+const app = `${SITE.appUrl}/agendar`;
+const wpp = SITE.whatsapp;
+---
+<section id="hero" class="relative overflow-hidden pt-28 md:pt-36 pb-24 md:pb-32">
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <div class="container-tight grid gap-10 md:gap-12 lg:grid-cols-[1.05fr_0.95fr] items-center">
+    <div class="hero-copy">
+      <Reveal>
+        <span class="eyebrow">Agenda digital para barbearia</span>
+      </Reveal>
+      <Reveal delay="80">
+        <h1 class="hero-title mt-4">
+          Mais clientes no horário<br />
+          <span class="hero-hl">menos no-show</span> no seu dia.
+        </h1>
+      </Reveal>
+      <Reveal delay="160">
+        <p class="hero-lede mt-5">
+          Agenda online, fila inteligente e lembrete automático no WhatsApp.
+          Tudo numa tela só. Seu cliente marca sozinho, você só atende.
+        </p>
+      </Reveal>
+      <Reveal delay="240">
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <a
+            href={app}
+            class="btn btn-primary text-base"
+            data-cta="hero-primary"
+          >
+            Começar grátis
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a
+            href={wpp}
+            class="btn btn-ghost"
+            target="_blank"
+            rel="noopener"
+            data-cta="hero-whatsapp"
+          >
+            <Icon name="whatsapp" size={18} />
+            Falar no WhatsApp
+          </a>
+        </div>
+      </Reveal>
+      <Reveal delay="320">
+        <p class="hero-microcopy mt-4">
+          14 dias grátis · não pede cartão · começa em 5 minutos
+        </p>
+      </Reveal>
+
+      <dl class="hero-stats mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {STATS.map((s, i) => (
+          <Reveal as="div" delay={360 + i * 80}>
+            <dt class="hero-stat-value">{s.value}</dt>
+            <dd class="hero-stat-label">{s.label}</dd>
+            {s.caption && <dd class="hero-stat-caption">{s.caption}</dd>}
+          </Reveal>
+        ))}
+      </dl>
+    </div>
+
+    <Reveal as="div" delay="200" class="hero-mockup-wrap">
+      <div class="hero-mockup">
+        <div class="hero-mockup-bar">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="hero-mockup-body">
+          <div class="hm-day">
+            <div>
+              <p class="hm-eyebrow">Quinta, 24</p>
+              <p class="hm-day-title">Hoje · 8 horários</p>
+            </div>
+            <div class="hm-day-badge">
+              <span class="hm-dot"></span>
+              Online
+            </div>
+          </div>
+
+          <ul class="hm-slots">
+            <li class="hm-slot is-taken">
+              <span class="hm-time">09:00</span>
+              <span class="hm-client">
+                <span class="hm-avatar">JA</span>
+                <span>
+                  <b>Júnior Andrade</b>
+                  <small>Corte + barba · R$ 70</small>
+                </span>
+              </span>
+              <span class="hm-status hm-status-confirmed">Confirmado</span>
+            </li>
+            <li class="hm-slot is-next">
+              <span class="hm-time">10:00</span>
+              <span class="hm-client"><span class="hm-empty">Livre</span></span>
+              <span class="hm-status hm-status-open">Disponível</span>
+            </li>
+            <li class="hm-slot is-taken">
+              <span class="hm-time">11:00</span>
+              <span class="hm-client">
+                <span class="hm-avatar hm-avatar-2">DB</span>
+                <span>
+                  <b>Diego Bernardes</b>
+                  <small>Corte · R$ 45</small>
+                </span>
+              </span>
+              <span class="hm-status hm-status-confirmed">Confirmado</span>
+            </li>
+            <li class="hm-slot is-pending">
+              <span class="hm-time">13:30</span>
+              <span class="hm-client">
+                <span class="hm-avatar hm-avatar-3">AF</span>
+                <span>
+                  <b>Aline Ferreira</b>
+                  <small>Escova · R$ 90</small>
+                </span>
+              </span>
+              <span class="hm-status hm-status-pending">Aguardando</span>
+            </li>
+          </ul>
+
+          <div class="hm-reminder">
+            <Icon name="whatsapp" size={16} />
+            <div>
+              <p><b>Lembrete enviado</b> · 09:00 amanhã</p>
+              <small>"Oi Júnior, passando pra lembrar do seu horário amanhã às 09:00. Responde 1 pra confirmar."</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  #hero {
+    position: relative;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 50% at 30% 20%, rgb(var(--cor-primaria-rgb) / 0.06), transparent 70%),
+      radial-gradient(40% 40% at 80% 0%, rgb(var(--cor-primaria-rgb) / 0.04), transparent 70%);
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+    color: var(--cor-texto-primario);
+  }
+  .hero-hl {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+  }
+  .hero-hl::before {
+    content: "";
+    position: absolute;
+    inset: 0.05em -0.08em 0.1em -0.08em;
+    background: var(--cor-primaria);
+    border-radius: 4px;
+    transform: skewX(-6deg);
+    z-index: -1;
+  }
+  .hero-lede {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    color: var(--cor-texto-secundario);
+    max-width: 32ch;
+  }
+  .hero-microcopy {
+    font-size: 0.85rem;
+    color: var(--cor-subtitulos);
+  }
+  .hero-stats { gap: 1.25rem 0.75rem; }
+  .hero-stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--cor-texto-primario);
+  }
+  .hero-stat-label {
+    margin-top: 0.125rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--cor-texto-secundario);
+  }
+  .hero-stat-caption {
+    font-size: 0.72rem;
+    color: var(--cor-subtitulos);
+  }
+
+  .hero-mockup-wrap { perspective: 1400px; }
+  .hero-mockup {
+    margin-inline: auto;
+    max-width: 460px;
+    transform: rotateY(-6deg) rotateX(2deg) translateZ(0);
+    transform-style: preserve-3d;
+    border-radius: var(--radius-lg);
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    box-shadow:
+      0 50px 100px -30px rgba(0, 0, 0, 0.5),
+      0 20px 40px -20px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+  @media (max-width: 1024px) {
+    .hero-mockup { transform: none; }
+  }
+  .hero-mockup-bar {
+    display: flex;
+    gap: 6px;
+    padding: 14px 16px 10px;
+    background: var(--cor-fundo-elevado);
+    border-bottom: 1px solid var(--cor-borda-geral);
+  }
+  .hero-mockup-bar span {
+    width: 10px; height: 10px; border-radius: 9999px;
+    background: var(--cor-borda-geral);
+  }
+  .hero-mockup-bar span:first-child { background: #ff5f56; }
+  .hero-mockup-bar span:nth-child(2) { background: #ffbd2e; }
+  .hero-mockup-bar span:nth-child(3) { background: #27c93f; }
+  .hero-mockup-body { padding: 18px 18px 22px; }
+  .hm-day {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px;
+    background: var(--cor-fundo-elevado);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--cor-borda-geral);
+  }
+  .hm-eyebrow {
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    color: var(--cor-subtitulos); letter-spacing: 0.05em;
+  }
+  .hm-day-title { font-size: 1rem; font-weight: 700; margin-top: 2px; color: var(--cor-texto-primario); }
+  .hm-day-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--cor-status-ok-bg);
+    color: var(--cor-status-ok);
+    font-size: 0.7rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 9999px;
+    border: 1px solid rgb(62, 207, 114, 0.25);
+  }
+  .hm-dot {
+    width: 6px; height: 6px; border-radius: 9999px;
+    background: var(--cor-status-ok);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hm-dot { animation: none; }
+  }
+  .hm-slots {
+    list-style: none; padding: 0; margin: 14px 0 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .hm-slot {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: var(--cor-fundo-elevado);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-md);
+    transition: transform 0.15s ease;
+  }
+  .hm-slot:hover { transform: translateX(2px); }
+  .hm-slot.is-next {
+    border-color: rgb(var(--cor-primaria-rgb) / 0.4);
+    background: rgb(var(--cor-primaria-rgb) / 0.06);
+  }
+  .hm-time { font-weight: 700; font-size: 0.95rem; color: var(--cor-texto-primario); }
+  .hm-client { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+  .hm-client b { font-size: 0.85rem; font-weight: 600; display: block; color: var(--cor-texto-primario); }
+  .hm-client small { color: var(--cor-subtitulos); font-size: 0.72rem; }
+  .hm-avatar {
+    width: 32px; height: 32px; border-radius: var(--radius-sm);
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--cor-cards-hover); color: var(--cor-texto-primario);
+    font-weight: 700; font-size: 0.7rem;
+  }
+  .hm-avatar-2 { background: #6366f1; color: #fff; }
+  .hm-avatar-3 { background: #f59e0b; color: #fff; }
+  .hm-empty {
+    font-size: 0.78rem; color: var(--cor-subtitulos);
+    background: var(--cor-fundo); border: 1px dashed var(--cor-borda-geral);
+    padding: 4px 10px; border-radius: 9999px;
+  }
+  .hm-status {
+    font-size: 0.7rem; font-weight: 600;
+    padding: 4px 8px; border-radius: 9999px;
+  }
+  .hm-status-confirmed {
+    color: var(--cor-status-ok);
+    background: var(--cor-status-ok-bg);
+  }
+  .hm-status-open {
+    color: var(--cor-subtitulos);
+    background: var(--cor-fundo);
+  }
+  .hm-status-pending {
+    color: var(--cor-texto-secundario);
+    background: var(--cor-cards-hover);
+  }
+  .hm-reminder {
+    margin-top: 6px; display: flex; gap: 10px; padding: 12px;
+    background: var(--cor-whatsapp-bg);
+    border: 1px solid rgb(37, 211, 102, 0.25);
+    border-radius: var(--radius-md);
+  }
+  .hm-reminder :global(svg) { color: var(--cor-whatsapp); flex-shrink: 0; margin-top: 2px; }
+  .hm-reminder p { font-size: 0.78rem; font-weight: 600; color: var(--cor-texto-primario); }
+  .hm-reminder small { font-size: 0.72rem; color: var(--cor-texto-secundario); display: block; margin-top: 2px; }
+</style>
