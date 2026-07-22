@@ -60,3 +60,35 @@
   --space-9: 6rem;
   --space-10: 8rem;
 }
+
+html[data-theme="light"] {
+  --cor-primaria: #FF5A24;
+  --cor-primaria-rgb: 255 90 36;
+  --cor-hover: #E84E1A;
+  --cor-primaria-dark: #D94515;
+  --cor-primaria-soft: rgba(255, 90, 36, 0.08);
+
+  --cor-fundo: #FAFAF8;
+  --cor-fundo-elevado: #F3F2EF;
+  --cor-cards: #FFFFFF;
+  --cor-cards-hover: #F5F4F1;
+  --cor-borda-geral: #E6E5E1;
+  --cor-borda-hover: #CFCEC9;
+
+  --cor-texto-primario: #131316;
+  --cor-texto-secundario: #56565C;
+  --cor-subtitulos: #85858C;
+
+  --cor-status-ok: #1A9F55;
+  --cor-status-ok-bg: #E8F5EE;
+  --cor-whatsapp: #1DA851;
+  --cor-whatsapp-bg: rgba(29, 168, 81, 0.08);
+  --cor-stars: #F5A623;
+
+  --sombra-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --sombra-card-hover: 0 12px 28px -8px rgba(0, 0, 0, 0.12),
+    0 4px 10px -6px rgba(0, 0, 0, 0.08);
+  --sombra-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  --sombra-popover: 0 10px 40px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
