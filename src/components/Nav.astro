@@ -1,5 +1,4 @@
 ---
-import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import { NAV_LINKS } from "@data/content";
@@ -17,10 +16,18 @@ const wpp = SITE.whatsapp;
   <div class="container-tight flex items-center justify-between gap-4 py-3 md:py-4">
     <a
       href="/"
-      class="flex items-center gap-2 text-[var(--cor-texto-primario)] font-semibold tracking-tight"
+      class="flex items-center"
     >
-      <Logo size={32} />
-      <span class="text-lg font-bold">Skedoole</span>
+      <img
+        src="/skedoole-logo-light.png"
+        alt="Skedoole"
+        class="h-8 w-auto logo-light"
+      />
+      <img
+        src="/skedoole-logo-dark.png"
+        alt="Skedoole"
+        class="h-8 w-auto logo-dark"
+      />
     </a>
 
     <nav class="hidden md:flex items-center gap-7" aria-label="Principal">
@@ -83,7 +90,16 @@ const wpp = SITE.whatsapp;
   >
     <div class="nav-mobile-inner">
       <div class="flex items-center justify-between p-4 border-b border-[var(--cor-borda-geral)]">
-        <Logo size={28} />
+        <img
+          src="/skedoole-logo-light.png"
+          alt="Skedoole"
+          class="h-7 w-auto logo-light"
+        />
+        <img
+          src="/skedoole-logo-dark.png"
+          alt="Skedoole"
+          class="h-7 w-auto logo-dark"
+        />
         <button
           type="button"
           id="nav-close"
@@ -119,6 +135,11 @@ const wpp = SITE.whatsapp;
 </header>
 
 <style>
+  .logo-light { display: block; }
+  .logo-dark { display: none; }
+  html[data-theme="dark"] .logo-light { display: none; }
+  html[data-theme="dark"] .logo-dark { display: block; }
+
   .site-nav[data-state="scrolled"] {
     background: color-mix(in oklab, var(--cor-fundo) 88%, transparent);
     backdrop-filter: saturate(180%) blur(14px);
