@@ -77,4 +77,45 @@ const wpp = SITE.whatsapp;
   .cta-lede { font-size: 1.05rem; margin-top: 16px; color: rgba(255,255,255,0.92); max-width: 60ch; }
   .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
   .cta-fine { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 14px; }
+
+  html[data-theme="light"] .cta-band {
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    color: var(--cor-texto-primario);
+  }
+
+  html[data-theme="light"] .cta-title-sub {
+    color: var(--cor-texto-secundario);
+  }
+
+  html[data-theme="light"] .cta-lede {
+    color: var(--cor-texto-secundario);
+  }
+
+  html[data-theme="light"] .cta-fine {
+    color: var(--cor-subtitulos);
+  }
+
+  html[data-theme="light"] .eyebrow {
+    color: var(--cor-primaria);
+  }
+
+  html[data-theme="light"] .eyebrow span {
+    background: var(--cor-primaria) !important;
+  }
+
+  html[data-theme="light"] .cta-glow {
+    background: radial-gradient(50% 60% at 80% 10%, var(--cor-primaria-soft), transparent 70%);
+  }
+
+  html[data-theme="light"] .cta-actions a:last-child {
+    background: transparent !important;
+    color: var(--cor-texto-primario) !important;
+    border: 1px solid var(--cor-borda-hover) !important;
+  }
+
+  html[data-theme="light"] .cta-actions a:last-child:hover {
+    background: var(--cor-cards-hover) !important;
+    border-color: var(--cor-texto-secundario) !important;
+  }
 </style>
