@@ -1,5 +1,4 @@
 ---
-import Logo from "@components/Logo.astro";
 import { SITE } from "@config/site";
 
 const year = new Date().getFullYear();
@@ -11,7 +10,11 @@ const wpp = SITE.whatsapp;
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="/" class="flex items-center gap-2 font-bold text-lg">
-          <Logo size={28} variant="mono" />
+          <img
+            src="/logo-skedoole/logo-mini-orange.svg"
+            alt=""
+            class="h-7 w-auto"
+          />
           <span>Skedoole</span>
         </a>
         <p class="footer-tagline">
