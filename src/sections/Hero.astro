@@ -9,8 +9,9 @@ const wpp = SITE.whatsapp;
 ---
 <section id="hero" class="relative overflow-hidden pt-28 md:pt-36 pb-24 md:pb-32">
   <div class="hero-bg" aria-hidden="true"></div>
+  <canvas class="hero-mesh" aria-hidden="true"></canvas>
 
-  <div class="container-tight grid gap-10 md:gap-12 lg:grid-cols-[1.05fr_0.95fr] items-center">
+  <div class="container-tight relative z-10 grid gap-10 md:gap-12 lg:grid-cols-[1.05fr_0.95fr] items-center">
     <div class="hero-copy">
       <Reveal>
         <span class="eyebrow">Agenda digital + IA no WhatsApp</span>
@@ -18,7 +19,7 @@ const wpp = SITE.whatsapp;
       <Reveal delay="80">
         <h1 class="hero-title mt-4">
           Enquanto você corta,<br />
-          o <span class="hero-hl">WhatsApp agenda</span> por você.
+          o <span class="hero-hl font-black">WhatsApp agenda</span> por você.
         </h1>
       </Reveal>
       <Reveal delay="160">
@@ -39,7 +40,7 @@ const wpp = SITE.whatsapp;
           </a>
           <a
             href={wpp}
-            class="btn btn-ghost"
+            class="btn btn-ghost hover:bg-[var(--cor-whatsapp-bg)] hover:border-[var(--cor-whatsapp)] hover:text-[var(--cor-whatsapp)]"
             target="_blank"
             rel="noopener"
             data-cta="hero-whatsapp"
@@ -55,7 +56,7 @@ const wpp = SITE.whatsapp;
         </p>
       </Reveal>
 
-      <dl class="hero-stats mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <dl class="hero-stats mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-6">
         {STATS.map((s, i) => (
           <Reveal as="div" delay={360 + i * 80}>
             <dt class="hero-stat-value">{s.value}</dt>
@@ -67,7 +68,7 @@ const wpp = SITE.whatsapp;
     </div>
 
     <Reveal as="div" delay="200" class="hero-mockup-wrap">
-      <div class="hero-mockup chat-mockup" aria-label="Exemplo de conversa com a IA no WhatsApp">
+      <div class="hero-mockup chat-mockup shadow-lg" aria-label="Exemplo de conversa com a IA no WhatsApp">
         <div class="chat-header">
           <span class="chat-avatar">
             <Icon name="bot" size={20} />
@@ -113,6 +114,17 @@ const wpp = SITE.whatsapp;
       radial-gradient(60% 50% at 30% 20%, rgb(var(--cor-primaria-rgb) / 0.06), transparent 70%),
       radial-gradient(40% 40% at 80% 0%, rgb(var(--cor-primaria-rgb) / 0.04), transparent 70%);
   }
+  .hero-mesh {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.55;
+  }
+  html[data-theme="light"] .hero-mesh {
+    opacity: 0.4;
+  }
   .hero-title {
     font-size: clamp(2.4rem, 5.5vw, 4rem);
     font-weight: 800;
@@ -143,7 +155,7 @@ const wpp = SITE.whatsapp;
     font-size: 0.85rem;
     color: var(--cor-subtitulos);
   }
-  .hero-stats { gap: 1.25rem 0.75rem; }
+  .hero-stats { gap: 1.5rem 2rem; }
   .hero-stat-value {
     font-size: 1.75rem;
     font-weight: 800;
@@ -272,3 +284,120 @@ const wpp = SITE.whatsapp;
   .chat-footer span { flex: 1; }
   .chat-footer :global(svg) { color: var(--cor-whatsapp); }
 </style>
+
+<script>
+  const init = () => {
+    const canvas = document.querySelector<HTMLCanvasElement>(".hero-mesh");
+    if (!canvas) return;
+
+    const hero = document.getElementById("hero");
+    if (!hero) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const COLS = 22;
+    const ROWS = 14;
+    const SPACING = 64;
+    const FOV = 340;
+    const FLOW = 0.9;
+
+    const primary = getComputedStyle(document.documentElement)
+      .getPropertyValue("--cor-primaria")
+      .trim() || "#FF5A24";
+
+    let W = 0;
+    let H = 0;
+    let dots: { x: number; y: number; z: number }[] = [];
+    let zOffset = 0;
+
+    const size = () => {
+      const rect = hero.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      canvas.width = W * DPR;
+      canvas.height = H * DPR;
+      canvas.style.width = `${W}px`;
+      canvas.style.height = `${H}px`;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    };
+
+    const build = () => {
+      dots = [];
+      const w2 = (COLS - 1) * SPACING / 2;
+      const h2 = (ROWS - 1) * SPACING / 2;
+      for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS; r++) {
+          dots.push({
+            x: c * SPACING - w2,
+            y: r * SPACING - h2 + Math.sin(c * 0.6) * 6,
+            z: (Math.random() - 0.5) * 90,
+          });
+        }
+      }
+    };
+
+    const draw = (t: number) => {
+      const alpha = Math.min(1, window.scrollY / hero.offsetHeight * 2);
+      ctx.clearRect(0, 0, W, H);
+
+      const cx = W / 2;
+      const cy = H * 0.42;
+      const rot = reduced ? 0 : Math.sin(t / 6000) * 0.22;
+
+      const cosR = Math.cos(rot);
+      const sinR = Math.sin(rot);
+
+      zOffset += FLOW;
+      if (zOffset > SPACING) zOffset -= SPACING;
+
+      ctx.globalAlpha = (1 - alpha) * 0.8;
+
+      for (const d of dots) {
+        const relZ = ((d.z + zOffset) % SPACING + SPACING) % SPACING;
+        const depth = relZ / SPACING;
+        const scale = FOV / (FOV + (relZ - SPACING / 2));
+
+        const xr = d.x * cosR;
+        const yr = d.y;
+        const sx = cx + xr * scale;
+        const sy = cy + (yr * cosR + (relZ - SPACING / 2) * sinR * 0.35) * scale;
+
+        const size = (1.1 + depth * 1.9) * scale;
+        ctx.fillStyle = primary;
+        ctx.globalAlpha = (1 - alpha) * (0.12 + depth * 0.55);
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.globalAlpha = 1;
+    };
+
+    let raf = 0;
+    const loop = (t: number) => {
+      draw(t);
+      if (!reduced) raf = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      size();
+      build();
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(loop);
+    };
+
+    const onScroll = () => {
+      if (reduced) return;
+      draw(performance.now());
+    };
+
+    start();
+    window.addEventListener("resize", start);
+    window.addEventListener("scroll", onScroll, { passive: true });
+  };
+  init();
+  document.addEventListener("astro:after-swap", init);
+</script>
