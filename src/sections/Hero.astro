@@ -18,8 +18,7 @@ const wpp = SITE.whatsapp;
       </Reveal>
       <Reveal delay="80">
         <h1 class="hero-title mt-4">
-          Enquanto você atende,<br />
-          o <span class="hero-hl font-black">WhatsApp agenda</span> por você.
+          Enquanto você atende,<br class="hero-br" />a <span class="hero-hl font-black">IA agenda</span> por você.
         </h1>
       </Reveal>
       <Reveal delay="160">
@@ -56,16 +55,6 @@ const wpp = SITE.whatsapp;
           14 dias grátis · não pede cartão · a IA atende já no teste
         </p>
       </Reveal>
-
-      <dl class="hero-stats mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-6">
-        {STATS.map((s, i) => (
-          <Reveal as="div" delay={360 + i * 80}>
-            <dt class="hero-stat-value">{s.value}</dt>
-            <dd class="hero-stat-label">{s.label}</dd>
-            {s.caption && <dd class="hero-stat-caption">{s.caption}</dd>}
-          </Reveal>
-        ))}
-      </dl>
     </div>
 
     <Reveal as="div" delay="200" class="hero-mockup-wrap">
@@ -101,6 +90,18 @@ const wpp = SITE.whatsapp;
       </div>
     </Reveal>
   </div>
+
+  <div class="container-tight relative z-10">
+    <dl class="hero-stats">
+      {STATS.map((s, i) => (
+        <Reveal as="div" delay={360 + i * 80} class="hero-stat">
+          <dt class="hero-stat-value">{s.value}</dt>
+          <dd class="hero-stat-label">{s.label}</dd>
+          {s.caption && <dd class="hero-stat-caption">{s.caption}</dd>}
+        </Reveal>
+      ))}
+    </dl>
+  </div>
 </section>
 
 <style>
@@ -127,15 +128,19 @@ const wpp = SITE.whatsapp;
     opacity: 0.4;
   }
   .hero-title {
-    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-size: clamp(2.2rem, 4.4vw, 3.1rem);
     font-weight: 800;
     letter-spacing: -0.03em;
-    line-height: 1.0;
+    line-height: 1.08;
     color: var(--cor-texto-primario);
+  }
+  @media (max-width: 640px) {
+    .hero-br { display: none; }
   }
   .hero-hl {
     position: relative;
     display: inline-block;
+    white-space: nowrap;
     z-index: 1;
   }
   .hero-hl::before {
@@ -150,13 +155,34 @@ const wpp = SITE.whatsapp;
   .hero-lede {
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     color: var(--cor-texto-secundario);
-    max-width: 32ch;
+    max-width: 34ch;
   }
   .hero-microcopy {
     font-size: 0.85rem;
     color: var(--cor-subtitulos);
   }
-  .hero-stats { gap: 1.5rem 2rem; }
+  .hero-stats {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--cor-borda-geral);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem 2rem;
+  }
+  @media (min-width: 640px) {
+    .hero-stats {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .hero-stat {
+      padding-inline: 1.75rem;
+      border-left: 1px solid var(--cor-borda-geral);
+    }
+    .hero-stat:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
   .hero-stat-value {
     font-size: 1.75rem;
     font-weight: 800;
