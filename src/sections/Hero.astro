@@ -2,7 +2,7 @@
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
 import { SITE } from "@config/site";
-import { STATS } from "@data/content";
+import { STATS, CHAT_MSGS } from "@data/content";
 
 const app = `${SITE.appUrl}/criar-conta`;
 const wpp = SITE.whatsapp;
@@ -13,18 +13,18 @@ const wpp = SITE.whatsapp;
   <div class="container-tight grid gap-10 md:gap-12 lg:grid-cols-[1.05fr_0.95fr] items-center">
     <div class="hero-copy">
       <Reveal>
-        <span class="eyebrow">Agenda digital para barbearia</span>
+        <span class="eyebrow">Agenda digital + IA no WhatsApp</span>
       </Reveal>
       <Reveal delay="80">
         <h1 class="hero-title mt-4">
-          Sua agenda cheia<br />
-          <span class="hero-hl">e cadeira que não fica vazia</span> à toa.
+          Enquanto você corta,<br />
+          o <span class="hero-hl">WhatsApp agenda</span> por você.
         </h1>
       </Reveal>
       <Reveal delay="160">
         <p class="hero-lede mt-5">
-          O cliente marca sozinho pelo link. O WhatsApp lembra na véspera.
-          A fila espera no celular. Você só atende.
+          Cliente manda mensagem, a IA confere a agenda e marca na hora.
+          O WhatsApp lembra na véspera. A fila espera no celular. Você só atende.
         </p>
       </Reveal>
       <Reveal delay="240">
@@ -51,7 +51,7 @@ const wpp = SITE.whatsapp;
       </Reveal>
       <Reveal delay="320">
         <p class="hero-microcopy mt-4">
-          14 dias grátis · não pede cartão · começa em 5 minutos
+          14 dias grátis · não pede cartão · a IA atende já no teste
         </p>
       </Reveal>
 
@@ -67,70 +67,34 @@ const wpp = SITE.whatsapp;
     </div>
 
     <Reveal as="div" delay="200" class="hero-mockup-wrap">
-      <div class="hero-mockup">
-        <div class="hero-mockup-bar">
-          <span></span><span></span><span></span>
+      <div class="hero-mockup chat-mockup" aria-label="Exemplo de conversa com a IA no WhatsApp">
+        <div class="chat-header">
+          <span class="chat-avatar">
+            <Icon name="bot" size={20} />
+          </span>
+          <div>
+            <p class="chat-name">Barbearia do João</p>
+            <p class="chat-online">IA online · responde na hora</p>
+          </div>
+          <span class="chat-ai-badge">IA</span>
         </div>
-        <div class="hero-mockup-body">
-          <div class="hm-day">
-            <div>
-              <p class="hm-eyebrow">Quinta, 24</p>
-              <p class="hm-day-title">Hoje · 8 horários</p>
-            </div>
-            <div class="hm-day-badge">
-              <span class="hm-dot"></span>
-              Online
-            </div>
-          </div>
 
-          <ul class="hm-slots">
-            <li class="hm-slot is-taken">
-              <span class="hm-time">09:00</span>
-              <span class="hm-client">
-                <span class="hm-avatar">JA</span>
-                <span>
-                  <b>Júnior Andrade</b>
-                  <small>Corte + barba · R$ 70</small>
-                </span>
-              </span>
-              <span class="hm-status hm-status-confirmed">Confirmado</span>
-            </li>
-            <li class="hm-slot is-next">
-              <span class="hm-time">10:00</span>
-              <span class="hm-client"><span class="hm-empty">Livre</span></span>
-              <span class="hm-status hm-status-open">Disponível</span>
-            </li>
-            <li class="hm-slot is-taken">
-              <span class="hm-time">11:00</span>
-              <span class="hm-client">
-                <span class="hm-avatar hm-avatar-2">DB</span>
-                <span>
-                  <b>Diego Bernardes</b>
-                  <small>Corte · R$ 45</small>
-                </span>
-              </span>
-              <span class="hm-status hm-status-confirmed">Confirmado</span>
-            </li>
-            <li class="hm-slot is-pending">
-              <span class="hm-time">13:30</span>
-              <span class="hm-client">
-                <span class="hm-avatar hm-avatar-3">AF</span>
-                <span>
-                  <b>Aline Ferreira</b>
-                  <small>Escova · R$ 90</small>
-                </span>
-              </span>
-              <span class="hm-status hm-status-pending">Aguardando</span>
-            </li>
-          </ul>
-
-          <div class="hm-reminder">
-            <Icon name="whatsapp" size={16} />
-            <div>
-              <p><b>Lembrete enviado</b> · 09:00 amanhã</p>
-              <small>"Oi Júnior, passando pra lembrar do seu horário amanhã às 09:00. Responde 1 pra confirmar."</small>
+        <div class="chat-body">
+          {CHAT_MSGS.map((m) => (
+            <div class={`chat-msg ${m.from === "client" ? "is-client" : "is-bot"}`}>
+              <p>{m.text}</p>
+              <span class="chat-time">{m.time}</span>
             </div>
+          ))}
+          <div class="chat-typing" aria-hidden="true">
+            <span></span><span></span><span></span>
           </div>
+        </div>
+
+        <div class="chat-footer">
+          <Icon name="whatsapp" size={18} />
+          <span>Mensagem</span>
+          <Icon name="arrow" size={16} />
         </div>
       </div>
     </Reveal>
@@ -214,112 +178,97 @@ const wpp = SITE.whatsapp;
   @media (max-width: 1024px) {
     .hero-mockup { transform: none; }
   }
-  .hero-mockup-bar {
-    display: flex;
-    gap: 6px;
-    padding: 14px 16px 10px;
+  .chat-mockup { display: flex; flex-direction: column; }
+  .chat-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
     background: var(--cor-fundo-elevado);
     border-bottom: 1px solid var(--cor-borda-geral);
   }
-  .hero-mockup-bar span {
-    width: 10px; height: 10px; border-radius: 9999px;
-    background: var(--cor-borda-geral);
-  }
-  .hero-mockup-bar span:first-child { background: #ff5f56; }
-  .hero-mockup-bar span:nth-child(2) { background: #ffbd2e; }
-  .hero-mockup-bar span:nth-child(3) { background: #27c93f; }
-  .hero-mockup-body { padding: 18px 18px 22px; }
-  .hm-day {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px;
-    background: var(--cor-fundo-elevado);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--cor-borda-geral);
-  }
-  .hm-eyebrow {
-    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-    color: var(--cor-subtitulos); letter-spacing: 0.05em;
-  }
-  .hm-day-title { font-size: 1rem; font-weight: 700; margin-top: 2px; color: var(--cor-texto-primario); }
-  .hm-day-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--cor-status-ok-bg);
-    color: var(--cor-status-ok);
-    font-size: 0.7rem; font-weight: 700;
-    padding: 4px 10px; border-radius: 9999px;
-    border: 1px solid rgb(62, 207, 114, 0.25);
-  }
-  .hm-dot {
-    width: 6px; height: 6px; border-radius: 9999px;
-    background: var(--cor-status-ok);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hm-dot { animation: none; }
-  }
-  .hm-slots {
-    list-style: none; padding: 0; margin: 14px 0 12px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .hm-slot {
-    display: grid;
-    grid-template-columns: 56px 1fr auto;
-    align-items: center; gap: 10px;
-    padding: 10px 12px;
-    background: var(--cor-fundo-elevado);
-    border: 1px solid var(--cor-borda-geral);
-    border-radius: var(--radius-md);
-    transition: transform 0.15s ease;
-  }
-  .hm-slot:hover { transform: translateX(2px); }
-  .hm-slot.is-next {
-    border-color: rgb(var(--cor-primaria-rgb) / 0.4);
-    background: rgb(var(--cor-primaria-rgb) / 0.06);
-  }
-  .hm-time { font-weight: 700; font-size: 0.95rem; color: var(--cor-texto-primario); }
-  .hm-client { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
-  .hm-client b { font-size: 0.85rem; font-weight: 600; display: block; color: var(--cor-texto-primario); }
-  .hm-client small { color: var(--cor-subtitulos); font-size: 0.72rem; }
-  .hm-avatar {
-    width: 32px; height: 32px; border-radius: var(--radius-sm);
+  .chat-avatar {
+    width: 40px; height: 40px; border-radius: var(--radius-full);
     display: inline-flex; align-items: center; justify-content: center;
-    background: var(--cor-cards-hover); color: var(--cor-texto-primario);
-    font-weight: 700; font-size: 0.7rem;
+    background: var(--cor-whatsapp-bg);
+    color: var(--cor-whatsapp);
+    border: 1px solid rgb(37, 211, 102, 0.3);
+    flex-shrink: 0;
   }
-  .hm-avatar-2 { background: #6366f1; color: #fff; }
-  .hm-avatar-3 { background: #f59e0b; color: #fff; }
-  .hm-empty {
-    font-size: 0.78rem; color: var(--cor-subtitulos);
-    background: var(--cor-fundo); border: 1px dashed var(--cor-borda-geral);
-    padding: 4px 10px; border-radius: 9999px;
-  }
-  .hm-status {
-    font-size: 0.7rem; font-weight: 600;
-    padding: 4px 8px; border-radius: 9999px;
-  }
-  .hm-status-confirmed {
-    color: var(--cor-status-ok);
-    background: var(--cor-status-ok-bg);
-  }
-  .hm-status-open {
-    color: var(--cor-subtitulos);
-    background: var(--cor-fundo);
-  }
-  .hm-status-pending {
+  .chat-name { font-size: 0.95rem; font-weight: 700; color: var(--cor-texto-primario); }
+  .chat-online { font-size: 0.72rem; color: var(--cor-status-ok); font-weight: 600; margin-top: 1px; }
+  .chat-ai-badge {
+    margin-left: auto;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
     color: var(--cor-texto-secundario);
     background: var(--cor-cards-hover);
+    border: 1px solid var(--cor-borda-geral);
+    padding: 3px 8px; border-radius: 9999px;
   }
-  .hm-reminder {
-    margin-top: 6px; display: flex; gap: 10px; padding: 12px;
-    background: var(--cor-whatsapp-bg);
-    border: 1px solid rgb(37, 211, 102, 0.25);
+  .chat-body {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 18px 16px 16px;
+    background:
+      radial-gradient(120% 90% at 0% 0%, rgb(var(--cor-primaria-rgb) / 0.04), transparent 60%),
+      var(--cor-fundo-elevado);
+    flex: 1;
+  }
+  .chat-msg {
+    max-width: 82%;
+    padding: 9px 12px;
     border-radius: var(--radius-md);
+    position: relative;
+    box-shadow: var(--sombra-card);
   }
-  .hm-reminder :global(svg) { color: var(--cor-whatsapp); flex-shrink: 0; margin-top: 2px; }
-  .hm-reminder p { font-size: 0.78rem; font-weight: 600; color: var(--cor-texto-primario); }
-  .hm-reminder small { font-size: 0.72rem; color: var(--cor-texto-secundario); display: block; margin-top: 2px; }
+  .chat-msg p { font-size: 0.82rem; line-height: 1.45; margin: 0; color: var(--cor-texto-primario); }
+  .chat-msg.is-bot {
+    align-self: flex-start;
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    border-bottom-left-radius: 4px;
+  }
+  .chat-msg.is-client {
+    align-self: flex-end;
+    background: var(--cor-whatsapp-bg);
+    border: 1px solid rgb(37, 211, 102, 0.28);
+    border-bottom-right-radius: 4px;
+  }
+  .chat-time {
+    display: block;
+    text-align: right;
+    font-size: 0.62rem;
+    color: var(--cor-subtitulos);
+    margin-top: 3px;
+  }
+  .chat-typing {
+    align-self: flex-start;
+    display: inline-flex; gap: 4px;
+    padding: 9px 14px;
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-md);
+    border-bottom-left-radius: 4px;
+  }
+  .chat-typing span {
+    width: 6px; height: 6px; border-radius: 9999px;
+    background: var(--cor-subtitulos);
+    animation: typing 1.2s ease-in-out infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat-typing span { animation: none; opacity: 1; }
+  }
+  .chat-footer {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    background: var(--cor-fundo-elevado);
+    border-top: 1px solid var(--cor-borda-geral);
+    color: var(--cor-subtitulos);
+    font-size: 0.82rem;
+  }
+  .chat-footer span { flex: 1; }
+  .chat-footer :global(svg) { color: var(--cor-whatsapp); }
 </style>

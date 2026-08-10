@@ -13,7 +13,8 @@ const fmtBRL = (n: number) =>
     : new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-        maximumFractionDigits: 0,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       }).format(n);
 ---
 <section id="precos" class="py-24 md:py-32">
@@ -27,6 +28,25 @@ const fmtBRL = (n: number) =>
         Teste grátis por 14 dias. Sem cartão. Cancele em 1 toque.
       </p>
     </Reveal>
+
+    <div class="prices-included mt-8">
+      <span class="prices-included-label">Incluso em todos os planos</span>
+      <div class="prices-included-items">
+        {[
+          "IA no WhatsApp",
+          "Lembrete e confirmação automáticos",
+          "Agenda online 24h",
+          "Fila digital",
+          "Comissão automática",
+          "Relatórios",
+        ].map((i) => (
+          <span class="prices-included-item">
+            <Icon name="check" size={14} />
+            {i}
+          </span>
+        ))}
+      </div>
+    </div>
 
     <div class="prices-toggle-wrap mt-8">
       <div class="prices-toggle" role="radiogroup" aria-label="Ciclo de cobrança">
@@ -48,15 +68,21 @@ const fmtBRL = (n: number) =>
           <h3 class="plan-name">{p.name}</h3>
           <p class="plan-tagline">{p.tagline}</p>
           <div class="plan-price">
-            <span data-monthly>{fmtBRL(p.monthly)}</span>
-            <span data-annual hidden>{fmtBRL(p.annual)}</span>
-            <span class="plan-cycle">/mês</span>
+            {p.custom ? (
+              <span class="plan-custom-price">Sob consulta</span>
+            ) : (
+              <>
+                <span data-monthly>{fmtBRL(p.monthly!)}</span>
+                <span data-annual hidden>{fmtBRL(p.annual!)}</span>
+              </>
+            )}
+            <span class="plan-cycle">{p.custom ? "" : "/mês"}</span>
           </div>
           <a
-            href={p.name === "Estúdio" ? wpp : app}
+            href={p.custom ? wpp : app}
             class={`btn mt-5 w-full ${p.featured ? "btn-primary" : "btn-ghost"}`}
-            target={p.name === "Estúdio" ? "_blank" : undefined}
-            rel={p.name === "Estúdio" ? "noopener" : undefined}
+            target={p.custom ? "_blank" : undefined}
+            rel={p.custom ? "noopener" : undefined}
             data-cta={`plan-${p.name.toLowerCase()}`}
           >
             {p.cta}
@@ -75,11 +101,51 @@ const fmtBRL = (n: number) =>
     <p class="prices-foot mt-8 text-center text-sm text-[var(--cor-subtitulos)]">
       Precificação em BRL. Sem taxa de adesão. Cancele quando quiser.
     </p>
+    <p class="prices-note mt-3 text-center text-sm text-[var(--cor-subtitulos)]">
+      A faixa conta o total de profissionais, somando todas as suas unidades.
+      Precisa de mais de 20? Fale com a gente — fechamos um plano sob medida.
+    </p>
   </div>
 </section>
 
 <style>
   .prices-toggle-wrap { display: flex; justify-content: center; }
+  .prices-included {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    background: var(--cor-fundo-elevado);
+    border: 1px dashed var(--cor-borda-hover);
+    border-radius: var(--radius-lg);
+  }
+  .prices-included-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cor-subtitulos);
+  }
+  .prices-included-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .prices-included-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--cor-texto-secundario);
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    padding: 6px 12px;
+    border-radius: 9999px;
+  }
+  .prices-included-item :global(svg) { color: var(--cor-status-ok); flex-shrink: 0; }
   .prices-toggle {
     display: inline-flex;
     background: var(--cor-fundo-elevado);
@@ -150,6 +216,11 @@ const fmtBRL = (n: number) =>
     color: var(--cor-texto-primario);
   }
   .plan-cycle { font-size: 0.85rem; color: var(--cor-subtitulos); margin-left: 4px; }
+  .plan-price .plan-custom-price {
+    font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em;
+    color: var(--cor-texto-primario);
+  }
+  .prices-note { max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.5; }
   .plan-features { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .plan-features li {
     display: flex; align-items: flex-start; gap: 8px;
@@ -170,7 +241,7 @@ const fmtBRL = (n: number) =>
           b.classList.toggle("is-active", active);
           b.setAttribute("aria-checked", String(active));
         });
-        document.querySelectorAll<HTMLElement>("[data-plan]").forEach((plan) => {
+        document.querySelectorAll<HTMLElement>(".prices-grid .plan").forEach((plan) => {
           const m = plan.querySelector<HTMLElement>("[data-monthly]");
           const a = plan.querySelector<HTMLElement>("[data-annual]");
           if (!m || !a) return;

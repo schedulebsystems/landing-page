@@ -21,12 +21,13 @@ export interface Step {
 export interface Plan {
   name: string;
   tagline: string;
-  monthly: number;
-  annual: number;
+  monthly: number | null;
+  annual: number | null;
   features: string[];
   cta: string;
   featured?: boolean;
   badge?: string;
+  custom?: boolean;
 }
 
 export interface Testimonial {
@@ -54,6 +55,21 @@ export interface NavLink {
   href: string;
 }
 
+export interface ChatMsg {
+  from: "client" | "bot";
+  text: string;
+  time: string;
+}
+
+export const CHAT_MSGS: ChatMsg[] = [
+  { from: "client", text: "Oi! Quero cortar hoje à tarde se tiver vaga.", time: "13:04" },
+  { from: "bot", text: "Opa, tudo bem? 👋 Hoje temos horário com o Bruno às 15h e às 16h30. Qual prefere?", time: "13:04" },
+  { from: "client", text: "15h com o Bruno.", time: "13:05" },
+  { from: "bot", text: "Anotado! Corte de cabelo é R$ 45,00 e dura 1h. Confirma?", time: "13:05" },
+  { from: "client", text: "Pode ser.", time: "13:05" },
+  { from: "bot", text: "Prontinho! ✔️ Agendado pra hoje às 15h com o Bruno. Qualquer coisa é só chamar.", time: "13:06" },
+];
+
 export const NAV_LINKS: NavLink[] = [
   { label: "Funcionalidades", href: "#recursos" },
   { label: "Como funciona", href: "#como-funciona" },
@@ -64,12 +80,23 @@ export const NAV_LINKS: NavLink[] = [
 
 export const STATS: Stat[] = [
   { value: "94%", label: "menos no-show", caption: "quem esquece vira confirmado com 1 toque no WhatsApp" },
+  { value: "24/7", label: "atendendo no WhatsApp", caption: "a IA responde e agenda mesmo de madrugada" },
   { value: "5 min", label: "do zero ao ar", caption: "sem instalar, sem treinar, sem migrar nada" },
-  { value: "+8 mil", label: "horas de atenção devolvidas", caption: "pro barbeiro focar no que faz de melhor" },
   { value: "4,9/5", label: "nota dos barbeiros", caption: "312 avaliações — a maioria depois de testar" },
 ];
 
 export const FEATURES: Feature[] = [
+  {
+    icon: "bot",
+    title: "IA que agenda no WhatsApp por você",
+    desc: "Cliente manda mensagem, a IA entende e agenda sozinha: escolhe serviço, profissional e horário na hora. Você não precisa nem olhar o celular.",
+    bullets: [
+      "Atende 24/7 — madrugada, domingo, feriado",
+      "Consulta serviços, horários e remarca por conversa",
+      "Cliente nem baixa app — só manda mensagem",
+    ],
+    highlight: true,
+  },
   {
     icon: "calendar-check",
     title: "Cliente marca de qualquer lugar, a qualquer hora",
@@ -93,6 +120,16 @@ export const FEATURES: Feature[] = [
     highlight: true,
   },
   {
+    icon: "shield",
+    title: "Reserva com sinal: quem não paga não fura",
+    desc: "Ative o sinal PIX na reserva: o cliente garante o horário pagando uma parte adiantada. Menos cadeira vazia, mais previsibilidade.",
+    bullets: [
+      "Sinal PIX automático na confirmação",
+      "Horário travado enquanto o pagamento não cai",
+      "Sem no-show: quem investiu não falta",
+    ],
+  },
+  {
     icon: "users",
     title: "Ninguém mais amontoado na recepção",
     desc: "Cliente chega, entra na fila pelo celular. Vê a posição em tempo real e recebe notificação quando estiver perto da vez.",
@@ -103,16 +140,6 @@ export const FEATURES: Feature[] = [
     ],
   },
   {
-    icon: "repeat",
-    title: "Caixa previsível todo mês",
-    desc: "Cliente vira assinante, paga mensalidade no cartão e tem corte garantido. Você sabe quanto vai entrar antes do mês começar.",
-    bullets: [
-      "Cobrança automática todo mês",
-      "O cliente não falta — ele já pagou",
-      "Cancelamento só você pode mexer",
-    ],
-  },
-  {
     icon: "credit-card",
     title: "Pagamento na hora, comissão separada sozinha",
     desc: "Pix ou cartão no final do atendimento. O valor cai na conta e a comissão de cada profissional já sai calculada.",
@@ -120,6 +147,36 @@ export const FEATURES: Feature[] = [
       "Pix e cartão — sem maquininha extra",
       "Comissão split automática, sem planilha",
       "Recebimento no próximo dia útil",
+    ],
+  },
+  {
+    icon: "star",
+    title: "Reputação que atrai cliente novo",
+    desc: "Cliente avalia com 1 a 5 estrelas depois do corte. A nota aparece no seu perfil público — e vira motivo pra gente nova te escolher.",
+    bullets: [
+      "Pesquisa automática pós-atendimento no WhatsApp",
+      "Nota estampada no seu link de agendamento",
+      "Profissional bem avaliado vende mais",
+    ],
+  },
+  {
+    icon: "globe",
+    title: "Sua marca, seu endereço, seu link",
+    desc: "Você ganha um endereço próprio com seu nome, sua logo e suas cores. O cliente vê a sua barbearia, não um sistema genérico.",
+    bullets: [
+      "Endereço com o nome da sua barbearia",
+      "Logo, favicon e cores da sua marca",
+      "Permissões pra cada profissional da equipe",
+    ],
+  },
+  {
+    icon: "repeat",
+    title: "Caixa previsível todo mês",
+    desc: "Cliente vira assinante, paga mensalidade no cartão e tem corte garantido. Você sabe quanto vai entrar antes do mês começar.",
+    bullets: [
+      "Cobrança automática todo mês",
+      "O cliente não falta — ele já pagou",
+      "Cancelamento só você pode mexer",
     ],
   },
   {
@@ -147,13 +204,13 @@ export const STEPS: Step[] = [
   },
   {
     n: 3,
-    title: "Espalha o link por aí",
-    desc: "Instagram, WhatsApp, porta da barbearia. Um link só, fixo. O cliente não baixa app, não faz login — só abre e marca.",
+    title: "Espalha o link e liga a IA no WhatsApp",
+    desc: "Instagram, WhatsApp, porta da barbearia. Um link só, fixo. E a IA passa a atender quem manda mensagem — o cliente não baixa app, não faz login, só marca.",
   },
   {
     n: 4,
     title: "O cliente marca. Você só atende.",
-    desc: "Ele escolhe profissional, serviço e horário. O lembrete cai no WhatsApp dele automaticamente. A agenda enche, a cadeira não fura.",
+    desc: "Ele agenda sozinho, pela IA ou pelo link. O lembrete cai no WhatsApp dele automaticamente. A agenda enche, a cadeira não fura.",
   },
 ];
 
@@ -232,8 +289,20 @@ export const FAQS: Faq[] = [
     a: "Sim. A Skedoole dispara sozinha antes do horário marcado. O cliente responde com 1 toque confirmando ou cancelando. Se cancelar, a agenda libera a vaga na hora pra fila ou pra outro cliente. Você não move um dedo.",
   },
   {
+    q: "A IA do WhatsApp agenda de verdade?",
+    a: "Sim. Quando o cliente manda mensagem, a IA entende o pedido e agenda sozinha: escolhe o serviço, o profissional e o horário disponível — igual faria no link. Ela também consulta preços, remarca e cancela. Você acompanha tudo na agenda, como qualquer outro agendamento.",
+  },
+  {
+    q: "O cliente precisa baixar algum aplicativo?",
+    a: "Não. O cliente usa o WhatsApp que ele já tem: manda mensagem e a IA responde. Se preferir, também pode agendar pelo link no navegador — sem instalar nada, sem criar conta.",
+  },
+  {
+    q: "E se a IA errar ou o cliente quiser falar com gente?",
+    a: "A IA agenda só com confirmação explícita do cliente e respeita seus serviços, horários e bloqueios. Se o assunto fugir do que ela sabe (ex.: pedido especial), ela responde na hora e chama atenção de alguém da equipe no aplicativo — você decide se assume ou segue no automático.",
+  },
+  {
     q: "Funciona pra barbearia pequena de bairro?",
-    a: "É pra isso que existe. O plano Solo é grátis: um profissional, agenda online, lembrete no WhatsApp e link fixo. Se couber num barbeiro e uma tesoura, cabe na Skedoole.",
+    a: "É pra isso que existe. Você testa 14 dias grátis com tudo liberado e, se fizer sentido, começa num plano de R$ 99/mês pra até 2 profissionais — com agenda online, IA no WhatsApp, lembrete e link fixo. Se couber num barbeiro e uma tesoura, cabe na Skedoole.",
   },
   {
     q: "Posso migrar meus clientes de outro sistema?",
@@ -247,30 +316,31 @@ export const FAQS: Faq[] = [
 
 export const PLANS: Plan[] = [
   {
-    name: "Solo",
-    tagline: "Pra quem atende sozinho e quer começar sem pagar nada",
-    monthly: 0,
-    annual: 0,
+    name: "Faixa 1",
+    tagline: "Pra quem atende sozinho ou a dois",
+    monthly: 99,
+    annual: 91.08,
     features: [
+      "Até 2 profissionais",
+      "IA que agenda no WhatsApp",
       "Agenda online 24h",
-      "1 profissional",
-      "Lembrete WhatsApp (até 50/mês)",
-      "Link de agendamento fixo",
-      "Painel básico do dono",
+      "Lembrete e confirmação automáticos",
+      "Fila digital",
+      "Painel do dono",
     ],
-    cta: "Começar grátis",
+    cta: "Testar grátis por 14 dias",
   },
   {
-    name: "Pro",
-    tagline: "Pra barbearia com equipe que quer crescer",
-    monthly: 79,
-    annual: 75,
+    name: "Faixa 2",
+    tagline: "Pra equipe de 3 a 5 profissionais",
+    monthly: 179,
+    annual: 164.68,
     features: [
       "Até 5 profissionais",
-      "Lembrete WhatsApp ilimitado",
-      "Fila digital automática",
+      "Tudo da Faixa 1",
+      "Comissão split automática",
+      "Gestão financeira",
       "Clube de assinatura",
-      "Painel completo com relatórios",
       "Suporte direto no WhatsApp",
     ],
     cta: "Testar grátis por 14 dias",
@@ -278,18 +348,45 @@ export const PLANS: Plan[] = [
     badge: "Mais escolhido",
   },
   {
-    name: "Estúdio",
-    tagline: "Pra rede ou estúdio que precisa de controle total",
-    monthly: 199,
-    annual: 189,
+    name: "Faixa 3",
+    tagline: "Pra times de 6 a 10 profissionais",
+    monthly: 299,
+    annual: 275.08,
     features: [
-      "Profissionais ilimitados",
+      "Até 10 profissionais",
+      "Tudo da Faixa 2",
+      "Avaliações e reputação",
       "Múltiplas unidades",
-      "Comissão split automática",
-      "API pra integrar com outros sistemas",
+      "Suporte prioritário",
+    ],
+    cta: "Testar grátis por 14 dias",
+  },
+  {
+    name: "Faixa 4",
+    tagline: "Pra redes de 11 a 20 profissionais",
+    monthly: 499,
+    annual: 459.08,
+    features: [
+      "Até 20 profissionais",
+      "Tudo da Faixa 3",
+      "Gerente de conta dedicado",
+      "Onboarding assistido",
+      "Configuração personalizada",
+    ],
+    cta: "Testar grátis por 14 dias",
+  },
+  {
+    name: "Custom",
+    tagline: "Mais de 20 profissionais ou necessidades especiais",
+    monthly: null,
+    annual: null,
+    features: [
+      "Profissionais e unidades sob medida",
+      "Precificação por volume",
       "Gerente de conta dedicado",
       "Onboarding presencial",
     ],
     cta: "Falar com a gente",
+    custom: true,
   },
 ];

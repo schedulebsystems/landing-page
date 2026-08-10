@@ -1,0 +1,259 @@
+---
+import Icon from "@components/Icon.astro";
+import Reveal from "@components/Reveal.astro";
+import { CHAT_MSGS } from "@data/content";
+import { SITE } from "@config/site";
+
+const app = `${SITE.appUrl}/criar-conta`;
+---
+
+<section id="ia-whatsapp" class="py-24 md:py-32 ai-section">
+  <div class="container-tight">
+    <div class="ai-band">
+      <div class="ai-glow" aria-hidden="true"></div>
+
+      <div class="ai-copy">
+        <Reveal>
+          <span class="ai-chip">
+            <Icon name="sparkles" size={14} />
+            Agente de IA
+          </span>
+        </Reveal>
+        <Reveal delay="80">
+          <h2 class="ai-title">
+            Uma IA que atende sua barbearia<br class="hidden md:block" />
+            <span class="ai-hl">mesmo quando você tá de folga.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay="160">
+          <p class="ai-lede">
+            É a Skedoole no WhatsApp da barbearia: entende o que o cliente
+            quer, confere a agenda de verdade e fecha o agendamento — sem
+            fila de espera, sem "vou ver e te aviso".
+          </p>
+        </Reveal>
+        <Reveal delay="240">
+          <ul class="ai-bullets">
+            <li>
+              <Icon name="check" size={16} />
+              <span><b>Agenda sozinha</b> — consulta serviços, profissionais e horários disponíveis e marca.</span>
+            </li>
+            <li>
+              <Icon name="check" size={16} />
+              <span><b>Remarca e cancela</b> por conversa, respeitando seus bloqueios e regras.</span>
+            </li>
+            <li>
+              <Icon name="check" size={16} />
+              <span><b>Atende 24/7</b> — madrugada, domingo, feriado. Quem não dorme é ela, não você.</span>
+            </li>
+            <li>
+              <Icon name="check" size={16} />
+              <span><b>Passa o bastão na hora</b> — assunto especial chama alguém da sua equipe no app.</span>
+            </li>
+          </ul>
+        </Reveal>
+        <Reveal delay="320">
+          <a href={app} class="btn btn-primary mt-7 text-sm" data-cta="ai-cta">
+            Ativar a IA da minha barbearia <Icon name="arrow-right" size={16} />
+          </a>
+        </Reveal>
+      </div>
+
+      <Reveal as="div" delay="200" class="ai-chat-wrap">
+        <div class="ai-chat" aria-label="Exemplo de conversa com a IA no WhatsApp">
+          <div class="chat-header">
+            <span class="chat-avatar">
+              <Icon name="bot" size={20} />
+            </span>
+            <div>
+              <p class="chat-name">Barbearia do João</p>
+              <p class="chat-online">IA online · responde na hora</p>
+            </div>
+            <span class="chat-ai-badge">IA</span>
+          </div>
+          <div class="chat-body">
+            {CHAT_MSGS.map((m) => (
+              <div class={`chat-msg ${m.from === "client" ? "is-client" : "is-bot"}`}>
+                <p>{m.text}</p>
+                <span class="chat-time">{m.time}</span>
+              </div>
+            ))}
+          </div>
+          <div class="chat-footer">
+            <Icon name="whatsapp" size={18} />
+            <span>Mensagem</span>
+            <Icon name="arrow" size={16} />
+          </div>
+        </div>
+        <p class="ai-caption">Exemplo real de conversa. O cliente sai com horário marcado em 2 minutos.</p>
+      </Reveal>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai-section {
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-band {
+    position: relative;
+    display: grid;
+    gap: 40px;
+    align-items: center;
+    border-radius: var(--radius-xl);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    background:
+      linear-gradient(180deg, rgb(var(--cor-primaria-rgb) / 0.08), transparent 60%),
+      var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    overflow: hidden;
+  }
+  @media (min-width: 980px) {
+    .ai-band { grid-template-columns: 1.1fr 0.9fr; }
+  }
+  .ai-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 60% at 10% 10%, rgb(var(--cor-primaria-rgb) / 0.12), transparent 60%),
+      radial-gradient(40% 50% at 90% 90%, rgb(var(--cor-whatsapp) / 0.08), transparent 60%);
+  }
+  .ai-copy, .ai-chat-wrap { position: relative; z-index: 1; }
+  .ai-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cor-whatsapp);
+    background: var(--cor-whatsapp-bg);
+    border: 1px solid rgb(37, 211, 102, 0.3);
+    padding: 6px 12px;
+    border-radius: 9999px;
+  }
+  .ai-title {
+    margin-top: 16px;
+    font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    color: var(--cor-texto-primario);
+  }
+  .ai-hl {
+    color: var(--cor-whatsapp);
+  }
+  .ai-lede {
+    margin-top: 16px;
+    font-size: 1.02rem;
+    color: var(--cor-texto-secundario);
+    max-width: 52ch;
+    line-height: 1.6;
+  }
+  .ai-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ai-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.94rem;
+    color: var(--cor-texto-secundario);
+    line-height: 1.5;
+  }
+  .ai-bullets :global(svg) {
+    color: var(--cor-status-ok);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .ai-bullets b { color: var(--cor-texto-primario); font-weight: 600; }
+  .ai-chat-wrap { max-width: 440px; margin-inline: auto; width: 100%; }
+  .ai-chat {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--cor-fundo-elevado);
+    border: 1px solid var(--cor-borda-geral);
+    box-shadow: var(--sombra-card-hover);
+    display: flex;
+    flex-direction: column;
+  }
+  .ai-caption {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--cor-subtitulos);
+  }
+  .chat-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    background: var(--cor-fundo-elevado);
+    border-bottom: 1px solid var(--cor-borda-geral);
+  }
+  .chat-avatar {
+    width: 40px; height: 40px; border-radius: var(--radius-full);
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--cor-whatsapp-bg);
+    color: var(--cor-whatsapp);
+    border: 1px solid rgb(37, 211, 102, 0.3);
+    flex-shrink: 0;
+  }
+  .chat-name { font-size: 0.95rem; font-weight: 700; color: var(--cor-texto-primario); }
+  .chat-online { font-size: 0.72rem; color: var(--cor-status-ok); font-weight: 600; margin-top: 1px; }
+  .chat-ai-badge {
+    margin-left: auto;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--cor-texto-secundario);
+    background: var(--cor-cards-hover);
+    border: 1px solid var(--cor-borda-geral);
+    padding: 3px 8px; border-radius: 9999px;
+  }
+  .chat-body {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 18px 16px 16px;
+    flex: 1;
+  }
+  .chat-msg {
+    max-width: 82%;
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--sombra-card);
+  }
+  .chat-msg p { font-size: 0.82rem; line-height: 1.45; margin: 0; color: var(--cor-texto-primario); }
+  .chat-msg.is-bot {
+    align-self: flex-start;
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    border-bottom-left-radius: 4px;
+  }
+  .chat-msg.is-client {
+    align-self: flex-end;
+    background: var(--cor-whatsapp-bg);
+    border: 1px solid rgb(37, 211, 102, 0.28);
+    border-bottom-right-radius: 4px;
+  }
+  .chat-time {
+    display: block;
+    text-align: right;
+    font-size: 0.62rem;
+    color: var(--cor-subtitulos);
+    margin-top: 3px;
+  }
+  .chat-footer {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    background: var(--cor-fundo-elevado);
+    border-top: 1px solid var(--cor-borda-geral);
+    color: var(--cor-subtitulos);
+    font-size: 0.82rem;
+  }
+  .chat-footer span { flex: 1; }
+  .chat-footer :global(svg) { color: var(--cor-whatsapp); }
+</style>
