@@ -20,6 +20,7 @@ export interface Step {
 
 export interface Plan {
   name: string;
+  cap: string;
   tagline: string;
   monthly: number | null;
   annual: number | null;
@@ -316,12 +317,12 @@ export const FAQS: Faq[] = [
 
 export const PLANS: Plan[] = [
   {
-    name: "Faixa 1",
+    name: "Essencial",
+    cap: "Até 2 profissionais",
     tagline: "Pra quem atende sozinho ou a dois",
     monthly: 99,
     annual: 91.08,
     features: [
-      "Até 2 profissionais",
       "IA que agenda no WhatsApp",
       "Agenda online 24h",
       "Lembrete e confirmação automáticos",
@@ -331,13 +332,13 @@ export const PLANS: Plan[] = [
     cta: "Testar grátis por 14 dias",
   },
   {
-    name: "Faixa 2",
-    tagline: "Pra equipe de 3 a 5 profissionais",
+    name: "Equipe",
+    cap: "De 3 a 5 profissionais",
+    tagline: "Pra equipe em crescimento",
     monthly: 179,
     annual: 164.68,
     features: [
-      "Até 5 profissionais",
-      "Tudo da Faixa 1",
+      "Tudo do Essencial",
       "Comissão split automática",
       "Gestão financeira",
       "Clube de assinatura",
@@ -348,13 +349,13 @@ export const PLANS: Plan[] = [
     badge: "Mais escolhido",
   },
   {
-    name: "Faixa 3",
-    tagline: "Pra times de 6 a 10 profissionais",
+    name: "Studio",
+    cap: "De 6 a 10 profissionais",
+    tagline: "Pra times maiores",
     monthly: 299,
     annual: 275.08,
     features: [
-      "Até 10 profissionais",
-      "Tudo da Faixa 2",
+      "Tudo do Equipe",
       "Avaliações e reputação",
       "Múltiplas unidades",
       "Suporte prioritário",
@@ -362,13 +363,13 @@ export const PLANS: Plan[] = [
     cta: "Testar grátis por 14 dias",
   },
   {
-    name: "Faixa 4",
-    tagline: "Pra redes de 11 a 20 profissionais",
+    name: "Rede",
+    cap: "De 11 a 20 profissionais",
+    tagline: "Pra redes de unidades",
     monthly: 499,
     annual: 459.08,
     features: [
-      "Até 20 profissionais",
-      "Tudo da Faixa 3",
+      "Tudo do Studio",
       "Gerente de conta dedicado",
       "Onboarding assistido",
       "Configuração personalizada",
@@ -376,8 +377,9 @@ export const PLANS: Plan[] = [
     cta: "Testar grátis por 14 dias",
   },
   {
-    name: "Custom",
-    tagline: "Mais de 20 profissionais ou necessidades especiais",
+    name: "Enterprise",
+    cap: "Mais de 20 profissionais",
+    tagline: "Pra operações sob medida",
     monthly: null,
     annual: null,
     features: [
