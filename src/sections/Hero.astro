@@ -7,7 +7,7 @@ import { STATS, CHAT_MSGS } from "@data/content";
 const app = `${SITE.appUrl}/criar-conta`;
 const wpp = SITE.whatsapp;
 ---
-<section id="hero" class="relative overflow-hidden pt-28 md:pt-36 pb-24 md:pb-32">
+<section id="hero" class="relative overflow-hidden pt-24 md:pt-28 pb-16 md:pb-24">
   <div class="hero-bg" aria-hidden="true"></div>
   <canvas class="hero-mesh" aria-hidden="true"></canvas>
 
@@ -18,14 +18,14 @@ const wpp = SITE.whatsapp;
       </Reveal>
       <Reveal delay="80">
         <h1 class="hero-title mt-4">
-          Enquanto você atende,<br class="hero-br" />a <span class="hero-hl font-black">IA agenda</span> por você.
+          Enquanto você atende,<br class="hero-br" /> a <span class="hero-hl font-black">IA agenda</span> por você.
         </h1>
       </Reveal>
       <Reveal delay="160">
         <p class="hero-lede mt-5">
-          Seu cliente manda mensagem e a IA cruza os horários na mesma hora.
-          Sem interromper o atendimento, sem esquecer de responder ninguém.
-          Você foca no seu talento, a Skedoole lota sua agenda.
+          Seu cliente manda mensagem, a IA confere sua agenda de verdade e
+          fecha o horário — sem te tirar do meio de um atendimento pra
+          responder celular.
         </p>
       </Reveal>
       <Reveal delay="240">
@@ -57,35 +57,37 @@ const wpp = SITE.whatsapp;
       </Reveal>
     </div>
 
-    <Reveal as="div" delay="200" class="hero-mockup-wrap">
-      <div class="hero-mockup chat-mockup shadow-lg" aria-label="Exemplo de conversa com a IA no WhatsApp">
-        <div class="chat-header">
-          <span class="chat-avatar">
-            <Icon name="bot" size={20} />
-          </span>
-          <div>
-            <p class="chat-name">Studio Beleza</p>
-            <p class="chat-online">IA online · responde na hora</p>
-          </div>
-          <span class="chat-ai-badge">IA</span>
-        </div>
-
-        <div class="chat-body">
-          {CHAT_MSGS.map((m) => (
-            <div class={`chat-msg ${m.from === "client" ? "is-client" : "is-bot"}`}>
-              <p>{m.text}</p>
-              <span class="chat-time">{m.time}</span>
+    <Reveal as="div" delay="200">
+      <div class="hero-mockup-wrap">
+        <div class="hero-mockup chat-mockup shadow-lg" aria-label="Exemplo de conversa com a IA no WhatsApp">
+          <div class="chat-header">
+            <span class="chat-avatar">
+              <Icon name="bot" size={20} />
+            </span>
+            <div>
+              <p class="chat-name">Studio Beleza</p>
+              <p class="chat-online">IA online · responde na hora</p>
             </div>
-          ))}
-          <div class="chat-typing" aria-hidden="true">
-            <span></span><span></span><span></span>
+            <span class="chat-ai-badge">IA</span>
           </div>
-        </div>
 
-        <div class="chat-footer">
-          <Icon name="whatsapp" size={18} />
-          <span>Mensagem</span>
-          <Icon name="arrow" size={16} />
+          <div class="chat-body">
+            {CHAT_MSGS.map((m) => (
+              <div class={`chat-msg ${m.from === "client" ? "is-client" : "is-bot"}`}>
+                <p>{m.text}</p>
+                <span class="chat-time">{m.time}</span>
+              </div>
+            ))}
+            <div class="chat-typing" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="chat-footer">
+            <Icon name="whatsapp" size={18} />
+            <span>Mensagem</span>
+            <Icon name="arrow" size={16} />
+          </div>
         </div>
       </div>
     </Reveal>
@@ -94,10 +96,12 @@ const wpp = SITE.whatsapp;
   <div class="container-tight relative z-10">
     <dl class="hero-stats">
       {STATS.map((s, i) => (
-        <Reveal as="div" delay={360 + i * 80} class="hero-stat">
-          <dt class="hero-stat-value">{s.value}</dt>
-          <dd class="hero-stat-label">{s.label}</dd>
-          {s.caption && <dd class="hero-stat-caption">{s.caption}</dd>}
+        <Reveal as="div" delay={360 + i * 80}>
+          <div class="hero-stat">
+            <dt class="hero-stat-value">{s.value}</dt>
+            <dd class="hero-stat-label">{s.label}</dd>
+            {s.caption && <dd class="hero-stat-caption">{s.caption}</dd>}
+          </div>
         </Reveal>
       ))}
     </dl>

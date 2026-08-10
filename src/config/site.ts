@@ -20,10 +20,15 @@ export const SITE = {
   },
   locale: "pt-BR",
   lang: "pt-br",
-  defaultTitle: "Skedoole | Sistema de Agendamento e Gestão para Profissionais de Beleza",
+  defaultTitle: "Skedoole | Agenda com IA no WhatsApp pra Barbearia e Salão",
   description:
-    "Otimize a rotina do seu negócio de beleza com o Skedoole. Controle agendamentos, comissões, pagamentos e clientes em uma única plataforma.",
+    "Agenda online, lembrete automático e uma IA que atende e agenda pelo WhatsApp — sozinha, 24h. Menos no-show, mais horário ocupado, sem planilha. Teste grátis por 14 dias.",
   ogImage: "/og.svg",
+  /**
+   * TODO: placeholder até a 4Asset/Skedoole informar o CNPJ real.
+   * Não inventar um número — substituir antes de publicar em produção.
+   */
+  cnpj: "00.000.000/0001-00",
   themeColor: "#FF5A24",
   twitter: "@skedoole",
   author: "Equipe Skedoole",

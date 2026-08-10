@@ -1,13 +1,13 @@
 ---
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
-import { CHAT_MSGS } from "@data/content";
+import { AI_CHAT_MSGS } from "@data/content";
 import { SITE } from "@config/site";
 
 const app = `${SITE.appUrl}/criar-conta`;
 ---
 
-<section id="ia-whatsapp" class="py-24 md:py-32 ai-section">
+<section id="ia-whatsapp" class="py-16 md:py-24 ai-section">
   <div class="container-tight">
     <div class="ai-band">
       <div class="ai-glow" aria-hidden="true"></div>
@@ -72,7 +72,7 @@ const app = `${SITE.appUrl}/criar-conta`;
             <span class="chat-ai-badge">IA</span>
           </div>
           <div class="chat-body">
-            {CHAT_MSGS.map((m) => (
+            {AI_CHAT_MSGS.map((m) => (
               <div class={`chat-msg ${m.from === "client" ? "is-client" : "is-bot"}`}>
                 <p>{m.text}</p>
                 <span class="chat-time">{m.time}</span>
@@ -85,7 +85,7 @@ const app = `${SITE.appUrl}/criar-conta`;
             <Icon name="arrow" size={16} />
           </div>
         </div>
-        <p class="ai-caption">Exemplo real de conversa. O cliente sai com horário marcado em 2 minutos.</p>
+        <p class="ai-caption">De madrugada, sem depender de ninguém: a IA remarca e libera o horário antigo em 2 minutos.</p>
       </Reveal>
     </div>
   </div>

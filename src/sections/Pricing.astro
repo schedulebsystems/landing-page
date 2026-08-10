@@ -27,7 +27,7 @@ const fmtInt = (n: number) =>
 const savingOf = (p: (typeof PLANS)[number]) =>
   p.monthly !== null && p.annual !== null ? (p.monthly - p.annual) * 12 : 0;
 ---
-<section id="precos" class="py-24 md:py-32">
+<section id="precos" class="py-16 md:py-24">
   <div class="container-tight">
     <Reveal class="text-center mx-auto max-w-2xl">
       <span class="eyebrow justify-center">Investimento</span>
@@ -69,10 +69,8 @@ const savingOf = (p: (typeof PLANS)[number]) =>
     </div>
   </div>
 
-  <Reveal class="prices-scroll">
-    <button type="button" class="prices-arrow prices-arrow-prev" aria-label="Ver planos anteriores">
-      <Icon name="chevron-left" size={20} />
-    </button>
+  <Reveal>
+    <div class="prices-scroll">
     <div class="prices-grid">
       {PLANS.map((p) => (
         <article class={`plan ${p.featured ? "plan-featured" : ""}`}>
@@ -116,9 +114,7 @@ const savingOf = (p: (typeof PLANS)[number]) =>
         </article>
       ))}
     </div>
-    <button type="button" class="prices-arrow prices-arrow-next" aria-label="Ver mais planos">
-      <Icon name="chevron-right" size={20} />
-    </button>
+    </div>
   </Reveal>
 
   <div class="container-tight">
@@ -140,7 +136,9 @@ const savingOf = (p: (typeof PLANS)[number]) =>
     align-items: center;
     gap: 12px;
     padding: 18px 20px;
-    background: var(--cor-fundo-elevado);
+    background:
+      radial-gradient(circle, var(--cor-borda-geral) 1px, transparent 1.2px) 0 0 / 16px 16px,
+      var(--cor-fundo-elevado);
     border: 1px dashed var(--cor-borda-hover);
     border-radius: var(--radius-lg);
   }
@@ -217,65 +215,18 @@ const savingOf = (p: (typeof PLANS)[number]) =>
     color: var(--cor-primaria);
   }
   .prices-scroll {
-    position: relative;
     margin-top: 2.5rem;
-  }
-  .prices-scroll::before,
-  .prices-scroll::after {
-    content: "";
-    position: absolute;
-    top: 0; bottom: 0;
-    width: clamp(2rem, 6vw, 4.5rem);
-    pointer-events: none;
-    z-index: 1;
-  }
-  .prices-scroll::before {
-    left: 0;
-    background: linear-gradient(to right, var(--cor-fundo), transparent);
-  }
-  .prices-scroll::after {
-    right: 0;
-    background: linear-gradient(to left, var(--cor-fundo), transparent);
   }
   .prices-grid {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    padding-inline: max(1rem, calc((100vw - 1200px) / 2 + 2rem));
-    padding-block: 10px 14px;
-  }
-  .prices-grid::-webkit-scrollbar { display: none; }
-  .prices-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    width: 44px; height: 44px;
-    border-radius: 9999px;
-    display: inline-flex; align-items: center; justify-content: center;
-    background: var(--cor-cards);
-    color: var(--cor-texto-primario);
-    border: 1px solid var(--cor-borda-hover);
-    box-shadow: var(--sombra-card-hover);
-    cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  }
-  .prices-arrow:hover {
-    background: var(--cor-cards-hover);
-    border-color: var(--cor-texto-secundario);
-  }
-  .prices-arrow-prev { left: 14px; }
-  .prices-arrow-next { right: 14px; }
-  @media (max-width: 719px) {
-    .prices-arrow { display: none; }
   }
   .plan {
     position: relative;
     flex: 0 0 auto;
     width: clamp(280px, 26vw, 340px);
-    scroll-snap-align: center;
     padding: 24px;
     background: var(--cor-cards);
     border: 1px solid var(--cor-borda-geral);
@@ -389,17 +340,6 @@ const savingOf = (p: (typeof PLANS)[number]) =>
         apply(btn.dataset.cycle || "monthly");
       });
     });
-
-    const grid = document.querySelector<HTMLElement>(".prices-grid");
-    const prev = document.querySelector<HTMLButtonElement>(".prices-arrow-prev");
-    const next = document.querySelector<HTMLButtonElement>(".prices-arrow-next");
-    const step = () => {
-      if (!grid) return 0;
-      const card = grid.querySelector<HTMLElement>(".plan");
-      return (card ? card.offsetWidth : grid.clientWidth) + 16;
-    };
-    prev?.addEventListener("click", () => grid?.scrollBy({ left: -step(), behavior: "smooth" }));
-    next?.addEventListener("click", () => grid?.scrollBy({ left: step(), behavior: "smooth" }));
 
     window.addEventListener("resize", () => {
       const active = toggle?.querySelector<HTMLButtonElement>("button.is-active");

@@ -3,12 +3,12 @@ import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
 import { FEATURES } from "@data/content";
 ---
-<section id="recursos" class="section-dark py-20 md:py-28 features-bg">
+<section id="recursos" class="section-dark py-14 md:py-20 features-bg">
   <div class="container-tight">
     <Reveal class="max-w-2xl">
       <span class="eyebrow">O pacote completo</span>
       <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
-                  Tudo que seu negócio precisa<br class="hidden md:block" />
+        Tudo que seu negócio precisa<br class="hidden md:block" />
         pra não perder mais nenhum horário.
       </h2>
       <p class="mt-4 text-[var(--cor-texto-secundario)]">
@@ -17,9 +17,9 @@ import { FEATURES } from "@data/content";
       </p>
     </Reveal>
 
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {FEATURES.map((f, i) => (
-        <Reveal delay={(i % 3) * 80} class="card card-hover p-6 md:p-7">
+    <div class="mt-12 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {FEATURES.map((f) => (
+        <Reveal class="card card-hover p-6 md:p-7">
           <div class="feature-icon">
             <Icon name={f.icon} size={22} />
           </div>
@@ -64,32 +64,24 @@ import { FEATURES } from "@data/content";
     position: relative;
     z-index: 1;
   }
-  .feature-highlight {
-    border-color: rgb(var(--cor-primaria-rgb) / 0.4);
-    background:
-      linear-gradient(180deg, rgb(var(--cor-primaria-rgb) / 0.1), transparent 50%),
-      var(--cor-cards);
-  }
   .feature-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 48px; height: 48px;
     border-radius: var(--radius-md);
-    background: var(--cor-primaria-soft);
-    color: var(--cor-primaria);
-    border: 1.5px solid rgb(var(--cor-primaria-rgb) / 0.25);
-    box-shadow: 0 0 20px rgb(var(--cor-primaria-rgb) / 0.15);
+    background: var(--cor-cards-hover);
+    color: var(--cor-texto-primario);
+    border: 1.5px solid var(--cor-borda-geral);
     transition: all 0.3s ease;
   }
   .card-hover:hover .feature-icon {
-    box-shadow: 0 0 30px rgb(var(--cor-primaria-rgb) / 0.3);
-    border-color: rgb(var(--cor-primaria-rgb) / 0.5);
+    border-color: var(--cor-borda-hover);
     transform: scale(1.05);
   }
   .feature-bullet {
     display: flex; align-items: center; gap: 8px;
     font-size: 0.86rem; color: var(--cor-texto-secundario);
   }
-  .feature-bullet :global(svg) { color: var(--cor-primaria); }
+  .feature-bullet :global(svg) { color: var(--cor-status-ok); }
 </style>

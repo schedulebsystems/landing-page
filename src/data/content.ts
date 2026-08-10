@@ -71,6 +71,15 @@ export const CHAT_MSGS: ChatMsg[] = [
   { from: "bot", text: "Prontinho! ✔️ Agendado pra hoje às 15h com o Bruno. Qualquer coisa é só chamar.", time: "13:06" },
 ];
 
+export const AI_CHAT_MSGS: ChatMsg[] = [
+  { from: "client", text: "Oi! Preciso remarcar minha sobrancelha de amanhã 😅", time: "23:41" },
+  { from: "bot", text: "Sem problema! Vi que você tá agendado amanhã às 10h com a Camila. Amanhã ainda temos 14h e 17h30 com ela. Qual fica melhor?", time: "23:41" },
+  { from: "client", text: "14h é melhor pra mim.", time: "23:42" },
+  { from: "bot", text: "Beleza! Fica assim: amanhã às 14h com a Camila. O horário antigo das 10h foi liberado. Confirma?", time: "23:42" },
+  { from: "client", text: "Confirmo.", time: "23:42" },
+  { from: "bot", text: "Remarcado! ✔️ Amanhã às 14h com a Camila. Até lá!", time: "23:43" },
+];
+
 export const NAV_LINKS: NavLink[] = [
   { label: "Funcionalidades", href: "#recursos" },
   { label: "Como funciona", href: "#como-funciona" },
@@ -83,7 +92,7 @@ export const STATS: Stat[] = [
   { value: "94%", label: "menos no-show", caption: "quem esquece vira confirmado com 1 toque no WhatsApp" },
   { value: "24/7", label: "atendendo no WhatsApp", caption: "a IA responde e agenda mesmo de madrugada" },
   { value: "5 min", label: "do zero ao ar", caption: "sem instalar, sem treinar, sem migrar nada" },
-  { value: "4,9/5", label: "nota dos profissionais", caption: "312 avaliações — a maioria depois de testar" },
+  { value: "LGPD", label: "seus dados, sempre seus", caption: "sem venda de lista, sem letra miúda" },
 ];
 
 export const FEATURES: Feature[] = [
@@ -104,8 +113,7 @@ export const FEATURES: Feature[] = [
     desc: "Enquanto você atende, o cliente abre o link e escolhe profissional, serviço e horário. Sem telefonema, sem esperar você responder.",
     bullets: [
       "Um link fixo que todo mundo acha",
-      "O próprio cliente remarca se precisar",
-      "Você decide quais horários liberar",
+      "O cliente remarca sozinho se precisar — você só fica sabendo",
     ],
     highlight: true,
   },
@@ -122,12 +130,11 @@ export const FEATURES: Feature[] = [
   },
   {
     icon: "shield",
-    title: "Fim do No-Show com Sinal via PIX",
-    desc: "Ative o sinal PIX na reserva: o cliente garante o horário pagando uma parte adiantada. Menos horários vagos, mais previsibilidade.",
+    title: "Fim do no-show com sinal via Pix",
+    desc: "Ative o sinal Pix na reserva: o cliente garante o horário pagando uma parte adiantada. Menos horários vagos, mais previsibilidade.",
     bullets: [
-      "Sinal PIX automático na confirmação",
-      "Horário travado enquanto o pagamento não cai",
-      "Sem no-show: quem investiu não falta",
+      "Sinal Pix automático na confirmação",
+      "Horário só é seu de verdade quando o pagamento cai",
     ],
   },
   {
@@ -148,16 +155,7 @@ export const FEATURES: Feature[] = [
       "Pix e cartão — sem maquininha extra",
       "Comissão split automática, sem planilha",
       "Recebimento no próximo dia útil",
-    ],
-  },
-  {
-    icon: "star",
-    title: "Reputação que atrai cliente novo",
-    desc: "Cliente avalia com 1 a 5 estrelas depois do atendimento. A nota aparece no seu perfil público — e vira motivo pra gente nova te escolher.",
-    bullets: [
-      "Pesquisa automática pós-atendimento no WhatsApp",
-      "Nota estampada no seu link de agendamento",
-      "Profissional bem avaliado vende mais",
+      "Cada profissional vê o próprio extrato no celular",
     ],
   },
   {
@@ -175,9 +173,8 @@ export const FEATURES: Feature[] = [
     title: "Caixa previsível todo mês",
     desc: "Cliente vira assinante, paga mensalidade no cartão e tem atendimento garantido. Você sabe quanto vai entrar antes do mês começar.",
     bullets: [
-      "Cobrança automática todo mês",
-      "O cliente não falta — ele já pagou",
-      "Cancelamento só você pode mexer",
+      "Cobrança automática todo mês, sem cobrar na mão",
+      "Cliente assinante não falta — ele já pagou",
     ],
   },
   {
@@ -188,6 +185,7 @@ export const FEATURES: Feature[] = [
       "Faturamento do dia, da semana, do mês",
       "Quem mais atendeu e quem mais vendeu",
       "Horário de pico — pra escalar equipe certo",
+      "Exporta tudo quando quiser, sem pedir pro suporte",
     ],
   },
 ];
