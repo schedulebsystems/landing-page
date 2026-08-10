@@ -62,10 +62,10 @@ export interface ChatMsg {
 }
 
 export const CHAT_MSGS: ChatMsg[] = [
-  { from: "client", text: "Oi! Quero cortar hoje à tarde se tiver vaga.", time: "13:04" },
+  { from: "client", text: "Oi! Quero agendar um horário hoje à tarde se tiver vaga.", time: "13:04" },
   { from: "bot", text: "Opa, tudo bem? 👋 Hoje temos horário com o Bruno às 15h e às 16h30. Qual prefere?", time: "13:04" },
   { from: "client", text: "15h com o Bruno.", time: "13:05" },
-  { from: "bot", text: "Anotado! Corte de cabelo é R$ 45,00 e dura 1h. Confirma?", time: "13:05" },
+  { from: "bot", text: "Anotado! O serviço é R$ 45,00 e dura 1h. Confirma?", time: "13:05" },
   { from: "client", text: "Pode ser.", time: "13:05" },
   { from: "bot", text: "Prontinho! ✔️ Agendado pra hoje às 15h com o Bruno. Qualquer coisa é só chamar.", time: "13:06" },
 ];
@@ -82,7 +82,7 @@ export const STATS: Stat[] = [
   { value: "94%", label: "menos no-show", caption: "quem esquece vira confirmado com 1 toque no WhatsApp" },
   { value: "24/7", label: "atendendo no WhatsApp", caption: "a IA responde e agenda mesmo de madrugada" },
   { value: "5 min", label: "do zero ao ar", caption: "sem instalar, sem treinar, sem migrar nada" },
-  { value: "4,9/5", label: "nota dos barbeiros", caption: "312 avaliações — a maioria depois de testar" },
+  { value: "4,9/5", label: "nota dos profissionais", caption: "312 avaliações — a maioria depois de testar" },
 ];
 
 export const FEATURES: Feature[] = [
@@ -110,7 +110,7 @@ export const FEATURES: Feature[] = [
   },
   {
     icon: "message-circle",
-    title: "Sua cadeira para de ficar vazia de bobeira",
+    title: "Sua agenda para de ficar vazia de bobeira",
     desc: "24h antes, o Skedoole manda o lembrete no WhatsApp. O cliente confirma com um toque. Se cancelar, a vaga abre na hora pra fila.",
     bullets: [
       "Lembrete automático — você não precisa lembrar de lembrar",
@@ -121,8 +121,8 @@ export const FEATURES: Feature[] = [
   },
   {
     icon: "shield",
-    title: "Reserva com sinal: quem não paga não fura",
-    desc: "Ative o sinal PIX na reserva: o cliente garante o horário pagando uma parte adiantada. Menos cadeira vazia, mais previsibilidade.",
+    title: "Fim do No-Show com Sinal via PIX",
+    desc: "Ative o sinal PIX na reserva: o cliente garante o horário pagando uma parte adiantada. Menos horários vagos, mais previsibilidade.",
     bullets: [
       "Sinal PIX automático na confirmação",
       "Horário travado enquanto o pagamento não cai",
@@ -131,12 +131,12 @@ export const FEATURES: Feature[] = [
   },
   {
     icon: "users",
-    title: "Ninguém mais amontoado na recepção",
+    title: "Fila de espera 100% digital",
     desc: "Cliente chega, entra na fila pelo celular. Vê a posição em tempo real e recebe notificação quando estiver perto da vez.",
     bullets: [
       "Fila virtual — sem senha de papel, sem confusão",
       "Posição atualizada na hora no celular do cliente",
-      "Aviso no WhatsApp quando a cadeira liberar",
+      "Aviso no WhatsApp quando um horário liberar",
     ],
   },
   {
@@ -152,7 +152,7 @@ export const FEATURES: Feature[] = [
   {
     icon: "star",
     title: "Reputação que atrai cliente novo",
-    desc: "Cliente avalia com 1 a 5 estrelas depois do corte. A nota aparece no seu perfil público — e vira motivo pra gente nova te escolher.",
+    desc: "Cliente avalia com 1 a 5 estrelas depois do atendimento. A nota aparece no seu perfil público — e vira motivo pra gente nova te escolher.",
     bullets: [
       "Pesquisa automática pós-atendimento no WhatsApp",
       "Nota estampada no seu link de agendamento",
@@ -162,9 +162,9 @@ export const FEATURES: Feature[] = [
   {
     icon: "globe",
     title: "Sua marca, seu endereço, seu link",
-    desc: "Você ganha um endereço próprio com seu nome, sua logo e suas cores. O cliente vê a sua barbearia, não um sistema genérico.",
+    desc: "Você ganha um endereço próprio com seu nome, sua logo e suas cores. O cliente vê o seu negócio, não um sistema genérico.",
     bullets: [
-      "Endereço com o nome da sua barbearia",
+      "Endereço com o nome do seu negócio",
       "Logo, favicon e cores da sua marca",
       "Permissões pra cada profissional da equipe",
     ],
@@ -172,7 +172,7 @@ export const FEATURES: Feature[] = [
   {
     icon: "repeat",
     title: "Caixa previsível todo mês",
-    desc: "Cliente vira assinante, paga mensalidade no cartão e tem corte garantido. Você sabe quanto vai entrar antes do mês começar.",
+    desc: "Cliente vira assinante, paga mensalidade no cartão e tem atendimento garantido. Você sabe quanto vai entrar antes do mês começar.",
     bullets: [
       "Cobrança automática todo mês",
       "O cliente não falta — ele já pagou",
@@ -205,12 +205,12 @@ export const STEPS: Step[] = [
   {
     n: 3,
     title: "Espalha o link e liga a IA no WhatsApp",
-    desc: "Instagram, WhatsApp, porta da barbearia. Um link só, fixo. E a IA passa a atender quem manda mensagem — o cliente não baixa app, não faz login, só marca.",
+    desc: "Instagram, WhatsApp, porta do seu negócio. Um link só, fixo. E a IA passa a atender quem manda mensagem — o cliente não baixa app, não faz login, só marca.",
   },
   {
     n: 4,
     title: "O cliente marca. Você só atende.",
-    desc: "Ele agenda sozinho, pela IA ou pelo link. O lembrete cai no WhatsApp dele automaticamente. A agenda enche, a cadeira não fura.",
+    desc: "Ele agenda sozinho, pela IA ou pelo link. O lembrete cai no WhatsApp dele automaticamente. A agenda enche, a agenda não fura.",
   },
 ];
 
@@ -219,7 +219,7 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       "Perdia 4, 5 cliente por dia de no-show. Depois do lembrete no WhatsApp caiu pra quase zero. Mudou meu caixa no primeiro mês.",
     name: "Júnior Andrade",
-    role: "Barbeiro e dono",
+    role: "Dono",
     city: "São Paulo — Zona Leste",
     initials: "JA",
     rating: 5,
@@ -227,7 +227,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     quote:
       "Faturamento dobrou em 3 meses. O clube de assinatura segurou os cliente fiel — eles pagam todo mês e não faltam mais.",
-    role: "Barbearia Barão — Dono",
+    role: "Studio Barão — Dono",
     name: "Diego Bernardes",
     city: "Belo Horizonte — Savassi",
     initials: "DB",
@@ -255,7 +255,7 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       "Antes eu chutava faturamento, comissão, tudo. Hoje abro o painel e vejo: quanto entrou, quem atendeu mais, quanto cada um tem pra receber.",
     name: "Wesley Carvalho",
-    role: "Barbearia Cruzeiro",
+    role: "Studio Cruzeiro",
     city: "Porto Alegre — Moinhos",
     initials: "WC",
     rating: 5,
@@ -274,7 +274,7 @@ export const TESTIMONIALS: Testimonial[] = [
 export const FAQS: Faq[] = [
   {
     q: "Vai dar trabalho pra configurar?",
-    a: "Não. São 3 campos de cadastro e sua barbearia já existe. Depois é só adicionar os profissionais e liberar o link. Se travar em alguma coisa, a gente ajuda no WhatsApp em minutos.",
+    a: "Não. São 3 campos de cadastro e seu negócio já existe. Depois é só adicionar os profissionais e liberar o link. Se travar em alguma coisa, a gente ajuda no WhatsApp em minutos.",
   },
   {
     q: "E se meu cliente não souber usar?",
@@ -282,7 +282,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: "Como funciona o teste grátis?",
-    a: "Você cria sua barbearia agora, usa 14 dias completos com tudo liberado. Não pede cartão, não cobra nada. Se não fizer sentido, para de usar — não precisa cancelar, não tem multa, não tem pegadinha.",
+    a: "Você cria seu negócio agora, usa 14 dias completos com tudo liberado. Não pede cartão, não cobra nada. Se não fizer sentido, para de usar — não precisa cancelar, não tem multa, não tem pegadinha.",
   },
   {
     q: "O lembrete no WhatsApp é automático mesmo?",
@@ -301,8 +301,8 @@ export const FAQS: Faq[] = [
     a: "A IA agenda só com confirmação explícita do cliente e respeita seus serviços, horários e bloqueios. Se o assunto fugir do que ela sabe (ex.: pedido especial), ela responde na hora e chama atenção de alguém da equipe no aplicativo — você decide se assume ou segue no automático.",
   },
   {
-    q: "Funciona pra barbearia pequena de bairro?",
-    a: "É pra isso que existe. Você testa 14 dias grátis com tudo liberado e, se fizer sentido, começa num plano de R$ 99/mês pra até 2 profissionais — com agenda online, IA no WhatsApp, lembrete e link fixo. Se couber num barbeiro e uma tesoura, cabe na Skedoole.",
+    q: "Funciona pra um negócio pequeno de bairro?",
+    a: "É pra isso que existe. Você testa 14 dias grátis com tudo liberado e, se fizer sentido, começa num plano de R$ 99/mês pra até 2 profissionais — com agenda online, IA no WhatsApp, lembrete e link fixo. Se couber num profissional, cabe na Skedoole.",
   },
   {
     q: "Posso migrar meus clientes de outro sistema?",

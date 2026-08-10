@@ -20,9 +20,9 @@ export const SITE = {
   },
   locale: "pt-BR",
   lang: "pt-br",
-  defaultTitle: "Skedoole | Sistema de Agendamento e Gestão para Barbearias",
+  defaultTitle: "Skedoole | Sistema de Agendamento e Gestão para Profissionais de Beleza",
   description:
-    "Otimize a rotina da sua barbearia com o Skedoole. Controle agendamentos, comissões, pagamentos e clientes em uma única plataforma.",
+    "Otimize a rotina do seu negócio de beleza com o Skedoole. Controle agendamentos, comissões, pagamentos e clientes em uma única plataforma.",
   ogImage: "/og.svg",
   themeColor: "#FF5A24",
   twitter: "@skedoole",
