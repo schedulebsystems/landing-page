@@ -31,6 +31,16 @@ export const SITE = {
   cnpj: "00.000.000/0001-00",
   themeColor: "#FF5A24",
   twitter: "@skedoole",
+  /**
+   * Perfis sociais usados no sameAs do JSON-LD.
+   * TODO: confirmar as URLs reais antes de publicar em produção.
+   */
+  socials: [
+    "https://www.instagram.com/skedoole",
+    "https://www.youtube.com/@skedoole",
+    "https://www.linkedin.com/company/skedoole",
+    "https://twitter.com/skedoole",
+  ],
   author: "Equipe Skedoole",
   keywords: [
     "agendamento online barbearia",

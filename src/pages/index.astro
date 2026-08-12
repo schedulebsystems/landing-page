@@ -2,14 +2,17 @@
 import Base from "@layouts/Base.astro";
 import Nav from "@components/Nav.astro";
 import Footer from "@components/Footer.astro";
+import StickyCTA from "@components/StickyCTA.astro";
 import Hero from "@sections/Hero.astro";
 import AIBot from "@sections/AIBot.astro";
 import Features from "@sections/Features.astro";
 import HowItWorks from "@sections/HowItWorks.astro";
+import Comparison from "@sections/Comparison.astro";
 import Testimonials from "@sections/Testimonials.astro";
 import Pricing from "@sections/Pricing.astro";
 import FAQ from "@sections/FAQ.astro";
 import CTA from "@sections/CTA.astro";
+import { FAQS } from "@data/content";
 ---
 <Base>
   <Nav />
@@ -18,10 +21,22 @@ import CTA from "@sections/CTA.astro";
     <AIBot />
     <Features />
     <HowItWorks />
+    <Comparison />
     <Testimonials />
     <Pricing />
     <FAQ />
     <CTA />
   </main>
   <Footer />
+  <StickyCTA />
 </Base>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+})} />

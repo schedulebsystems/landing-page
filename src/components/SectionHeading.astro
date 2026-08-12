@@ -1,0 +1,31 @@
+---
+/**
+ * Cabeçalho de seção padrão: eyebrow + h2 (slot) + lede (slot opcional).
+ * Envolve tudo num único Reveal — mesmo comportamento das seções atuais.
+ */
+import Reveal from "@components/Reveal.astro";
+
+interface Props {
+  eyebrow?: string;
+  align?: "left" | "center";
+  class?: string;
+}
+
+const { eyebrow, align = "left", class: className = "" } = Astro.props;
+
+const wrapperClass = `section-heading ${
+  align === "center" ? "text-center mx-auto" : ""
+} ${className}`;
+const eyebrowClass = `eyebrow ${align === "center" ? "justify-center" : ""}`;
+---
+<Reveal class={wrapperClass}>
+  {eyebrow && <span class={eyebrowClass}>{eyebrow}</span>}
+  <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+    <slot name="title" />
+  </h2>
+  {Astro.slots.has("lede") && (
+    <p class="mt-4 text-[var(--cor-texto-secundario)]">
+      <slot name="lede" />
+    </p>
+  )}
+</Reveal>

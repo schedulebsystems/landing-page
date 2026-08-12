@@ -1,6 +1,7 @@
 ---
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
+import ChatMockup from "@components/ChatMockup.astro";
 import { AI_CHAT_MSGS } from "@data/content";
 import { SITE } from "@config/site";
 
@@ -60,31 +61,7 @@ const app = `${SITE.appUrl}/criar-conta`;
       </div>
 
       <Reveal as="div" delay="200" class="ai-chat-wrap">
-        <div class="ai-chat" aria-label="Exemplo de conversa com a IA no WhatsApp">
-          <div class="chat-header">
-            <span class="chat-avatar">
-              <Icon name="bot" size={20} />
-            </span>
-            <div>
-              <p class="chat-name">Studio Beleza</p>
-              <p class="chat-online">IA online · responde na hora</p>
-            </div>
-            <span class="chat-ai-badge">IA</span>
-          </div>
-          <div class="chat-body">
-            {AI_CHAT_MSGS.map((m) => (
-              <div class={`chat-msg ${m.from === "client" ? "is-client" : "is-bot"}`}>
-                <p>{m.text}</p>
-                <span class="chat-time">{m.time}</span>
-              </div>
-            ))}
-          </div>
-          <div class="chat-footer">
-            <Icon name="whatsapp" size={18} />
-            <span>Mensagem</span>
-            <Icon name="arrow" size={16} />
-          </div>
-        </div>
+        <ChatMockup messages={AI_CHAT_MSGS} class="ai-chat" />
         <p class="ai-caption">De madrugada, sem depender de ninguém: a IA remarca e libera o horário antigo em 2 minutos.</p>
       </Reveal>
     </div>
@@ -182,8 +159,6 @@ const app = `${SITE.appUrl}/criar-conta`;
     background: var(--cor-fundo-elevado);
     border: 1px solid var(--cor-borda-geral);
     box-shadow: var(--sombra-card-hover);
-    display: flex;
-    flex-direction: column;
   }
   .ai-caption {
     margin-top: 12px;
@@ -191,69 +166,4 @@ const app = `${SITE.appUrl}/criar-conta`;
     font-size: 0.78rem;
     color: var(--cor-subtitulos);
   }
-  .chat-header {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 16px;
-    background: var(--cor-fundo-elevado);
-    border-bottom: 1px solid var(--cor-borda-geral);
-  }
-  .chat-avatar {
-    width: 40px; height: 40px; border-radius: var(--radius-full);
-    display: inline-flex; align-items: center; justify-content: center;
-    background: var(--cor-whatsapp-bg);
-    color: var(--cor-whatsapp);
-    border: 1px solid rgb(37, 211, 102, 0.3);
-    flex-shrink: 0;
-  }
-  .chat-name { font-size: 0.95rem; font-weight: 700; color: var(--cor-texto-primario); }
-  .chat-online { font-size: 0.72rem; color: var(--cor-status-ok); font-weight: 600; margin-top: 1px; }
-  .chat-ai-badge {
-    margin-left: auto;
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--cor-texto-secundario);
-    background: var(--cor-cards-hover);
-    border: 1px solid var(--cor-borda-geral);
-    padding: 3px 8px; border-radius: 9999px;
-  }
-  .chat-body {
-    display: flex; flex-direction: column; gap: 10px;
-    padding: 18px 16px 16px;
-    flex: 1;
-  }
-  .chat-msg {
-    max-width: 82%;
-    padding: 9px 12px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--sombra-card);
-  }
-  .chat-msg p { font-size: 0.82rem; line-height: 1.45; margin: 0; color: var(--cor-texto-primario); }
-  .chat-msg.is-bot {
-    align-self: flex-start;
-    background: var(--cor-cards);
-    border: 1px solid var(--cor-borda-geral);
-    border-bottom-left-radius: 4px;
-  }
-  .chat-msg.is-client {
-    align-self: flex-end;
-    background: var(--cor-whatsapp-bg);
-    border: 1px solid rgb(37, 211, 102, 0.28);
-    border-bottom-right-radius: 4px;
-  }
-  .chat-time {
-    display: block;
-    text-align: right;
-    font-size: 0.62rem;
-    color: var(--cor-subtitulos);
-    margin-top: 3px;
-  }
-  .chat-footer {
-    display: flex; align-items: center; gap: 8px;
-    padding: 12px 16px;
-    background: var(--cor-fundo-elevado);
-    border-top: 1px solid var(--cor-borda-geral);
-    color: var(--cor-subtitulos);
-    font-size: 0.82rem;
-  }
-  .chat-footer span { flex: 1; }
-  .chat-footer :global(svg) { color: var(--cor-whatsapp); }
 </style>

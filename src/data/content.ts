@@ -83,7 +83,7 @@ export const AI_CHAT_MSGS: ChatMsg[] = [
 export const NAV_LINKS: NavLink[] = [
   { label: "Funcionalidades", href: "#recursos" },
   { label: "Como funciona", href: "#como-funciona" },
-  { label: "Planos e preços", href: "#precos" },
+  { label: "Preços", href: "#precos" },
   { label: "Histórias de clientes", href: "#historias" },
   { label: "Blog", href: "/blog" },
 ];
@@ -210,6 +210,45 @@ export const STEPS: Step[] = [
     n: 4,
     title: "O cliente marca. Você só atende.",
     desc: "Ele agenda sozinho, pela IA ou pelo link. O lembrete cai no WhatsApp dele automaticamente. A agenda enche, a agenda não fura.",
+  },
+];
+
+export interface ComparisonRow {
+  label: string;
+  manual: string;
+  skedoole: string;
+}
+
+export const COMPARISON: ComparisonRow[] = [
+  {
+    label: "Confirmar horário",
+    manual: "Liga pra cada cliente e ainda fica no vácuo",
+    skedoole: "A IA confirma e lembra no WhatsApp sozinha",
+  },
+  {
+    label: "Faltas e no-shows",
+    manual: "Horário vago de graça quando ninguém aparece",
+    skedoole: "94% menos faltas com lembrete automático",
+  },
+  {
+    label: "Atender no celular",
+    manual: "Caderno em casa, agenda perdida no balcão",
+    skedoole: "Agenda no bolso, em qualquer lugar, na hora",
+  },
+  {
+    label: "Fila de espera",
+    manual: "Cliente esperando sem saber quando é a vez",
+    skedoole: "Fila digital com posição atualizada na hora",
+  },
+  {
+    label: "Receber por Pix",
+    manual: "Conta manual, cobrança que some do papel",
+    skedoole: "Pix e cartão com cobrança automática",
+  },
+  {
+    label: "Fechar o dia",
+    manual: "Somar tudo à mão, no escuro",
+    skedoole: "Relatórios prontos no fechar do caixa",
   },
 ];
 

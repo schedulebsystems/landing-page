@@ -1,46 +1,151 @@
 ---
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
-import { PLANS } from "@data/content";
+import SectionHeading from "@components/SectionHeading.astro";
 import { SITE } from "@config/site";
 
 const app = `${SITE.appUrl}/criar-conta`;
 const wpp = SITE.whatsapp;
-
-const fmtBRL = (n: number) =>
-  n === 0
-    ? "R$ 0"
-    : new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(n);
-
-const fmtInt = (n: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-    maximumFractionDigits: 0,
-  }).format(n);
-
-const savingOf = (p: (typeof PLANS)[number]) =>
-  p.monthly !== null && p.annual !== null ? (p.monthly - p.annual) * 12 : 0;
 ---
 <section id="precos" class="py-16 md:py-24">
   <div class="container-tight">
-    <Reveal class="text-center mx-auto max-w-2xl">
-      <span class="eyebrow justify-center">Investimento</span>
-      <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
-        Preço direto. Sem pegadinha, sem surpresa.
-      </h2>
-      <p class="mt-4 text-[var(--cor-texto-secundario)]">
-        Teste grátis por 14 dias. Sem cartão. Cancele em 1 toque.
-      </p>
+    <SectionHeading eyebrow="Investimento" align="center" class="max-w-2xl">
+      <Fragment slot="title">
+        Preço justo, calculado na hora.
+      </Fragment>
+      <Fragment slot="lede">
+        Você escolhe quantos profissionais e unidades quer ativar. O valor é
+        gerado automaticamente para o seu cenário — sem plano travado.
+      </Fragment>
+    </SectionHeading>
+
+    <Reveal class="mt-12">
+      <div class="calc">
+        <div class="calc-summary">
+          <div class="prices-toggle" role="radiogroup" aria-label="Ciclo de cobrança">
+            <span class="prices-toggle-thumb" aria-hidden="true"></span>
+            <button type="button" data-cycle="monthly" class="is-active" role="radio" aria-checked="true" tabindex="0">Mensal</button>
+            <button type="button" data-cycle="annual" role="radio" aria-checked="false" tabindex="-1">
+              Anual <span class="save">-8%</span>
+            </button>
+          </div>
+
+          <div class="calc-price-row">
+            <div class="calc-price" aria-live="polite">
+              <span class="calc-currency">R$</span>
+              <span class="calc-amount" data-amount>139,70</span>
+              <span class="calc-period" data-period>/mês</span>
+            </div>
+          </div>
+          <p class="calc-annual-note" data-annual-note hidden>
+            Faturado anualmente em <strong data-annual-total>R$ 1.542,29</strong>
+          </p>
+
+          <dl class="calc-breakdown">
+            <div class="calc-break-row">
+              <dt>
+                Assinatura base
+                <span class="calc-incl">1º profissional e 1 unidade</span>
+              </dt>
+              <dd data-base>R$ 49,90</dd>
+            </div>
+            <div class="calc-break-row" data-row-extra-profs hidden>
+              <dt data-label-extra-profs>Profissionais extras (2)</dt>
+              <dd data-extra-profs>R$ 39,80</dd>
+            </div>
+            <div class="calc-break-row" data-row-extra-units hidden>
+              <dt data-label-extra-units>Unidades extras (1)</dt>
+              <dd data-extra-units>R$ 59,90</dd>
+            </div>
+            <div class="calc-break-row calc-break-total">
+              <dt>
+                Total
+                <span class="calc-incl">cobrado por mês</span>
+              </dt>
+              <dd data-total>R$ 139,70</dd>
+            </div>
+          </dl>
+
+          <div class="calc-cta">
+            <a href={app} class="btn btn-primary calc-cta-btn" data-cta="pricing-calculator">
+              Começar grátis
+              <Icon name="arrow-right" size={16} />
+            </a>
+            <p class="calc-fine">Teste grátis por 14 dias · Sem cartão · Sem fidelidade</p>
+          </div>
+        </div>
+
+        <div class="calc-config">
+          <div class="stepper-card">
+            <div class="stepper-head">
+              <span class="stepper-icon"><Icon name="users" size={18} /></span>
+              <span>
+                <strong>Profissionais</strong>
+                <small>1 incluso no valor base</small>
+              </span>
+            </div>
+            <div class="stepper">
+              <button type="button" data-stepper-profs="-1" aria-label="Diminuir quantidade de profissionais" disabled>
+                <Icon name="minus" size={16} />
+              </button>
+              <div class="stepper-value">
+                <output data-prof-count>3</output>
+                <span class="stepper-unit">profissionais</span>
+              </div>
+              <button type="button" data-stepper-profs="1" aria-label="Aumentar quantidade de profissionais">
+                <Icon name="plus" size={16} />
+              </button>
+            </div>
+            <p class="stepper-hint">
+              Faixa atual: <strong data-bracket>R$ 39,90</strong> por profissional
+            </p>
+          </div>
+
+          <div class="stepper-card">
+            <div class="stepper-head">
+              <span class="stepper-icon"><Icon name="globe" size={18} /></span>
+              <span>
+                <strong>Unidades</strong>
+                <small>1 unidade sem custo</small>
+              </span>
+            </div>
+            <div class="stepper">
+              <button type="button" data-stepper-units="-1" aria-label="Diminuir quantidade de unidades" disabled>
+                <Icon name="minus" size={16} />
+              </button>
+              <div class="stepper-value">
+                <output data-unit-count>1</output>
+                <span class="stepper-unit">unidades</span>
+              </div>
+              <button type="button" data-stepper-units="1" aria-label="Aumentar quantidade de unidades">
+                <Icon name="plus" size={16} />
+              </button>
+            </div>
+            <p class="stepper-hint">
+              Unidade extra: <strong>R$ 59,90</strong>/mês cada
+            </p>
+          </div>
+
+          <div class="brackets-card">
+            <h3 class="brackets-title">Desconto por volume</h3>
+            <ul class="brackets-list">
+              <li><span>1 – 2 profissionais</span><strong>R$ 49,90</strong></li>
+              <li><span>3 – 5 profissionais</span><strong>R$ 39,90</strong></li>
+              <li><span>6 – 10 profissionais</span><strong>R$ 29,90</strong></li>
+              <li><span>11 – 20 profissionais</span><strong>R$ 24,90</strong></li>
+              <li><span>21+ profissionais</span><strong>R$ 19,90</strong></li>
+            </ul>
+            <p class="brackets-note">
+              Quanto mais profissionais, menor o valor por assento. O desconto é
+              aplicado automaticamente no total.
+            </p>
+          </div>
+        </div>
+      </div>
     </Reveal>
 
-    <div class="prices-included mt-8">
-      <span class="prices-included-label">Incluso em todos os planos</span>
+    <div class="prices-included mt-10">
+      <span class="prices-included-label">Todas as features em qualquer cenário</span>
       <div class="prices-included-items">
         {[
           "IA no WhatsApp",
@@ -58,78 +163,228 @@ const savingOf = (p: (typeof PLANS)[number]) =>
       </div>
     </div>
 
-    <div class="prices-toggle-wrap mt-8">
-      <div class="prices-toggle" role="radiogroup" aria-label="Ciclo de cobrança">
-        <span class="prices-toggle-thumb" aria-hidden="true"></span>
-        <button type="button" data-cycle="monthly" class="is-active" role="radio" aria-checked="true">Mensal</button>
-        <button type="button" data-cycle="annual" role="radio" aria-checked="false">
-          Anual <span class="save">-8%</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <Reveal>
-    <div class="prices-scroll">
-    <div class="prices-grid">
-      {PLANS.map((p) => (
-        <article class={`plan ${p.featured ? "plan-featured" : ""}`}>
-          {p.badge && <div class="plan-badge">{p.badge}</div>}
-          <span class="plan-cap">{p.cap}</span>
-          <h3 class="plan-name">{p.name}</h3>
-          <p class="plan-tagline">{p.tagline}</p>
-          <div class="plan-price">
-            {p.custom ? (
-              <span class="plan-custom-price">Sob consulta</span>
-            ) : (
-              <>
-                <span data-monthly>{fmtBRL(p.monthly!)}</span>
-                <span data-annual hidden>{fmtBRL(p.annual!)}</span>
-              </>
-            )}
-            <span class="plan-cycle">{p.custom ? "" : "/mês"}</span>
-          </div>
-          {!p.custom && (
-            <p class="plan-saving" data-saving hidden>
-              economize {fmtInt(savingOf(p))}/ano
-            </p>
-          )}
-          <ul class="plan-features">
-            {p.features.map((f) => (
-              <li>
-                <Icon name="check" size={16} />
-                <span>{f}</span>
-              </li>
-            ))}
-          </ul>
-          <a
-            href={p.custom ? wpp : app}
-            class={`btn plan-cta btn-primary ${p.featured ? "plan-cta-featured" : ""}`}
-            target={p.custom ? "_blank" : undefined}
-            rel={p.custom ? "noopener" : undefined}
-            data-cta={`plan-${p.name.toLowerCase()}`}
-          >
-            {p.cta}
-          </a>
-        </article>
-      ))}
-    </div>
-    </div>
-  </Reveal>
-
-  <div class="container-tight">
     <p class="prices-foot mt-10 text-center text-sm text-[var(--cor-subtitulos)]">
       Precificação em BRL. Sem taxa de adesão. Cancele quando quiser.
     </p>
     <p class="prices-note mt-3 text-center text-sm text-[var(--cor-subtitulos)]">
-      O plano conta o total de profissionais, somando todas as suas unidades.
-      Precisa de mais de 20? Fale com a gente — fechamos um plano sob medida.
+      O valor considera o total de profissionais, somando todas as suas unidades.
+      Precisa de um cenário maior?{" "}
+      <a href={wpp} target="_blank" rel="noopener" class="prices-link">
+        Fale com a gente
+      </a>{" "}
+      — fechamos um plano sob medida.
     </p>
   </div>
 </section>
 
 <style>
-  .prices-toggle-wrap { display: flex; justify-content: center; }
+  .calc {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 20px;
+    max-width: 1060px;
+    margin-inline: auto;
+    align-items: stretch;
+  }
+  @media (max-width: 900px) {
+    .calc { grid-template-columns: 1fr; }
+  }
+
+  .calc-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 28px 24px;
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--sombra-card-hover);
+  }
+  .calc-config {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .calc-price-row { margin-top: 24px; }
+  .calc-price { display: inline-flex; align-items: baseline; gap: 6px; }
+  .calc-currency {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--cor-texto-secundario);
+  }
+  .calc-amount {
+    display: inline-block;
+    font-size: clamp(2.6rem, 5vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--cor-texto-primario);
+    font-variant-numeric: tabular-nums;
+    transform-origin: center;
+  }
+  .calc-amount.calc-pulse { animation: calc-pulse 0.3s ease; }
+  @keyframes calc-pulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .calc-amount.calc-pulse { animation: none; }
+  }
+  .calc-period { font-size: 0.9rem; color: var(--cor-subtitulos); }
+  .calc-annual-note {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--cor-subtitulos);
+  }
+  .calc-annual-note strong {
+    color: var(--cor-texto-secundario);
+    font-weight: 700;
+  }
+
+  .calc-breakdown {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: var(--cor-fundo-elevado);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-md);
+  }
+  .calc-break-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-block: 7px;
+    font-size: 0.85rem;
+    color: var(--cor-texto-secundario);
+  }
+  .calc-break-row dt { text-align: left; }
+  .calc-break-row dd {
+    font-weight: 700;
+    color: var(--cor-texto-primario);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .calc-incl {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--cor-subtitulos);
+    font-weight: 500;
+    margin-top: 1px;
+  }
+  .calc-break-total {
+    border-top: 1px solid var(--cor-borda-geral);
+    margin-top: 6px;
+    padding-top: 13px;
+    font-size: 0.95rem;
+  }
+  .calc-break-total dt { font-weight: 700; color: var(--cor-texto-primario); }
+  .calc-break-total dd { font-size: 1.25rem; color: var(--cor-texto-primario); }
+
+  .calc-cta { margin-top: 24px; width: 100%; }
+  .calc-cta-btn { width: 100%; justify-content: center; }
+  .calc-fine { margin-top: 10px; font-size: 0.75rem; color: var(--cor-subtitulos); }
+
+  .stepper-card {
+    padding: 18px 20px;
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-lg);
+  }
+  .stepper-head { display: flex; align-items: center; gap: 12px; }
+  .stepper-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: var(--cor-cards-hover);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-sm);
+    color: var(--cor-texto-primario);
+  }
+  .stepper-head strong { display: block; font-size: 0.98rem; color: var(--cor-texto-primario); }
+  .stepper-head small { font-size: 0.78rem; color: var(--cor-subtitulos); }
+  .stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 6px;
+    background: var(--cor-fundo-elevado);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-md);
+  }
+  .stepper button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: var(--cor-cards-hover);
+    border: 1px solid var(--cor-borda-hover);
+    border-radius: var(--radius-sm);
+    color: var(--cor-texto-primario);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+  }
+  .stepper button:hover:not(:disabled) { background: var(--cor-cards); }
+  .stepper button:active:not(:disabled) { transform: scale(0.94); }
+  .stepper button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .stepper-value { display: flex; flex-direction: column; align-items: center; }
+  .stepper-value output {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--cor-texto-primario);
+    font-variant-numeric: tabular-nums;
+  }
+  .stepper-unit { font-size: 0.72rem; color: var(--cor-subtitulos); font-weight: 600; }
+  .stepper-hint {
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: var(--cor-subtitulos);
+    text-align: center;
+  }
+  .stepper-hint strong { color: var(--cor-texto-secundario); font-weight: 700; }
+
+  .brackets-card {
+    padding: 18px 20px;
+    background: var(--cor-fundo-elevado);
+    border: 1px dashed var(--cor-borda-hover);
+    border-radius: var(--radius-lg);
+  }
+  .brackets-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--cor-texto-primario);
+    margin-bottom: 12px;
+  }
+  .brackets-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .brackets-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-block: 6px;
+    border-bottom: 1px solid var(--cor-borda-geral);
+    font-size: 0.84rem;
+    color: var(--cor-texto-secundario);
+  }
+  .brackets-list li:last-child { border-bottom: 0; }
+  .brackets-list strong { color: var(--cor-texto-primario); font-variant-numeric: tabular-nums; }
+  .brackets-note { margin-top: 12px; font-size: 0.75rem; line-height: 1.5; color: var(--cor-subtitulos); }
+
   .prices-included {
     display: flex;
     flex-direction: column;
@@ -168,6 +423,7 @@ const savingOf = (p: (typeof PLANS)[number]) =>
     border-radius: 9999px;
   }
   .prices-included-item :global(svg) { color: var(--cor-status-ok); flex-shrink: 0; }
+
   .prices-toggle {
     position: relative;
     display: inline-grid;
@@ -200,9 +456,7 @@ const savingOf = (p: (typeof PLANS)[number]) =>
     transition: color 0.2s ease;
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   }
-  .prices-toggle button.is-active {
-    color: #fff;
-  }
+  .prices-toggle button.is-active { color: #fff; }
   .prices-toggle .save {
     font-size: 0.7rem; font-weight: 700;
     background: var(--cor-primaria);
@@ -214,137 +468,193 @@ const savingOf = (p: (typeof PLANS)[number]) =>
     background: #fff;
     color: var(--cor-primaria);
   }
-  .prices-scroll {
-    margin-top: 2.5rem;
-  }
-  .prices-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-  }
-  .plan {
-    position: relative;
-    flex: 0 0 auto;
-    width: clamp(280px, 26vw, 340px);
-    padding: 24px;
-    background: var(--cor-cards);
-    border: 1px solid var(--cor-borda-geral);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--sombra-card);
-    display: flex; flex-direction: column;
-  }
-  .plan-featured {
-    border-color: var(--cor-primaria);
-    box-shadow:
-      0 0 0 1px var(--cor-primaria),
-      0 30px 60px -30px rgb(var(--cor-primaria-rgb) / 0.3);
-  }
-  .plan-badge {
-    position: absolute;
-    top: -12px; left: 50%; transform: translateX(-50%);
-    background: var(--cor-primaria);
-    color: #fff;
-    font-size: 0.7rem; font-weight: 700;
-    padding: 4px 10px; border-radius: 9999px;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    box-shadow: 0 6px 14px -6px rgb(var(--cor-primaria-rgb) / 0.6);
-  }
-  .plan-cap {
-    align-self: flex-start;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--cor-texto-secundario);
-    background: var(--cor-fundo-elevado);
-    border: 1px solid var(--cor-borda-geral);
-    padding: 4px 10px; border-radius: 9999px;
-  }
-  .plan-name { font-size: 1.35rem; font-weight: 800; color: var(--cor-texto-primario); margin-top: 14px; letter-spacing: -0.02em; }
-  .plan-tagline { font-size: 0.85rem; color: var(--cor-subtitulos); margin-top: 2px; }
-  .plan-price { margin-top: 16px; display: flex; align-items: baseline; gap: 4px; }
-  .plan-price :strong, .plan-price span:not(.plan-cycle) {
-    font-size: clamp(2.1rem, 2vw + 1rem, 2.6rem);
-    font-weight: 800; letter-spacing: -0.03em;
-    color: var(--cor-texto-primario);
-    line-height: 1;
-  }
-  .plan-featured .plan-price :strong,
-  .plan-featured .plan-price span:not(.plan-cycle):not(.plan-custom-price) {
-    color: var(--cor-primaria);
-  }
-  .plan-cycle { font-size: 0.85rem; color: var(--cor-subtitulos); margin-left: 4px; }
-  .plan-price .plan-custom-price {
-    font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;
-    color: var(--cor-texto-primario);
-  }
-  .plan-saving {
-    margin-top: 4px;
-    font-size: 0.74rem; font-weight: 600;
-    color: var(--cor-status-ok);
-    min-height: 1.2em;
-  }
+
   .prices-note { max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.5; }
-  .plan-features {
-    list-style: none; padding: 0; margin: 20px 0 0;
-    display: flex; flex-direction: column; gap: 10px;
-    flex: 1;
+  .prices-link {
+    color: var(--cor-texto-secundario);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
-  .plan-features li {
-    display: flex; align-items: flex-start; gap: 8px;
-    font-size: 0.88rem; color: var(--cor-texto-secundario);
-  }
-  .plan-features :global(svg) { color: var(--cor-status-ok); flex-shrink: 0; margin-top: 2px; }
-  .plan-cta { margin-top: 22px; width: 100%; }
-  .plan-cta-featured {
-    box-shadow: 0 10px 30px -8px rgb(var(--cor-primaria-rgb) / 0.55),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
+  .prices-link:hover { color: var(--cor-texto-primario); }
 </style>
 
 <script>
   const setup = () => {
     const toggle = document.querySelector<HTMLElement>(".prices-toggle");
-    const buttons = document.querySelectorAll<HTMLButtonElement>(".prices-toggle button");
+    const buttons = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".prices-toggle button")
+    );
     const thumb = document.querySelector<HTMLElement>(".prices-toggle-thumb");
-    if (buttons.length === 0) return;
+    if (!toggle || buttons.length === 0 || !thumb) return;
+
+    const state = { cycle: "monthly", profs: 3, units: 1 };
+    const BRACKETS: { min: number; max: number | null; price: number }[] = [
+      { min: 1, max: 2, price: 49.9 },
+      { min: 3, max: 5, price: 39.9 },
+      { min: 6, max: 10, price: 29.9 },
+      { min: 11, max: 20, price: 24.9 },
+      { min: 21, max: null, price: 19.9 },
+    ];
+    const EXTRA_UNIT = 59.9;
+    const MAX = 99;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const q = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel);
+
+    const seatTotal = (qty: number) => {
+      let rest = qty;
+      let total = 0;
+      for (const b of BRACKETS) {
+        if (rest <= 0) break;
+        const seats = b.max === null ? rest : Math.min(Math.max(0, b.max - b.min + 1), rest);
+        total += b.price * seats;
+        rest -= seats;
+      }
+      return total;
+    };
+    const bracketPrice = (qty: number) => {
+      for (const b of BRACKETS) {
+        if (b.max === null ? qty >= b.min : qty >= b.min && qty <= b.max) return b.price;
+      }
+      return BRACKETS[0].price;
+    };
+    const monthlyTotal = () => seatTotal(state.profs) + Math.max(0, state.units - 1) * EXTRA_UNIT;
+    const fmt = (n: number) =>
+      n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const els = {
+      amount: q<HTMLElement>("[data-amount]"),
+      period: q<HTMLElement>("[data-period]"),
+      annualNote: q<HTMLElement>("[data-annual-note]"),
+      annualTotal: q<HTMLElement>("[data-annual-total]"),
+      base: q<HTMLElement>("[data-base]"),
+      rowExtraProfs: q<HTMLElement>("[data-row-extra-profs]"),
+      labelExtraProfs: q<HTMLElement>("[data-label-extra-profs]"),
+      extraProfs: q<HTMLElement>("[data-extra-profs]"),
+      rowExtraUnits: q<HTMLElement>("[data-row-extra-units]"),
+      labelExtraUnits: q<HTMLElement>("[data-label-extra-units]"),
+      extraUnits: q<HTMLElement>("[data-extra-units]"),
+      total: q<HTMLElement>("[data-total]"),
+      profCount: q<HTMLElement>("[data-prof-count]"),
+      unitCount: q<HTMLElement>("[data-unit-count]"),
+      bracket: q<HTMLElement>("[data-bracket]"),
+    };
+    const profBtns = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("[data-stepper-profs]")
+    );
+    const unitBtns = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("[data-stepper-units]")
+    );
 
     const moveThumb = (btn: HTMLButtonElement) => {
-      if (!toggle || !thumb) return;
       const tRect = toggle.getBoundingClientRect();
       const bRect = btn.getBoundingClientRect();
       thumb.style.width = `${bRect.width}px`;
       thumb.style.transform = `translateX(${bRect.left - tRect.left}px)`;
     };
 
+    const render = () => {
+      const monthly = monthlyTotal();
+      const annual = monthly * 12 * 0.92;
+      const isYearly = state.cycle === "annual";
+      const showVal = isYearly ? annual / 12 : monthly;
+
+      if (els.amount) {
+        els.amount.textContent = fmt(showVal);
+        if (!reduced) {
+          els.amount.classList.remove("calc-pulse");
+          void els.amount.offsetWidth;
+          els.amount.classList.add("calc-pulse");
+        }
+      }
+      if (els.annualNote) {
+        els.annualNote.hidden = !isYearly;
+        if (els.annualTotal) els.annualTotal.textContent = `R$ ${fmt(annual)}`;
+      }
+
+      const extraProfs = state.profs - 1;
+      const extraProfsCost = seatTotal(state.profs) - BRACKETS[0].price;
+      const extraUnits = state.units - 1;
+      const extraUnitsCost = extraUnits * EXTRA_UNIT;
+
+      if (els.base) els.base.textContent = `R$ ${fmt(BRACKETS[0].price)}`;
+      if (els.rowExtraProfs) {
+        els.rowExtraProfs.hidden = extraProfs <= 0;
+        if (els.labelExtraProfs)
+          els.labelExtraProfs.textContent = `Profissionais extras (${extraProfs})`;
+        if (els.extraProfs) els.extraProfs.textContent = `R$ ${fmt(extraProfsCost)}`;
+      }
+      if (els.rowExtraUnits) {
+        els.rowExtraUnits.hidden = extraUnits <= 0;
+        if (els.labelExtraUnits)
+          els.labelExtraUnits.textContent = `Unidades extras (${extraUnits})`;
+        if (els.extraUnits) els.extraUnits.textContent = `R$ ${fmt(extraUnitsCost)}`;
+      }
+      if (els.total) els.total.textContent = `R$ ${fmt(monthly)}`;
+
+      if (els.profCount) els.profCount.textContent = String(state.profs);
+      if (els.unitCount) els.unitCount.textContent = String(state.units);
+      if (els.bracket) els.bracket.textContent = `R$ ${fmt(bracketPrice(state.profs))}`;
+
+      profBtns.forEach((b) => {
+        const delta = Number(b.dataset.stepperProfs);
+        b.disabled = (delta === -1 && state.profs <= 1) || (delta === 1 && state.profs >= MAX);
+      });
+      unitBtns.forEach((b) => {
+        const delta = Number(b.dataset.stepperUnits);
+        b.disabled = (delta === -1 && state.units <= 1) || (delta === 1 && state.units >= MAX);
+      });
+    };
+
     const apply = (cycle: string) => {
+      state.cycle = cycle;
       buttons.forEach((b) => {
         const active = b.dataset.cycle === cycle;
         b.classList.toggle("is-active", active);
         b.setAttribute("aria-checked", String(active));
+        b.tabIndex = active ? 0 : -1;
         if (active) moveThumb(b);
       });
-      document.querySelectorAll<HTMLElement>(".prices-grid .plan").forEach((plan) => {
-        const m = plan.querySelector<HTMLElement>("[data-monthly]");
-        const a = plan.querySelector<HTMLElement>("[data-annual]");
-        const s = plan.querySelector<HTMLElement>("[data-saving]");
-        if (m) m.hidden = cycle !== "monthly";
-        if (a) a.hidden = cycle !== "annual";
-        if (s) s.hidden = cycle !== "annual";
-      });
+      render();
     };
 
-    const activeBtn = toggle?.querySelector<HTMLButtonElement>("button.is-active");
+    const activeBtn = toggle.querySelector<HTMLButtonElement>("button.is-active");
     if (activeBtn) moveThumb(activeBtn);
 
     buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        apply(btn.dataset.cycle || "monthly");
-      });
+      btn.addEventListener("click", () => apply(btn.dataset.cycle || "monthly"));
+    });
+    toggle.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const idx = buttons.indexOf(document.activeElement as HTMLButtonElement);
+      if (idx === -1) return;
+      e.preventDefault();
+      const dir = e.key === "ArrowRight" ? 1 : -1;
+      const next = buttons[(idx + dir + buttons.length) % buttons.length];
+      next.focus();
+      apply(next.dataset.cycle || "monthly");
+    });
+
+    const step = (kind: "profs" | "units", delta: number) => {
+      const next = state[kind] + delta;
+      if (next < 1 || next > MAX) return;
+      state[kind] = next;
+      render();
+    };
+    profBtns.forEach((b) => {
+      b.addEventListener("click", () => step("profs", Number(b.dataset.stepperProfs)));
+    });
+    unitBtns.forEach((b) => {
+      b.addEventListener("click", () => step("units", Number(b.dataset.stepperUnits)));
     });
 
     window.addEventListener("resize", () => {
-      const active = toggle?.querySelector<HTMLButtonElement>("button.is-active");
+      const active = toggle.querySelector<HTMLButtonElement>("button.is-active");
       if (active) moveThumb(active);
     });
+
+    render();
   };
   setup();
   document.addEventListener("astro:after-swap", setup);

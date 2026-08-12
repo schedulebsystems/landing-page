@@ -53,7 +53,7 @@ const jsonLdWebsite = {
       name: SITE.legalName,
       url: SITE.url,
       logo: new URL("/favicon-512.png", SITE.url).href,
-      sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
+      sameAs: SITE.socials,
       contactPoint: [
         {
           "@type": "ContactPoint",

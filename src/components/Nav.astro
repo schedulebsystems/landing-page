@@ -87,6 +87,9 @@ const wpp = SITE.whatsapp;
     class="nav-mobile md:hidden"
     data-open="false"
     aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menu"
   >
     <div class="nav-mobile-inner">
       <div class="flex items-center justify-between p-4 border-b border-[var(--cor-borda-geral)]">
@@ -203,6 +206,8 @@ const wpp = SITE.whatsapp;
     const mobile = document.getElementById("nav-mobile");
     const scrim = document.getElementById("nav-scrim");
 
+    let lastFocused: HTMLElement | null = null;
+
     const applyScroll = () => {
       if (!header) return;
       if (window.scrollY > 8) {
@@ -219,19 +224,53 @@ const wpp = SITE.whatsapp;
       mobile.dataset.open = String(open);
       scrim.dataset.open = String(open);
       if (open) {
+        lastFocused = document.activeElement as HTMLElement | null;
         scrim.hidden = false;
         toggle.setAttribute("aria-expanded", "true");
         mobile.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
+        document.addEventListener("keydown", trapTab);
+        requestAnimationFrame(() => {
+          const focusables = getFocusable();
+          (focusables[0] ?? close)?.focus();
+        });
       } else {
         toggle.setAttribute("aria-expanded", "false");
         mobile.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
+        document.removeEventListener("keydown", trapTab);
+        if (lastFocused && document.contains(lastFocused)) lastFocused.focus();
         const finish = () => {
           if (mobile.dataset.open === "false") scrim.hidden = true;
           mobile.removeEventListener("transitionend", finish);
         };
         mobile.addEventListener("transitionend", finish);
+      }
+    };
+
+    const getFocusable = () => {
+      if (!mobile) return [];
+      return Array.from(
+        mobile.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.hasAttribute("hidden"));
+    };
+
+    const trapTab = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !mobile || mobile.dataset.open !== "true") return;
+      const focusables = getFocusable();
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      const inside = active && mobile.contains(active);
+      if (e.shiftKey && (!inside || active === first)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (!inside || active === last)) {
+        e.preventDefault();
+        first.focus();
       }
     };
 

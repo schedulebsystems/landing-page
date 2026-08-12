@@ -1,6 +1,7 @@
 ---
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
+import SectionHeading from "@components/SectionHeading.astro";
 import { STEPS } from "@data/content";
 import { SITE } from "@config/site";
 
@@ -8,14 +9,9 @@ const app = `${SITE.appUrl}/criar-conta`;
 ---
 <section id="como-funciona" class="py-16 md:py-24">
   <div class="container-tight">
-    <Reveal>
-      <div class="max-w-2xl">
-        <span class="eyebrow">Como funciona</span>
-        <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
-          Do cadastro ao primeiro agendamento, 5 minutos.
-        </h2>
-      </div>
-    </Reveal>
+    <SectionHeading eyebrow="Como funciona" class="max-w-2xl">
+      <Fragment slot="title">Do cadastro ao primeiro agendamento, 5 minutos.</Fragment>
+    </SectionHeading>
 
     <ol class="cf-timeline mt-14">
       {STEPS.map((s, i) => (

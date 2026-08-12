@@ -18,10 +18,7 @@ const wpp = SITE.whatsapp;
           </svg>
         </div>
         <div class="cta-content">
-          <span class="eyebrow" style="color: rgba(255,255,255,0.85)">
-            <span style="background: rgba(255,255,255,0.85); width: 1.5rem; height: 1px; display: inline-block;"></span>
-            Último passo
-          </span>
+          <span class="eyebrow cta-eyebrow">Último passo</span>
           <h2 class="cta-title">
             5 minutos separam você<br />
             <span class="cta-title-sub">de um negócio que agenda sozinho.</span>
@@ -38,8 +35,7 @@ const wpp = SITE.whatsapp;
             </a>
             <a
               href={wpp}
-              class="btn text-base"
-              style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25);"
+              class="btn cta-ghost text-base"
               target="_blank" rel="noopener"
               data-cta="cta-final-whatsapp"
             >
@@ -96,6 +92,16 @@ const wpp = SITE.whatsapp;
   .cta-lede { font-size: 1.05rem; margin-top: 16px; color: rgba(255,255,255,0.92); max-width: 60ch; }
   .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
   .cta-fine { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 14px; }
+  .cta-eyebrow { color: rgba(255,255,255,0.85); }
+  .cta-ghost {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .cta-ghost:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.4);
+  }
 
   html[data-theme="light"] .cta-band {
     background: var(--cor-cards);
@@ -115,12 +121,19 @@ const wpp = SITE.whatsapp;
     color: var(--cor-subtitulos);
   }
 
-  html[data-theme="light"] .eyebrow {
+  html[data-theme="light"] .cta-eyebrow {
     color: var(--cor-primaria);
   }
 
-  html[data-theme="light"] .eyebrow span {
-    background: var(--cor-primaria) !important;
+  html[data-theme="light"] .cta-ghost {
+    background: transparent;
+    color: var(--cor-texto-primario);
+    border: 1px solid var(--cor-borda-hover);
+  }
+
+  html[data-theme="light"] .cta-ghost:hover {
+    background: var(--cor-cards-hover);
+    border-color: var(--cor-texto-secundario);
   }
 
   html[data-theme="light"] .cta-glow {
@@ -129,16 +142,5 @@ const wpp = SITE.whatsapp;
 
   html[data-theme="light"] .cta-doodle {
     display: none;
-  }
-
-  html[data-theme="light"] .cta-actions a:last-child {
-    background: transparent !important;
-    color: var(--cor-texto-primario) !important;
-    border: 1px solid var(--cor-borda-hover) !important;
-  }
-
-  html[data-theme="light"] .cta-actions a:last-child:hover {
-    background: var(--cor-cards-hover) !important;
-    border-color: var(--cor-texto-secundario) !important;
   }
 </style>

@@ -1,21 +1,21 @@
 ---
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
+import SectionHeading from "@components/SectionHeading.astro";
 import { FEATURES } from "@data/content";
 ---
-<section id="recursos" class="section-dark py-14 md:py-20 features-bg">
+<section id="recursos" class="py-14 md:py-20 features-bg">
   <div class="container-tight">
-    <Reveal class="max-w-2xl">
-      <span class="eyebrow">O pacote completo</span>
-      <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+    <SectionHeading eyebrow="O pacote completo" class="max-w-2xl">
+      <Fragment slot="title">
         Tudo que seu negócio precisa<br class="hidden md:block" />
         pra não perder mais nenhum horário.
-      </h2>
-      <p class="mt-4 text-[var(--cor-texto-secundario)]">
+      </Fragment>
+      <Fragment slot="lede">
         Nada de planilha, caderninho ou cinco abas abertas no navegador.
         A Skedoole junta agenda, fila, pagamento e relatório no mesmo lugar.
-      </p>
-    </Reveal>
+      </Fragment>
+    </SectionHeading>
 
     <div class="mt-12 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {FEATURES.map((f) => (
