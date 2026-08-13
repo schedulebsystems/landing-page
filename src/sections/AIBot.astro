@@ -95,7 +95,7 @@ const app = `${SITE.appUrl}/criar-conta`;
     pointer-events: none;
     background:
       radial-gradient(50% 60% at 10% 10%, rgb(var(--cor-primaria-rgb) / 0.12), transparent 60%),
-      radial-gradient(40% 50% at 90% 90%, rgb(var(--cor-whatsapp) / 0.08), transparent 60%);
+      radial-gradient(40% 50% at 90% 90%, rgb(var(--cor-primaria-rgb) / 0.08), transparent 60%);
   }
   .ai-copy, .ai-chat-wrap { position: relative; z-index: 1; }
   .ai-chip {
@@ -106,9 +106,9 @@ const app = `${SITE.appUrl}/criar-conta`;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--cor-whatsapp);
-    background: var(--cor-whatsapp-bg);
-    border: 1px solid rgb(37, 211, 102, 0.3);
+    color: var(--cor-primaria);
+    background: var(--cor-primaria-soft);
+    border: 1px solid rgb(var(--cor-primaria-rgb) / 0.3);
     padding: 6px 12px;
     border-radius: 9999px;
   }
@@ -121,7 +121,7 @@ const app = `${SITE.appUrl}/criar-conta`;
     color: var(--cor-texto-primario);
   }
   .ai-hl {
-    color: var(--cor-whatsapp);
+    color: var(--cor-primaria);
   }
   .ai-lede {
     margin-top: 16px;
@@ -147,7 +147,7 @@ const app = `${SITE.appUrl}/criar-conta`;
     line-height: 1.5;
   }
   .ai-bullets :global(svg) {
-    color: var(--cor-status-ok);
+    color: var(--cor-primaria);
     flex-shrink: 0;
     margin-top: 3px;
   }
@@ -159,6 +159,21 @@ const app = `${SITE.appUrl}/criar-conta`;
     background: var(--cor-fundo-elevado);
     border: 1px solid var(--cor-borda-geral);
     box-shadow: var(--sombra-card-hover);
+  }
+  .ai-chat :global(.chat-avatar) {
+    background: var(--cor-primaria-soft);
+    color: var(--cor-primaria);
+    border: 1px solid rgb(var(--cor-primaria-rgb) / 0.3);
+  }
+  .ai-chat :global(.chat-online) {
+    color: var(--cor-primaria);
+  }
+  .ai-chat :global(.chat-msg.is-client) {
+    background: var(--cor-primaria-soft);
+    border: 1px solid rgb(var(--cor-primaria-rgb) / 0.28);
+  }
+  .ai-chat :global(.chat-footer svg) {
+    color: var(--cor-primaria);
   }
   .ai-caption {
     margin-top: 12px;
