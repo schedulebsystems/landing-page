@@ -1,0 +1,36 @@
+---
+/**
+ * Moldura de celular desenhada em CSS.
+ * SVG de iPhone foi descartado: o asset disponível é uma ilustração 3D,
+ * não um frame vetorial limpo para receber conteúdo HTML.
+ */
+interface Props {
+  label?: string;
+}
+
+const { label = "Celular do cliente" } = Astro.props;
+---
+<div class="sb-phone" data-phone data-view="owner" aria-label={label}>
+  <span class="sb-phone__key sb-phone__key--up" aria-hidden="true"></span>
+  <span class="sb-phone__key sb-phone__key--down" aria-hidden="true"></span>
+  <span class="sb-phone__key sb-phone__key--power" aria-hidden="true"></span>
+
+  <div class="sb-phone__screen">
+    <div class="sb-phone__island" aria-hidden="true"></div>
+
+    <div class="sb-statusbar" aria-hidden="true">
+      <span class="sb-statusbar__time">9:41</span>
+      <span class="sb-statusbar__right">
+        <span class="sb-signal"><i></i><i></i><i></i><i></i></span>
+        <svg class="sb-wifi" viewBox="0 0 16 12" fill="none">
+          <path d="M1 4.2a10.5 10.5 0 0 1 14 0M3.4 6.8a7 7 0 0 1 9.2 0M5.9 9.3a3.2 3.2 0 0 1 4.2 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span class="sb-battery"><span></span></span>
+      </span>
+    </div>
+
+    <slot />
+
+    <div class="sb-phone__home" aria-hidden="true"></div>
+  </div>
+</div>

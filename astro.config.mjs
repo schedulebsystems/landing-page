@@ -21,6 +21,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
+      filter: (page) => !page.includes("/experiencia"),
       i18n: {
         defaultLocale: "pt-br",
         locales: { "pt-br": "pt-BR" },

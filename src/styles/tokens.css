@@ -18,9 +18,26 @@
 
   --cor-status-ok: #3ECF72;
   --cor-status-ok-bg: #123021;
+  --cor-success: #34D399;
+  --cor-success-bg: rgba(16, 185, 129, 0.15);
+  --cor-warning: #FBBF24;
+  --cor-warning-bg: rgba(245, 158, 11, 0.18);
+  --cor-danger: #F87171;
+  --cor-danger-bg: rgba(220, 38, 38, 0.15);
+  --cor-info: #60A5FA;
+  --cor-info-bg: rgba(59, 130, 246, 0.15);
+  --cor-btn-start: #34D399;
+  --cor-btn-finish: #38BDF8;
+  --cor-borda-card: #282828;
   --cor-whatsapp: #25D366;
   --cor-whatsapp-bg: rgba(37, 211, 102, 0.12);
   --cor-stars: #FFD700;
+
+  --cor-on-primary: #FFFFFF;
+  --cor-moldura: #08080A;
+  --cor-moldura-borda: #2C2C31;
+  --cor-moldura-brilho: rgba(255, 255, 255, 0.12);
+  --cor-overlay: rgba(0, 0, 0, 0.55);
 
   --sombra-card: 0 1px 3px rgba(0, 0, 0, 0.5);
   --sombra-card-hover: 0 12px 28px -8px rgba(0, 0, 0, 0.6),
@@ -81,9 +98,26 @@ html[data-theme="light"] {
 
   --cor-status-ok: #1A9F55;
   --cor-status-ok-bg: #E8F5EE;
+  --cor-success: #1A9F55;
+  --cor-success-bg: #E8F5EE;
+  --cor-warning: #D97706;
+  --cor-warning-bg: #FEF3C7;
+  --cor-danger: #DC2626;
+  --cor-danger-bg: #FEE2E2;
+  --cor-info: #2563EB;
+  --cor-info-bg: #EFF6FF;
+  --cor-btn-start: #1A9F55;
+  --cor-btn-finish: #0EA5E9;
+  --cor-borda-card: #E5E7EB;
   --cor-whatsapp: #1DA851;
   --cor-whatsapp-bg: rgba(29, 168, 81, 0.08);
   --cor-stars: #F5A623;
+
+  --cor-on-primary: #FFFFFF;
+  --cor-moldura: #08080A;
+  --cor-moldura-borda: #2C2C31;
+  --cor-moldura-brilho: rgba(255, 255, 255, 0.16);
+  --cor-overlay: rgba(0, 0, 0, 0.45);
 
   --sombra-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   --sombra-card-hover: 0 12px 28px -8px rgba(0, 0, 0, 0.12),

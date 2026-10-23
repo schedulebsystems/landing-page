@@ -1,0 +1,45 @@
+---
+import Base from "@layouts/Base.astro";
+import Nav from "@components/Nav.astro";
+import Footer from "@components/Footer.astro";
+import LiveSandbox from "@sections/LiveSandbox.astro";
+import ProblemSolution from "@sections/ProblemSolution.astro";
+import Pricing from "@sections/Pricing.astro";
+import FAQ from "@sections/FAQ.astro";
+import CTA from "@sections/CTA.astro";
+import {
+  FAQS,
+  NAV_LINKS_EXPERIENCIA,
+  FOOTER_LINKS_EXPERIENCIA,
+} from "@data/content";
+---
+<Base
+  title="Sua cadeira não fica vazia | Skedoole"
+  description="O cliente marca sozinho, o lembrete confirma e a fila cobre quem cancela. Veja o dia inteiro funcionando no simulador."
+  canonical="/experiencia"
+  noindex
+>
+  <Nav links={NAV_LINKS_EXPERIENCIA} />
+  <main id="main">
+    <LiveSandbox />
+    <ProblemSolution />
+    <Pricing />
+    <FAQ />
+    <CTA />
+  </main>
+  <Footer links={FOOTER_LINKS_EXPERIENCIA} />
+</Base>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  })}
+/>

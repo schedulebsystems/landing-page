@@ -1,9 +1,14 @@
 ---
 import Icon from "./Icon.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-import { NAV_LINKS } from "@data/content";
+import { NAV_LINKS, type NavLink } from "@data/content";
 import { SITE } from "@config/site";
 
+interface Props {
+  links?: NavLink[];
+}
+
+const { links = NAV_LINKS } = Astro.props;
 const app = `${SITE.appUrl}/criar-conta`;
 const entrar = `${SITE.appUrl}/acessar`;
 const wpp = SITE.whatsapp;
@@ -31,7 +36,7 @@ const wpp = SITE.whatsapp;
     </a>
 
     <nav class="hidden md:flex items-center gap-10" aria-label="Principal">
-      {NAV_LINKS.map((l) => (
+      {links.map((l) => (
         <a
           href={l.href}
           class="text-sm font-medium text-[var(--cor-texto-secundario)] hover:text-[var(--cor-texto-primario)] transition-colors"
@@ -113,7 +118,7 @@ const wpp = SITE.whatsapp;
         </button>
       </div>
       <nav class="p-4 flex flex-col gap-1" aria-label="Mobile">
-        {NAV_LINKS.map((l, i) => (
+        {links.map((l, i) => (
           <a
             href={l.href}
             class="px-3 py-3 rounded-md text-base font-medium text-[var(--cor-texto-primario)] hover:bg-[var(--cor-fundo-elevado)] transition nav-mobile-item"

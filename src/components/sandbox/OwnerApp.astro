@@ -1,0 +1,310 @@
+---
+import Icon from "@components/Icon.astro";
+import {
+  BASE_AGENDA,
+  BASE_APPOINTMENTS,
+  BASE_COMPLETED,
+  BASE_RECEIVED,
+  BASE_TO_RECEIVE,
+  PROFESSIONALS,
+  QUEUE,
+  STATUS_LABEL,
+  TENANT,
+  formatBRL,
+} from "@data/sandbox";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const nowTime = "14:03";
+---
+<div
+  class:list={["md-owner", { "md-owner--compact": compact }]}
+  data-owner
+  data-pro-filter="all"
+>
+  <div class="md-topbar">
+    <nav class="md-tabs" aria-label="Áreas do app">
+      <span class="md-tab is-active">Meu dia</span>
+      <span class="md-tab">Clientes</span>
+      <span class="md-tab">Caixa</span>
+    </nav>
+    <span class="md-topbar__shop">{TENANT.name}</span>
+    <span class="md-avatar md-avatar--xs">J</span>
+  </div>
+
+  <div class="md-mobile-head">
+    <strong>Meu dia</strong>
+    <span>{TENANT.dateShort}</span>
+  </div>
+
+  <div class="md-controls">
+    <div class="md-daynav">
+      <button
+        type="button"
+        class="md-daynav__arrow"
+        aria-label="Dia anterior"
+        aria-disabled="true"
+      >
+        <Icon name="chevron-left" size={13} />
+      </button>
+      <span class="md-daynav__main">
+        <small>Meu dia</small>
+        <strong>{TENANT.dateShort}</strong>
+      </span>
+      <button
+        type="button"
+        class="md-daynav__arrow"
+        aria-label="Próximo dia"
+        aria-disabled="true"
+      >
+        <Icon name="chevron-right" size={13} />
+      </button>
+      <button
+        type="button"
+        class="md-daynav__caret"
+        aria-label="Abrir calendário"
+        aria-disabled="true"
+      >
+        <Icon name="calendar-days" size={13} />
+      </button>
+    </div>
+    <div class="md-controls__actions">
+      <span class="md-settings">
+        <Icon name="settings" size={12} />
+        Configurações agenda
+      </span>
+      <span class="md-presencial">
+        <Icon name="plus" size={13} />
+        Presencial
+      </span>
+    </div>
+  </div>
+
+  <div class="md-chips" role="group" aria-label="Filtrar por profissional">
+    <button
+      type="button"
+      class="md-chip is-active"
+      data-action="filter"
+      data-value="all"
+      aria-pressed="true"
+    >
+      <span class="md-chip__avatar md-chip__avatar--all">
+        <Icon name="users" size={11} />
+      </span>
+      Todos
+    </button>
+    {PROFESSIONALS.map((professional) => (
+      <button
+        type="button"
+        class="md-chip"
+        data-action="filter"
+        data-value={professional.name}
+        aria-pressed="false"
+      >
+        <span class="md-chip__avatar">{professional.initials}</span>
+        {professional.name}
+      </button>
+    ))}
+  </div>
+
+  <div class="md-metrics">
+    <div class="md-metric">
+      <span>Concluídos</span>
+      <strong data-metric="completed">{BASE_COMPLETED}/{BASE_APPOINTMENTS}</strong>
+    </div>
+    <div class="md-metric md-metric--received">
+      <span>Recebido</span>
+      <strong data-metric="received">{formatBRL(BASE_RECEIVED)}</strong>
+    </div>
+    <div class="md-metric">
+      <span>A Receber</span>
+      <strong data-metric="toReceive">{formatBRL(BASE_TO_RECEIVE)}</strong>
+    </div>
+  </div>
+
+  <div class="md-body">
+    <aside class="md-rail">
+      <section class="md-chair" aria-label="Na cadeira">
+        <h4>Na cadeira</h4>
+        <div class="md-chair__card">
+          <span class="md-avatar md-avatar--sm">G</span>
+          <div class="md-chair__body">
+            <strong>Gustavo Lima</strong>
+            <span>Barba · Bruno</span>
+            <small>14:00–14:35</small>
+          </div>
+          <span class="md-status md-status--info">Em andamento</span>
+        </div>
+      </section>
+
+      <section class="md-queue" aria-label="Fila de espera">
+        <header class="md-queue__head">
+          <h4>Fila de espera</h4>
+          <span class="md-count" data-queue-count>{QUEUE.length}</span>
+        </header>
+        <ul class="md-queue__list" data-queue-list>
+          {QUEUE.map((entry) => (
+            <li class="md-queue__row" data-queue-row={entry.id}>
+              <span class="md-avatar md-avatar--sm">{entry.initials}</span>
+              <span class="md-queue__body">
+                <strong>{entry.name}</strong>
+                <span class="md-queue__meta">
+                  <span
+                    class:list={[
+                      "md-wait",
+                      entry.wait < 15
+                        ? "md-wait--ok"
+                        : entry.wait < 30
+                          ? "md-wait--warn"
+                          : "md-wait--danger",
+                    ]}
+                    data-queue-wait
+                  >
+                    há {entry.wait} min
+                  </span>
+                  <span class="md-queue__sep">·</span>
+                  <span data-queue-pref>{entry.preference}</span>
+                </span>
+              </span>
+              <button
+                type="button"
+                class="md-call"
+                data-action="fill"
+                data-queue-call={entry.id}
+              >
+                Chamar
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </aside>
+
+    <section class="md-timeline" aria-label="Agenda do dia">
+      <h4>Agenda do dia</h4>
+      <ol class="md-tl" data-timeline>
+        {BASE_AGENDA.map((item) => {
+          if (item.status === "bloqueio") {
+            return (
+              <li
+                class="md-tl__row md-tl__row--block"
+                data-time={item.time}
+                data-status="bloqueio"
+                data-pro="—"
+              >
+                <span class="md-tl__time">{item.time}</span>
+                <span class="md-tl__rail"><i></i></span>
+                <div class="md-tl__block">
+                  <Icon name="coffee" size={12} />
+                  <span>
+                    <strong>Almoço</strong>
+                    <small>12:00–13:00</small>
+                  </span>
+                </div>
+              </li>
+            );
+          }
+
+          const isCompact = item.status === "pago";
+
+          return (
+            <>
+              <li
+                class:list={[
+                  "md-tl__row",
+                  `md-tl__row--${item.status}`,
+                  { "md-tl__row--compact": isCompact },
+                ]}
+                data-time={item.time}
+                data-status={item.status}
+                data-pro={item.professional}
+              >
+                <span class="md-tl__time">{item.time}</span>
+                <span class="md-tl__rail"><i></i></span>
+                {isCompact ? (
+                  <div class="md-tl__compact">
+                    <strong>{item.client}</strong>
+                    <span>{item.service} · {item.professional}</span>
+                    <span class="md-tl__price">{formatBRL(item.price)}</span>
+                    <span class:list={["md-status", `md-status--${item.status}`]}>
+                      {STATUS_LABEL[item.status]}
+                    </span>
+                  </div>
+                ) : (
+                  <div class="md-tl__card">
+                    <div class="md-tl__top">
+                      <strong>{item.client}</strong>
+                      <span class:list={["md-status", `md-status--${item.status}`]}>
+                        {STATUS_LABEL[item.status]}
+                      </span>
+                    </div>
+                    <p class="md-tl__meta">
+                      {item.service} · {item.professional}
+                      <span class="md-tl__price">{formatBRL(item.price)}</span>
+                    </p>
+                  </div>
+                )}
+              </li>
+              {item.time === "14:00" && (
+                <li class="md-tl__now" data-time={nowTime} aria-label="Agora, 14:03">
+                  <span class="md-tl__time">{nowTime}</span>
+                  <span class="md-tl__rail"><i></i></span>
+                  <span class="md-tl__nowline"></span>
+                </li>
+              )}
+            </>
+          );
+        })}
+      </ol>
+    </section>
+  </div>
+
+  <template data-gap-template>
+    <li
+      class="md-tl__row md-tl__row--gap"
+      data-gap-row
+      data-status="gap"
+    >
+      <span class="md-tl__time" data-gap-time></span>
+      <span class="md-tl__rail"><i></i></span>
+      <div class="md-tl__gap">
+        <strong data-gap-title></strong>
+        <span data-gap-range></span>
+        <button
+          type="button"
+          class="md-gap__btn"
+          data-action="fill"
+          data-gap-fill
+        >
+          Encaixar 1º da fila
+        </button>
+      </div>
+    </li>
+  </template>
+
+  <template data-booking-template>
+    <li
+      class="md-tl__row md-tl__row--confirmado"
+      data-booking-row
+      data-status="confirmado"
+    >
+      <span class="md-tl__time" data-row-time></span>
+      <span class="md-tl__rail"><i></i></span>
+      <div class="md-tl__card">
+        <div class="md-tl__top">
+          <strong data-row-client></strong>
+          <span class="md-status md-status--confirmado" data-row-status>
+            Confirmado
+          </span>
+        </div>
+        <p class="md-tl__meta">
+          <span data-row-service></span> · <span data-row-pro></span>
+          <span class="md-tl__price" data-row-price></span>
+        </p>
+      </div>
+    </li>
+  </template>
+</div>

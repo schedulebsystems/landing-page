@@ -94,7 +94,10 @@ const wpp = SITE.whatsapp;
 <script>
   const setup = () => {
     const bar = document.getElementById("sticky-cta");
-    const hero = document.getElementById("hero");
+    const hero =
+      document.getElementById("hero") ??
+      document.getElementById("experiencia") ??
+      document.querySelector<HTMLElement>("main section");
     const footer = document.querySelector<HTMLElement>(".site-footer");
     if (!bar || !hero) return;
 

@@ -1,0 +1,530 @@
+---
+import Icon from "@components/Icon.astro";
+import Reveal from "@components/Reveal.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+
+const scenes = [
+  {
+    time: "23:04",
+    kicker: "O cliente quer marcar",
+    problem:
+      "A mensagem chega depois do expediente. Você vê no dia seguinte — e o cliente já marcou em outro lugar.",
+    solution:
+      "O link e a IA respondem na hora. Ele escolhe profissional, serviço e horário em 3 toques.",
+    chapter: 1,
+    visual: "phone" as const,
+  },
+  {
+    time: "14:00",
+    kicker: "O cliente esqueceu",
+    problem:
+      "A cadeira fica vazia. São R$ 50 perdidos e nenhum tempo para preencher o horário.",
+    solution:
+      "O lembrete chega no WhatsApp, ele confirma com um toque. Se cancelar, a fila chama o próximo.",
+    chapter: 3,
+    visual: "gap" as const,
+  },
+  {
+    time: "19:00",
+    kicker: "O dia acabou",
+    problem:
+      "Caderno, calculadora e WhatsApp. Você não sabe quanto entrou nem quanto vai pagar de comissão.",
+    solution:
+      "O Meu Dia mostra concluídos, recebido e a receber. A comissão está a um toque.",
+    chapter: 4,
+    visual: "metrics" as const,
+  },
+];
+---
+<section id="problemas" class="ps">
+  <div class="container-tight">
+    <SectionHeading eyebrow="O dia real" class="max-w-2xl">
+      <Fragment slot="title">Três horários que decidem o seu dia.</Fragment>
+      <Fragment slot="lede">
+        O que muda com a Skedoole — sem precisar entender de tecnologia.
+      </Fragment>
+    </SectionHeading>
+
+    <ol class="ps-timeline">
+      {scenes.map((scene, i) => (
+        <li
+          class="ps-scene"
+          data-reveal
+          style={i > 0 ? `transition-delay:${i * 80}ms` : undefined}
+        >
+          <div class="ps-rail" aria-hidden="true">
+            <span class="ps-time">{scene.time}</span>
+            <span class="ps-dot"></span>
+          </div>
+
+          <div class="ps-content">
+            <div class="ps-copy">
+              <p class="ps-kicker">{scene.kicker}</p>
+              <h3 class="ps-title">{scene.problem}</h3>
+              <p class="ps-solution">
+                <Icon name="check" size={14} />
+                <span>{scene.solution}</span>
+              </p>
+              <a
+                href="#capitulos"
+                class="ps-link"
+                data-jump-chapter={scene.chapter}
+              >
+                Ver no simulador
+                <Icon name="arrow-right" size={14} />
+              </a>
+            </div>
+
+            <div class="ps-visual">
+              {scene.visual === "phone" && (
+                <div class="ps-phone">
+                  <div class="ps-phone__bar">
+                    <Icon name="whatsapp" size={13} />
+                    WhatsApp
+                  </div>
+                  <div class="ps-bubble">Oi, tem horário amanhã?</div>
+                  <div class="ps-bubble ps-bubble--in">
+                    Tenho 15:00 com o Bruno. Quer confirmar?
+                  </div>
+                  <div class="ps-booking">
+                    <span class="ps-booking__icon">
+                      <Icon name="check" size={13} />
+                    </span>
+                    <span>
+                      <strong>Corte · Bruno</strong>
+                      <small>Hoje, 15:00</small>
+                    </span>
+                    <span class="ps-chip">Confirmado</span>
+                  </div>
+                </div>
+              )}
+
+              {scene.visual === "gap" && (
+                <div class="ps-gap">
+                  <div class="ps-gap__row ps-gap__row--empty">
+                    <span class="ps-gap__time">15:00</span>
+                    <span class="ps-gap__body">
+                      <strong>Vaga vazia</strong>
+                      <small>45 min livres</small>
+                    </span>
+                    <span class="ps-tag">R$ 50 perdidos</span>
+                  </div>
+                  <div class="ps-gap__row ps-gap__row--filled">
+                    <span class="ps-gap__time">15:00</span>
+                    <span class="ps-gap__body">
+                      <strong>Marcos Vinícius</strong>
+                      <small>Corte · Bruno</small>
+                    </span>
+                    <span class="ps-chip">Confirmado</span>
+                  </div>
+                </div>
+              )}
+
+              {scene.visual === "metrics" && (
+                <>
+                  <div class="ps-metrics">
+                    <div class="ps-metric">
+                      <small>Concluídos</small>
+                      <strong>4/8</strong>
+                    </div>
+                    <div class="ps-metric">
+                      <small>Recebido</small>
+                      <strong class="ps-green">R$ 220,00</strong>
+                    </div>
+                    <div class="ps-metric">
+                      <small>A Receber</small>
+                      <strong>R$ 170,00</strong>
+                    </div>
+                  </div>
+                  <div class="ps-commission">
+                    <Icon name="wallet" size={13} />
+                    Comissão do dia
+                    <strong>R$ 156,00</strong>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <Reveal class="ps-account">
+      <div>
+        <span class="eyebrow">A conta</span>
+        <p>
+          Uma falta por dia a R$ 50 são
+          <strong>R$ 1.300/mês</strong> em horários vagos.
+        </p>
+        <p>
+          O plano de 3 profissionais custa <strong>R$ 139,70/mês</strong>.
+          Três vagas preenchidas no mês já pagam o plano.
+        </p>
+        <small>Exemplo com ticket de R$ 50 e 26 dias. Não é promessa de resultado.</small>
+      </div>
+      <a href="#precos" class="btn btn-ghost">
+        Ver o preço
+        <Icon name="arrow-right" size={14} />
+      </a>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  .ps {
+    padding: 64px 0;
+    background: var(--cor-fundo-elevado);
+    border-block: 1px solid var(--cor-borda-geral);
+  }
+  .ps-timeline {
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+  }
+  .ps-timeline::before {
+    content: "";
+    position: absolute;
+    left: 21px;
+    top: 14px;
+    bottom: 14px;
+    width: 2px;
+    background: var(--cor-borda-geral);
+  }
+  .ps-scene {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 16px;
+    padding-bottom: 36px;
+    position: relative;
+  }
+  .ps-scene:last-child {
+    padding-bottom: 0;
+  }
+  .ps-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .ps-time {
+    font-size: 0.66rem;
+    font-weight: 700;
+    color: var(--cor-subtitulos);
+    background: var(--cor-fundo-elevado);
+    padding: 2px 0;
+    letter-spacing: 0.02em;
+  }
+  .ps-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 9999px;
+    background: var(--cor-primaria);
+    box-shadow: 0 0 0 4px var(--cor-fundo-elevado);
+  }
+  .ps-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 28px;
+    align-items: start;
+    padding-top: 2px;
+  }
+  .ps-kicker {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cor-subtitulos);
+  }
+  .ps-title {
+    margin-top: 8px;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.18;
+    max-width: 30ch;
+  }
+  .ps-solution {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 8px;
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    max-width: 44ch;
+  }
+  .ps-solution :global(svg) {
+    color: var(--cor-status-ok);
+    margin-top: 2px;
+  }
+  .ps-link {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--cor-primaria);
+    text-decoration: none;
+  }
+  .ps-link:hover {
+    text-decoration: underline;
+  }
+  .ps-visual {
+    background: var(--cor-cards);
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    box-shadow: var(--sombra-card);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 188px;
+  }
+  .ps-phone {
+    width: 100%;
+    max-width: 270px;
+    margin: 0 auto;
+    background: var(--cor-fundo-elevado);
+    border: 1px solid var(--cor-borda-card);
+    border-radius: 16px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .ps-phone__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 2px 2px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--cor-subtitulos);
+  }
+  .ps-phone__bar :global(svg) {
+    color: var(--cor-whatsapp);
+  }
+  .ps-bubble {
+    max-width: 92%;
+    padding: 7px 9px;
+    border-radius: 10px;
+    background: var(--cor-cards-hover);
+    color: var(--cor-texto-primario);
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+  .ps-bubble--in {
+    align-self: flex-end;
+    background: var(--cor-whatsapp-bg);
+  }
+  .ps-booking {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid var(--cor-borda-card);
+    border-radius: 10px;
+    background: var(--cor-cards);
+  }
+  .ps-booking__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 auto;
+    border-radius: 9999px;
+    background: var(--cor-success-bg);
+    color: var(--cor-success);
+  }
+  .ps-booking strong {
+    display: block;
+    font-size: 0.72rem;
+  }
+  .ps-booking small {
+    display: block;
+    color: var(--cor-subtitulos);
+    font-size: 0.62rem;
+  }
+  .ps-chip {
+    margin-left: auto;
+    padding: 3px 6px;
+    border-radius: 9999px;
+    background: var(--cor-success-bg);
+    color: var(--cor-success);
+    font-size: 0.56rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .ps-gap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ps-gap__row {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 9px 10px;
+    border: 1px solid var(--cor-borda-card);
+    border-radius: 10px;
+    background: var(--cor-cards);
+  }
+  .ps-gap__row--empty {
+    border-style: dashed;
+  }
+  .ps-gap__row--filled {
+    border-left: 3px solid var(--cor-success);
+  }
+  .ps-gap__time {
+    color: var(--cor-texto-secundario);
+    font-size: 0.64rem;
+    font-weight: 700;
+  }
+  .ps-gap__body strong {
+    display: block;
+    font-size: 0.72rem;
+  }
+  .ps-gap__body small {
+    display: block;
+    color: var(--cor-subtitulos);
+    font-size: 0.6rem;
+  }
+  .ps-tag {
+    padding: 3px 6px;
+    border-radius: 9999px;
+    background: var(--cor-warning-bg);
+    color: var(--cor-warning);
+    font-size: 0.56rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .ps-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .ps-metric {
+    min-width: 0;
+    padding: 8px 9px;
+    border: 1px solid var(--cor-borda-card);
+    border-radius: 9px;
+    background: var(--cor-fundo-elevado);
+  }
+  .ps-metric small {
+    display: block;
+    overflow: hidden;
+    color: var(--cor-subtitulos);
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ps-metric strong {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .ps-green {
+    color: var(--cor-success);
+  }
+  .ps-commission {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--cor-borda-geral);
+    color: var(--cor-texto-secundario);
+    font-size: 0.64rem;
+  }
+  .ps-commission strong {
+    margin-left: auto;
+    color: var(--cor-texto-primario);
+  }
+  .ps-account {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 28px;
+    padding: 22px 24px;
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-lg);
+    background: var(--cor-cards);
+  }
+  .ps-account p {
+    margin-top: 6px;
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .ps-account p strong {
+    color: var(--cor-texto-primario);
+  }
+  .ps-account small {
+    display: block;
+    margin-top: 8px;
+    color: var(--cor-subtitulos);
+    font-size: 0.64rem;
+  }
+  .ps-account .btn {
+    flex: 0 0 auto;
+  }
+  @media (max-width: 900px) {
+    .ps-content {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .ps-title {
+      max-width: 100%;
+    }
+    .ps-visual {
+      min-height: 0;
+    }
+  }
+  @media (max-width: 560px) {
+    .ps {
+      padding: 48px 0;
+    }
+    .ps-scene {
+      grid-template-columns: 36px minmax(0, 1fr);
+      gap: 12px;
+      padding-bottom: 28px;
+    }
+    .ps-timeline::before {
+      left: 17px;
+    }
+    .ps-account {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 18px;
+    }
+    .ps-account .btn {
+      justify-content: center;
+    }
+    .ps-metrics {
+      grid-template-columns: 1fr;
+    }
+    .ps-metric {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .ps-metric strong {
+      margin-top: 0;
+    }
+  }
+</style>

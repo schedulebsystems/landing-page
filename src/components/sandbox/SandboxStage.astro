@@ -1,0 +1,81 @@
+---
+import Icon from "@components/Icon.astro";
+import PhoneShell from "./PhoneShell.astro";
+import ClientApp from "./ClientApp.astro";
+import OwnerApp from "./OwnerApp.astro";
+import BrowserShell from "./BrowserShell.astro";
+import WhatsAppSheet from "./WhatsAppSheet.astro";
+---
+<div
+  class="sb-stage"
+  data-stage
+  data-phase="professional"
+  data-view="owner"
+>
+  <div class="sb-stage__phone">
+    <div class="sb-tabs" role="tablist" aria-label="Alternar visão no celular">
+      <button
+        type="button"
+        class="sb-tab is-active"
+        role="tab"
+        data-action="view"
+        data-value="owner"
+        aria-selected="true"
+        aria-controls="sb-phone-owner"
+      >
+        Painel
+      </button>
+      <button
+        type="button"
+        class="sb-tab"
+        role="tab"
+        data-action="view"
+        data-value="client"
+        aria-selected="false"
+        aria-controls="sb-phone-client"
+      >
+        Cliente
+      </button>
+    </div>
+
+    <PhoneShell label="Celular com a visão do cliente e do painel do dono">
+      <ClientApp />
+      <div
+        id="sb-phone-owner"
+        class="sb-phone-owner"
+        data-phone-owner
+        role="tabpanel"
+        aria-label="Visão do painel"
+      >
+        <OwnerApp compact />
+      </div>
+      <WhatsAppSheet />
+    </PhoneShell>
+
+    <p class="sb-device-label">
+      <span>Cliente</span>
+      link ou WhatsApp
+    </p>
+  </div>
+
+  <div class="sb-stage__panel">
+    <BrowserShell>
+      <OwnerApp />
+    </BrowserShell>
+    <p class="sb-device-label">
+      <span>Painel do dono</span>
+      atualiza sozinho
+    </p>
+  </div>
+
+  <div class="sb-stage__status">
+    <span class="sb-control">
+      <i aria-hidden="true"></i>
+      <span data-control-label>Demonstração automática — toque para assumir</span>
+    </span>
+    <button type="button" class="sb-replay" data-action="reset">
+      <Icon name="rotate-ccw" size={14} />
+      Ver de novo
+    </button>
+  </div>
+</div>

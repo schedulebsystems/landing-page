@@ -1,0 +1,72 @@
+---
+import Icon from "@components/Icon.astro";
+import ChapterRail from "@components/sandbox/ChapterRail.astro";
+import SandboxStage from "@components/sandbox/SandboxStage.astro";
+import OutcomeCard from "@components/sandbox/OutcomeCard.astro";
+import { SITE } from "@config/site";
+import "@styles/sandbox.css";
+
+const app = `${SITE.appUrl}/criar-conta`;
+---
+<section
+  class="sb-hero"
+  id="experiencia"
+  data-live-sandbox
+  aria-labelledby="sb-title"
+>
+  <div class="sb-hero__glow" aria-hidden="true"></div>
+
+  <div class="container-tight">
+    <div class="sb-hero__copy">
+      <span class="eyebrow">Experimente a Skedoole</span>
+      <h1 id="sb-title" class="sb-hero__title">
+        Sua cadeira não fica
+        <span class="sb-hl">vazia</span>.
+      </h1>
+      <p class="sb-hero__lede">
+        O cliente marca sozinho, o lembrete confirma e a fila cobre quem
+        cancela. Você só atende.
+      </p>
+
+      <div class="sb-hero__actions">
+        <a href="#capitulos" class="btn btn-primary">
+          <Icon name="play" size={15} />
+          Ver a simulação
+        </a>
+        <a href={app} class="btn btn-ghost" data-cta="sandbox-hero">
+          Começar grátis
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <p class="sb-hero__fine">
+        <Icon name="check" size={13} />
+        14 dias grátis · sem cartão · sem instalação
+      </p>
+    </div>
+
+    <ChapterRail />
+    <SandboxStage />
+    <OutcomeCard />
+
+    <p class="sb-disclaimer">
+      Demonstração com dados fictícios. Os números servem para mostrar o
+      fluxo do produto, não são uma promessa de resultado.
+    </p>
+
+    <p class="sr-only" aria-live="polite" data-live></p>
+  </div>
+</section>
+
+<script>
+  import { initSandbox } from "@/lib/sandbox/ui";
+
+  const setup = () => {
+    document
+      .querySelectorAll<HTMLElement>("[data-live-sandbox]")
+      .forEach((root) => initSandbox(root));
+  };
+
+  setup();
+  document.addEventListener("astro:after-swap", setup);
+</script>

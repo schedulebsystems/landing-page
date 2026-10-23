@@ -1,0 +1,28 @@
+---
+import Icon from "@components/Icon.astro";
+import { CHAPTERS } from "@data/sandbox";
+---
+<ol class="sb-chapters" id="capitulos" aria-label="Capítulos da demonstração">
+  {CHAPTERS.map((chapter) => (
+    <li>
+      <button
+        type="button"
+        class:list={["sb-chapter", { "is-active": chapter.id === 1 }]}
+        data-action="chapter"
+        data-value={chapter.id}
+        data-chapter={chapter.id}
+        aria-current={chapter.id === 1 ? "step" : undefined}
+      >
+        <span class="sb-chapter__top">
+          <span class="sb-chapter__n">0{chapter.id}</span>
+          <span class="sb-chapter__time">{chapter.time}</span>
+        </span>
+        <span class="sb-chapter__title">
+          <Icon name={chapter.icon} size={15} />
+          <span data-chapter-title>{chapter.title}</span>
+        </span>
+        <span class="sb-chapter__desc" data-chapter-desc>{chapter.desc}</span>
+      </button>
+    </li>
+  ))}
+</ol>

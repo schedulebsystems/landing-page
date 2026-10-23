@@ -1,0 +1,60 @@
+---
+import Icon from "@components/Icon.astro";
+import { TENANT } from "@data/sandbox";
+---
+<div class="sb-wa" data-wa hidden>
+  <div class="sb-wa__scrim" aria-hidden="true"></div>
+
+  <div
+    class="sb-wa__sheet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="sb-wa-title"
+  >
+    <span class="sb-wa__grabber" aria-hidden="true"></span>
+
+    <header class="sb-wa__head">
+      <span class="sb-wa__avatar">{TENANT.name.charAt(0)}</span>
+      <span class="sb-wa__contact">
+        <strong>{TENANT.name}</strong>
+        <span>WhatsApp Business · agora</span>
+      </span>
+      <span class="sb-wa__brand" aria-hidden="true">
+        <Icon name="whatsapp" size={18} />
+      </span>
+    </header>
+
+    <div class="sb-wa__chat">
+      <div class="sb-wa__bubble">
+        <p id="sb-wa-title">
+          <strong>Lembrete de horário</strong>
+          Oi, Mariana! Confirma seu <span data-wa-service>corte</span> hoje às
+          <span data-wa-time>15h</span> com o <span data-wa-pro>Bruno</span>?
+        </p>
+        <span class="sb-wa__meta">14:00 <span aria-hidden="true">✓✓</span></span>
+      </div>
+      <p class="sb-wa__hint">
+        Responda com um toque. O horário fica reservado até 14:30.
+      </p>
+    </div>
+
+    <div class="sb-wa__actions">
+      <button
+        type="button"
+        class="sb-wa__btn sb-wa__btn--confirm"
+        data-action="confirm"
+        data-wa-action
+      >
+        Confirmar
+      </button>
+      <button
+        type="button"
+        class="sb-wa__btn sb-wa__btn--cancel"
+        data-action="cancel"
+        data-wa-action
+      >
+        Não vou conseguir
+      </button>
+    </div>
+  </div>
+</div>

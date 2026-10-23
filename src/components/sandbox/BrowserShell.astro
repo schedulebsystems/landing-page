@@ -1,0 +1,45 @@
+---
+import Icon from "@components/Icon.astro";
+---
+<div class="sb-browser" aria-label="Painel do dono no navegador">
+  <div class="sb-browser__chrome" aria-hidden="true">
+    <span class="sb-browser__dots"><i></i><i></i><i></i></span>
+    <span class="sb-browser__url">
+      <Icon name="shield" size={11} />
+      app.skedoole.com.br/meu-dia
+    </span>
+    <span class="sb-browser__chrome-end">
+      <Icon name="more-horizontal" size={15} />
+    </span>
+  </div>
+
+  <div class="sb-browser__body">
+    <aside class="sb-sidebar" aria-hidden="true">
+      <span class="sb-sidebar__logo">S</span>
+      <span class="sb-sidebar__item is-active">
+        <Icon name="layout-dashboard" size={17} />
+        <span>Meu Dia</span>
+      </span>
+      <span class="sb-sidebar__item">
+        <Icon name="calendar-days" size={17} />
+        <span>Agenda</span>
+      </span>
+      <span class="sb-sidebar__item">
+        <Icon name="users" size={17} />
+        <span>Clientes</span>
+      </span>
+      <span class="sb-sidebar__item">
+        <Icon name="wallet" size={17} />
+        <span>Financeiro</span>
+      </span>
+      <span class="sb-sidebar__item sb-sidebar__item--end">
+        <Icon name="settings" size={17} />
+        <span>Ajustes</span>
+      </span>
+    </aside>
+
+    <div class="sb-workspace">
+      <slot />
+    </div>
+  </div>
+</div>

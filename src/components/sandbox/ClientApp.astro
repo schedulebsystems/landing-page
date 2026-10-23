@@ -1,0 +1,263 @@
+---
+import Icon from "@components/Icon.astro";
+import {
+  AVAILABLE_SLOTS,
+  PROFESSIONALS,
+  SERVICES,
+  TENANT,
+  formatBRL,
+  professionalById,
+  serviceById,
+} from "@data/sandbox";
+
+const weekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const firstWeekday = new Date(2026, 9, 1).getDay();
+const daysInMonth = 31;
+const calendarCells = Array.from({ length: 35 }, (_, index) => {
+  const day = index - firstWeekday + 1;
+  return day >= 1 && day <= daysInMonth ? day : null;
+});
+
+const defaultProfessional = professionalById("bruno");
+const defaultService = serviceById("corte");
+---
+<div
+  class="sb-client"
+  id="sb-phone-client"
+  data-phone-client
+  data-client-state="booked"
+  role="tabpanel"
+  aria-label="Visão do cliente"
+>
+  <div class="cl-topbar">
+    <span class="cl-topbar__name">{TENANT.name}</span>
+    <span class="cl-topbar__link">
+      <Icon name="calendar-check" size={11} />
+      Meus agendamentos
+    </span>
+  </div>
+
+  <div class="cl-scroll">
+    <header
+      class="cl-cover"
+      style={`--cl-cover: url(${TENANT.cover})`}
+    >
+      <span class="cl-cover__logo">J</span>
+      <div class="cl-cover__text">
+        <strong>{TENANT.name}</strong>
+        <span class="cl-cover__sub">
+          Agendamento online
+          <span class="cl-cover__rating">
+            <Icon name="star" size={10} />
+            {TENANT.rating} ({TENANT.reviews})
+          </span>
+        </span>
+      </div>
+    </header>
+
+    <div class="cl-body">
+      <section class="cl-step" data-step="professional">
+        <h2 class="cl-title">Quem vai te atender?</h2>
+        <p class="cl-sub">Escolha um de nossos profissionais.</p>
+
+        <div class="cl-list">
+          {PROFESSIONALS.map((professional) => (
+            <button
+              type="button"
+              class="cl-pro"
+              data-action="professional"
+              data-value={professional.id}
+              aria-pressed="false"
+            >
+              <span class="cl-avatar">{professional.initials}</span>
+              <span class="cl-pro__body">
+                <strong>{professional.name}</strong>
+                <span class="cl-pro__meta">
+                  <Icon name="star" size={10} />
+                  {professional.rating}
+                  <span>({professional.reviews})</span>
+                </span>
+              </span>
+              <span class="cl-radio" aria-hidden="true"></span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section class="cl-step" data-step="service" hidden>
+        <h2 class="cl-title">Quais serviços?</h2>
+        <p class="cl-sub">Você pode escolher mais de um.</p>
+
+        <div class="cl-list">
+          {SERVICES.map((service) => (
+            <button
+              type="button"
+              class="cl-service"
+              data-action="service"
+              data-value={service.id}
+              aria-pressed="false"
+            >
+              <span class="cl-service__icon">
+                <Icon name="scissors" size={17} />
+              </span>
+              <span class="cl-service__body">
+                <strong>{service.name}</strong>
+                <span>{formatBRL(service.price)} · {service.duration} min</span>
+              </span>
+              <span class="cl-check" aria-hidden="true">
+                <Icon name="check" size={12} />
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section class="cl-step" data-step="slot" hidden>
+        <h2 class="cl-title">Quando você quer vir?</h2>
+        <p class="cl-sub">Escolha o dia e o horário.</p>
+
+        <div class="cl-cal">
+          <div class="cl-cal__head">
+            <button
+              type="button"
+              class="cl-cal__arrow"
+              aria-label="Mês anterior"
+              disabled
+            >
+              <Icon name="chevron-left" size={14} />
+            </button>
+            <strong>{TENANT.monthLabel}</strong>
+            <button
+              type="button"
+              class="cl-cal__arrow"
+              aria-label="Próximo mês"
+              disabled
+            >
+              <Icon name="chevron-right" size={14} />
+            </button>
+          </div>
+          <div class="cl-cal__week" aria-hidden="true">
+            {weekdays.map((day) => <span>{day}</span>)}
+          </div>
+          <div class="cl-cal__grid">
+            {calendarCells.map((day) =>
+              day === null ? (
+                <span class="cl-cal__day cl-cal__day--empty" aria-hidden="true" />
+              ) : (
+                <span
+                  class:list={[
+                    "cl-cal__day",
+                    { "cl-cal__day--selected": day === 23 },
+                    { "cl-cal__day--muted": day !== 23 },
+                  ]}
+                  aria-current={day === 23 ? "date" : undefined}
+                  aria-disabled={day !== 23 ? "true" : undefined}
+                >
+                  {day}
+                  {day === 23 && <small>Hoje</small>}
+                </span>
+              ),
+            )}
+          </div>
+        </div>
+
+        <div class="cl-slots">
+          {AVAILABLE_SLOTS.map((time) => (
+            <button
+              type="button"
+              class="cl-slot"
+              data-action="slot"
+              data-value={time}
+              aria-pressed="false"
+              data-slot-available
+            >
+              {time}
+            </button>
+          ))}
+        </div>
+        <p class="cl-empty" data-slots-empty hidden>
+          Sem horários disponíveis neste dia.
+        </p>
+      </section>
+
+      <section class="cl-step cl-step--success" data-step="booked" hidden>
+        <div class="cl-success">
+          <span class="cl-success__icon" data-success-icon-check>
+            <Icon name="check" size={24} stroke={2.2} />
+          </span>
+          <span class="cl-success__icon cl-success__icon--muted" data-success-icon-calendar hidden>
+            <Icon name="calendar-days" size={23} stroke={1.9} />
+          </span>
+          <h2 data-success-title>Agendamento confirmado!</h2>
+          <p data-success-sub>Você receberá uma confirmação no WhatsApp.</p>
+          <span class="cl-cancel-badge" data-cancel-badge hidden>Cancelado</span>
+
+          <div class="cl-summary">
+            <div class="cl-summary__row">
+              <span>Profissional</span>
+              <strong data-summary-pro>{defaultProfessional.name}</strong>
+            </div>
+            <div class="cl-summary__row">
+              <span>Serviço(s)</span>
+              <strong data-summary-service>{defaultService.name}</strong>
+            </div>
+            <div class="cl-summary__row">
+              <span>Data</span>
+              <strong data-summary-date>{TENANT.dateLong}</strong>
+            </div>
+            <div class="cl-summary__row">
+              <span>Horário</span>
+              <strong data-summary-time>15:00</strong>
+            </div>
+            <div class="cl-summary__row cl-summary__row--total">
+              <span>Total</span>
+              <strong data-summary-price>{formatBRL(defaultService.price)}</strong>
+            </div>
+          </div>
+
+          <p class="cl-note" data-done-note>
+            <Icon name="bell" size={13} />
+            Você receberá um lembrete no WhatsApp antes do horário.
+          </p>
+          <p class="cl-note cl-note--ok" data-confirmed-note hidden>
+            <Icon name="check" size={13} />
+            Presença confirmada no WhatsApp.
+          </p>
+          <p class="cl-note cl-note--muted" data-cancel-note hidden>
+            <Icon name="shield" size={13} />
+            Cancelamento sem custo. Você pode remarcar quando quiser.
+          </p>
+
+          <button
+            type="button"
+            class="cl-link"
+            data-action="restart-client"
+          >
+            Fazer outro agendamento
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="cl-nav" data-client-nav>
+    <button
+      type="button"
+      class="cl-nav__back"
+      data-action="back"
+      data-back
+      hidden
+    >
+      Voltar
+    </button>
+    <button
+      type="button"
+      class="cl-nav__next"
+      data-action="next"
+      data-next
+      disabled
+    >
+      <span data-next-label>Escolher serviços</span>
+    </button>
+  </div>
+</div>

@@ -1,6 +1,12 @@
 ---
 import { SITE } from "@config/site";
+import { FOOTER_LINKS_HOME, type NavLink } from "@data/content";
 
+interface Props {
+  links?: NavLink[];
+}
+
+const { links = FOOTER_LINKS_HOME } = Astro.props;
 const year = new Date().getFullYear();
 const app = `${SITE.appUrl}/criar-conta`;
 const wpp = SITE.whatsapp;
@@ -28,11 +34,9 @@ const wpp = SITE.whatsapp;
 
       <div class="footer-col">
         <h4>Produto</h4>
-        <a href="/#recursos">Funcionalidades</a>
-        <a href="/#como-funciona">Como funciona</a>
-        <a href="/#precos">Preços</a>
-        <a href="/#historias">Histórias de clientes</a>
-        <a href="/blog">Blog</a>
+        {links.map((link) => (
+          <a href={link.href}>{link.label}</a>
+        ))}
       </div>
       <div class="footer-col">
         <h4>Contato</h4>
