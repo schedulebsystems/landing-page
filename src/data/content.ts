@@ -266,7 +266,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: "Quanto custa?",
-    a: "A partir de R$ 49,90 por profissional/mês, com todos os recursos do plano. A IA no WhatsApp é um add-on de R$ 24,90 por profissional/mês. Você testa 14 dias grátis, sem cartão.",
+    a: "Começa em R$ 49,90/mês para o primeiro profissional e cai por assento conforme sua equipe cresce. Tudo incluso: agenda, lembretes e a IA no WhatsApp — sem add-on e sem taxa extra por IA. Você testa 14 dias grátis, sem cartão.",
   },
   {
     q: "Meus dados e os dos meus clientes ficam seguros?",
