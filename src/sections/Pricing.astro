@@ -48,11 +48,11 @@ const wpp = SITE.whatsapp;
                 Assinatura base
                 <span class="calc-incl">1º profissional e 1 unidade</span>
               </dt>
-              <dd data-base>R$ 49,90</dd>
+              <dd data-base>R$ 59,90</dd>
             </div>
             <div class="calc-break-row" data-row-extra-profs hidden>
               <dt data-label-extra-profs>Profissionais extras (2)</dt>
-              <dd data-extra-profs>R$ 39,80</dd>
+              <dd data-extra-profs>R$ 79,80</dd>
             </div>
             <div class="calc-break-row" data-row-extra-units hidden>
               <dt data-label-extra-units>Unidades extras (1)</dt>
@@ -130,8 +130,8 @@ const wpp = SITE.whatsapp;
           <div class="brackets-card">
             <h3 class="brackets-title">Desconto por volume</h3>
             <ul class="brackets-list">
-              <li><span>1 – 2 profissionais</span><strong>R$ 49,90</strong></li>
-              <li><span>3 – 5 profissionais</span><strong>R$ 39,90</strong></li>
+              <li><span>1º profissional</span><strong>R$ 59,90</strong></li>
+              <li><span>2 – 5 profissionais</span><strong>R$ 39,90</strong></li>
               <li><span>6 – 10 profissionais</span><strong>R$ 29,90</strong></li>
               <li><span>11 – 20 profissionais</span><strong>R$ 24,90</strong></li>
               <li><span>21+ profissionais</span><strong>R$ 19,90</strong></li>
@@ -496,8 +496,8 @@ const wpp = SITE.whatsapp;
 
     const state = { cycle: "monthly", profs: 3, units: 1 };
     const BRACKETS: { min: number; max: number | null; price: number }[] = [
-      { min: 1, max: 2, price: 49.9 },
-      { min: 3, max: 5, price: 39.9 },
+      { min: 1, max: 1, price: 59.9 },
+      { min: 2, max: 5, price: 39.9 },
       { min: 6, max: 10, price: 29.9 },
       { min: 11, max: 20, price: 24.9 },
       { min: 21, max: null, price: 19.9 },

@@ -266,7 +266,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: "Quanto custa?",
-    a: "Começa em R$ 49,90/mês para o primeiro profissional e cai por assento conforme sua equipe cresce. Tudo incluso: agenda, lembretes e a IA no WhatsApp — sem add-on e sem taxa extra por IA. Você testa 14 dias grátis, sem cartão.",
+    a: "R$ 59,90/mês para o primeiro profissional e R$ 39,90 por profissional a mais, com desconto por volume a partir do 6º. Tudo incluso: agenda, lembretes e a IA no WhatsApp — sem add-on e sem taxa extra por IA. Você testa 14 dias grátis, sem cartão.",
   },
   {
     q: "Meus dados e os dos meus clientes ficam seguros?",
