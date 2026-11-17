@@ -1,0 +1,15 @@
+---
+// Landing por nicho: /barbearia, /salao, /estetica, /unhas.
+import SegmentLanding from "@components/SegmentLanding.astro";
+import { SEGMENT_PAGES } from "@data/segments";
+
+export function getStaticPaths() {
+  return SEGMENT_PAGES.map((seg) => ({
+    params: { segmento: seg.path.replace(/^\//, "") },
+    props: { segment: seg.key },
+  }));
+}
+
+const { segment } = Astro.props;
+---
+<SegmentLanding segment={segment} />

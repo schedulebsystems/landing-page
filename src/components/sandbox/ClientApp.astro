@@ -3,6 +3,7 @@ import Icon from "@components/Icon.astro";
 import {
   AVAILABLE_SLOTS,
   PROFESSIONALS,
+  SEGMENT,
   SERVICES,
   TENANT,
   formatBRL,
@@ -18,8 +19,13 @@ const calendarCells = Array.from({ length: 35 }, (_, index) => {
   return day >= 1 && day <= daysInMonth ? day : null;
 });
 
-const defaultProfessional = professionalById("bruno");
-const defaultService = serviceById("corte");
+const defaultProfessional = professionalById(SEGMENT.demo.professionalId);
+const defaultService = serviceById(SEGMENT.demo.serviceId);
+// Sem foto do nicho: capa em degradê da cor da marca com o ícone do segmento.
+const coverStyle = TENANT.cover
+  ? `--cl-cover: url(${TENANT.cover})`
+  : "--cl-cover: radial-gradient(120% 120% at 85% 0%, var(--cor-primaria), var(--cor-primaria-dark))";
+const logoLetter = TENANT.name.trim().charAt(0).toUpperCase();
 ---
 <div
   class="sb-client"
@@ -39,10 +45,15 @@ const defaultService = serviceById("corte");
 
   <div class="cl-scroll">
     <header
-      class="cl-cover"
-      style={`--cl-cover: url(${TENANT.cover})`}
+      class:list={["cl-cover", { "cl-cover--plain": !TENANT.cover }]}
+      style={coverStyle}
     >
-      <span class="cl-cover__logo">J</span>
+      {!TENANT.cover && (
+        <span class="cl-cover__art" aria-hidden="true">
+          <Icon name={TENANT.coverIcon} size={92} stroke={1.25} />
+        </span>
+      )}
+      <span class="cl-cover__logo">{logoLetter}</span>
       <div class="cl-cover__text">
         <strong>{TENANT.name}</strong>
         <span class="cl-cover__sub">

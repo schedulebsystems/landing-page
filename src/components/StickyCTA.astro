@@ -94,7 +94,10 @@ const wpp = SITE.whatsapp;
 <script>
   const setup = () => {
     const bar = document.getElementById("sticky-cta");
+    // Aparece assim que os botões do topo saem da tela (a simulação logo
+    // abaixo é longa; esperar o fim da seção deixava o celular sem CTA).
     const hero =
+      document.querySelector<HTMLElement>(".sb-hero__actions") ??
       document.getElementById("hero") ??
       document.getElementById("experiencia") ??
       document.querySelector<HTMLElement>("main section");

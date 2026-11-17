@@ -2,25 +2,44 @@
 import Icon from "@components/Icon.astro";
 import Reveal from "@components/Reveal.astro";
 import SectionHeading from "@components/SectionHeading.astro";
+import { getSegment, type SegmentKey } from "@data/segments";
+
+interface Props {
+  segment?: SegmentKey;
+}
+
+const seg = getSegment(Astro.props.segment ?? "geral");
+const pro = seg.professionals.find((p) => p.name === seg.scene.pro) ?? seg.professionals[0];
+const proComArtigo = `${pro.article} ${pro.name}`;
+const servico = seg.services.find((s) => s.name === seg.scene.service) ?? seg.services[0];
+const preco = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(seg.scene.price);
+const lugar = seg.place.noun.charAt(0).toUpperCase() + seg.place.noun.slice(1);
+const vazia = seg.place.gender === "f" ? "vazia" : "vazio";
+const quem = seg.key === "barbearia" ? "o cliente" : "a cliente";
+const Quem = quem.charAt(0).toUpperCase() + quem.slice(1);
+const ele = seg.key === "barbearia" ? "ele" : "ela";
+const Ele = ele.charAt(0).toUpperCase() + ele.slice(1);
 
 const scenes = [
   {
     time: "23:04",
-    kicker: "O cliente quer marcar",
+    kicker: `${Quem} quer marcar`,
     problem:
-      "A mensagem chega depois do expediente. Você vê no dia seguinte — e o cliente já marcou em outro lugar.",
+      `A mensagem chega depois do expediente. Você vê no dia seguinte — e ${quem} já marcou em outro lugar.`,
     solution:
-      "O link e a IA respondem na hora. Ele escolhe profissional, serviço e horário em 3 toques.",
+      `O link responde na hora, a qualquer hora. ${Ele} escolhe profissional, serviço e horário em 3 toques.`,
     chapter: 1,
     visual: "phone" as const,
   },
   {
     time: "14:00",
-    kicker: "O cliente esqueceu",
+    kicker: `${Quem} esqueceu`,
     problem:
-      "A cadeira fica vazia. São R$ 50 perdidos e nenhum tempo para preencher o horário.",
+      `A ${seg.place.noun} fica ${vazia}. São ${preco} perdidos e nenhum tempo para preencher o horário.`,
     solution:
-      "O lembrete chega no WhatsApp, ele confirma com um toque. Se cancelar, a fila chama o próximo.",
+      seg.fillMode === "queue"
+        ? `O lembrete chega no WhatsApp, ${ele} confirma com um toque. Se cancelar, a fila chama o próximo.`
+        : `O lembrete chega no WhatsApp, ${ele} confirma com um toque. Se cancelar, o horário volta para o seu link na hora.`,
     chapter: 3,
     visual: "gap" as const,
   },
@@ -28,9 +47,13 @@ const scenes = [
     time: "19:00",
     kicker: "O dia acabou",
     problem:
-      "Caderno, calculadora e WhatsApp. Você não sabe quanto entrou nem quanto vai pagar de comissão.",
+      seg.professionals.length > 1
+        ? "Caderno, calculadora e WhatsApp. Você não sabe quanto entrou nem quanto vai pagar de comissão."
+        : "Caderno, calculadora e WhatsApp. Você não sabe quanto entrou nem quanto ainda falta receber.",
     solution:
-      "O Meu Dia mostra concluídos, recebido e a receber. A comissão está a um toque.",
+      seg.professionals.length > 1
+        ? "O Meu Dia mostra concluídos, recebido e a receber. A comissão está a um toque."
+        : "O Meu Dia mostra concluídos, recebido e a receber. Sem planilha, sem conta de cabeça.",
     chapter: 4,
     visual: "metrics" as const,
   },
@@ -84,14 +107,14 @@ const scenes = [
                   </div>
                   <div class="ps-bubble">Oi, tem horário amanhã?</div>
                   <div class="ps-bubble ps-bubble--in">
-                    Tenho 15:00 com o Bruno. Quer confirmar?
+                    Tenho 15:00 com {proComArtigo}. Quer confirmar?
                   </div>
                   <div class="ps-booking">
                     <span class="ps-booking__icon">
                       <Icon name="check" size={13} />
                     </span>
                     <span>
-                      <strong>Corte · Bruno</strong>
+                      <strong>{seg.scene.service} · {seg.scene.pro}</strong>
                       <small>Hoje, 15:00</small>
                     </span>
                     <span class="ps-chip">Confirmado</span>
@@ -104,16 +127,16 @@ const scenes = [
                   <div class="ps-gap__row ps-gap__row--empty">
                     <span class="ps-gap__time">15:00</span>
                     <span class="ps-gap__body">
-                      <strong>Vaga vazia</strong>
-                      <small>45 min livres</small>
+                      <strong>{lugar} {vazia}</strong>
+                      <small>{servico.duration} min livres</small>
                     </span>
-                    <span class="ps-tag">R$ 50 perdidos</span>
+                    <span class="ps-tag">{preco} perdidos</span>
                   </div>
                   <div class="ps-gap__row ps-gap__row--filled">
                     <span class="ps-gap__time">15:00</span>
                     <span class="ps-gap__body">
-                      <strong>Marcos Vinícius</strong>
-                      <small>Corte · Bruno</small>
+                      <strong>{seg.scene.filler}</strong>
+                      <small>{seg.scene.service} · {seg.scene.pro}{seg.fillMode === "link" ? " · pelo link" : ""}</small>
                     </span>
                     <span class="ps-chip">Confirmado</span>
                   </div>

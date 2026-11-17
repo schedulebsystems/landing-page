@@ -1,0 +1,54 @@
+---
+// Página completa da landing para um segmento. A home usa "geral"; cada nicho
+// (/barbearia, /salao, /estetica, /unhas) tem a própria rota com headline,
+// simulação, "o dia real" e CTA na língua dele.
+import Base from "@layouts/Base.astro";
+import Nav from "@components/Nav.astro";
+import Footer from "@components/Footer.astro";
+import StickyCTA from "@components/StickyCTA.astro";
+import LiveSandbox from "@sections/LiveSandbox.astro";
+import ProblemSolution from "@sections/ProblemSolution.astro";
+import Testimonials from "@sections/Testimonials.astro";
+import Pricing from "@sections/Pricing.astro";
+import FAQ from "@sections/FAQ.astro";
+import CTA from "@sections/CTA.astro";
+import { FAQS, NAV_LINKS_EXPERIENCIA, FOOTER_LINKS_EXPERIENCIA } from "@data/content";
+import { getSegment, type SegmentKey } from "@data/segments";
+
+interface Props {
+  segment: SegmentKey;
+}
+
+const seg = getSegment(Astro.props.segment);
+---
+<Base
+  title={seg.seo.title}
+  description={seg.seo.description}
+  canonical={seg.path}
+>
+  <Nav links={NAV_LINKS_EXPERIENCIA} />
+  <main id="main">
+    <LiveSandbox segment={seg.key} />
+    <ProblemSolution segment={seg.key} />
+    <Testimonials segment={seg.key} />
+    <Pricing />
+    <FAQ />
+    <CTA />
+  </main>
+  <Footer links={FOOTER_LINKS_EXPERIENCIA} />
+  <StickyCTA />
+</Base>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  })}
+/>

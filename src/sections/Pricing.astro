@@ -34,12 +34,12 @@ const wpp = SITE.whatsapp;
           <div class="calc-price-row">
             <div class="calc-price" aria-live="polite">
               <span class="calc-currency">R$</span>
-              <span class="calc-amount" data-amount>139,70</span>
+              <span class="calc-amount" data-amount>59,90</span>
               <span class="calc-period" data-period>/mês</span>
             </div>
           </div>
           <p class="calc-annual-note" data-annual-note hidden>
-            Faturado anualmente em <strong data-annual-total>R$ 1.542,29</strong>
+            Faturado anualmente em <strong data-annual-total>R$ 661,30</strong>
           </p>
 
           <dl class="calc-breakdown">
@@ -63,7 +63,7 @@ const wpp = SITE.whatsapp;
                 Total
                 <span class="calc-incl">cobrado por mês</span>
               </dt>
-              <dd data-total>R$ 139,70</dd>
+              <dd data-total>R$ 59,90</dd>
             </div>
           </dl>
 
@@ -90,15 +90,15 @@ const wpp = SITE.whatsapp;
                 <Icon name="minus" size={16} />
               </button>
               <div class="stepper-value">
-                <output data-prof-count>3</output>
-                <span class="stepper-unit">profissionais</span>
+                <output data-prof-count>1</output>
+                <span class="stepper-unit" data-prof-unit>profissional</span>
               </div>
               <button type="button" data-stepper-profs="1" aria-label="Aumentar quantidade de profissionais">
                 <Icon name="plus" size={16} />
               </button>
             </div>
             <p class="stepper-hint">
-              Faixa atual: <strong data-bracket>R$ 39,90</strong> por profissional
+              Faixa atual: <strong data-bracket>R$ 59,90</strong> por profissional
             </p>
           </div>
 
@@ -116,7 +116,7 @@ const wpp = SITE.whatsapp;
               </button>
               <div class="stepper-value">
                 <output data-unit-count>1</output>
-                <span class="stepper-unit">unidades</span>
+                <span class="stepper-unit" data-unit-unit>unidade</span>
               </div>
               <button type="button" data-stepper-units="1" aria-label="Aumentar quantidade de unidades">
                 <Icon name="plus" size={16} />
@@ -200,6 +200,9 @@ const wpp = SITE.whatsapp;
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Não estica até a altura da coluna de ajustes (sobrava um vão vazio);
+       no desktop acompanha a rolagem. */
+    align-self: start;
     text-align: center;
     padding: 30px 28px 24px;
     background: var(--cor-cards);
@@ -494,7 +497,8 @@ const wpp = SITE.whatsapp;
     const thumb = document.querySelector<HTMLElement>(".prices-toggle-thumb");
     if (!toggle || buttons.length === 0 || !thumb) return;
 
-    const state = { cycle: "monthly", profs: 3, units: 1 };
+    // Abre no cenário mais comum (quem trabalha sozinha): o preço de entrada.
+    const state = { cycle: "monthly", profs: 1, units: 1 };
     const BRACKETS: { min: number; max: number | null; price: number }[] = [
       { min: 1, max: 1, price: 59.9 },
       { min: 2, max: 5, price: 39.9 },
@@ -600,6 +604,10 @@ const wpp = SITE.whatsapp;
       if (els.total) els.total.textContent = `R$ ${fmt(monthly)}`;
 
       if (els.profCount) els.profCount.textContent = String(state.profs);
+      const profUnit = document.querySelector<HTMLElement>("[data-prof-unit]");
+      if (profUnit) profUnit.textContent = state.profs === 1 ? "profissional" : "profissionais";
+      const unitUnit = document.querySelector<HTMLElement>("[data-unit-unit]");
+      if (unitUnit) unitUnit.textContent = state.units === 1 ? "unidade" : "unidades";
       if (els.unitCount) els.unitCount.textContent = String(state.units);
       if (els.bracket) els.bracket.textContent = `R$ ${fmt(bracketPrice(state.profs))}`;
 
@@ -665,3 +673,9 @@ const wpp = SITE.whatsapp;
   setup();
   document.addEventListener("astro:after-swap", setup);
 </script>
+
+<style>
+  @media (min-width: 1024px) {
+    .calc-summary { position: sticky; top: 96px; }
+  }
+</style>

@@ -2827,6 +2827,20 @@ button.sb-iconbtn:hover {
   background-size: cover;
 }
 
+/* Capa sem foto (nichos sem imagem própria): degradê + ícone do segmento */
+.cl-cover--plain {
+  overflow: hidden;
+}
+
+.cl-cover__art {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  color: var(--cor-on-primary);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
 .cl-cover__logo {
   display: grid;
   place-items: center;
@@ -4319,6 +4333,40 @@ button.sb-iconbtn:hover {
 }
 
 .md-owner--compact .md-chair,
+/* Modo "link" (estética/unhas): no lugar da fila, o link no ar */
+.md-link__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--cor-status-ok);
+
+  i {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--cor-status-ok);
+  }
+}
+
+.md-link__url {
+  margin: 6px 0 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cor-texto-primario);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.md-link__note {
+  margin: 0;
+  font-size: 9px;
+  line-height: 1.35;
+  color: var(--cor-texto-secundario);
+}
+
 .md-owner--compact .md-queue {
   padding: 6px 7px;
 }
@@ -4363,4 +4411,53 @@ button.sb-iconbtn:hover {
 
 @media (max-width: 767px) {
   .sb-stage__phone > .sb-device-label { display: none; }
+}
+
+
+/* ─── Atalhos por segmento (home) e volta (páginas de nicho) ─── */
+.sb-segments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 22px 0 0;
+}
+
+.sb-segments__label {
+  font-size: 13px;
+  color: var(--cor-texto-secundario);
+}
+
+.sb-segments__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--cor-borda-geral);
+  border-radius: 999px;
+  background: var(--cor-cards);
+  color: var(--cor-texto-primario);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.sb-segments__chip:hover {
+  border-color: var(--cor-borda-hover);
+  background: var(--cor-cards-hover);
+}
+
+.sb-segments__chip:focus-visible {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+.sb-segments--back .sb-segments__chip {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cor-texto-secundario);
 }

@@ -1,6 +1,7 @@
 import {
   BASE_AGENDA,
   QUEUE,
+  SEGMENT,
   SERVICES,
   professionalById,
   serviceById,
@@ -113,7 +114,7 @@ function bookingFor(state: SandboxState): AgendaItem | null {
     const entry = QUEUE.find((item) => item.id === state.filledId) ?? QUEUE[0];
     const service =
       SERVICES.find((item) => item.name === entry.service) ??
-      serviceById("corte");
+      serviceById(SEGMENT.demo.serviceId);
     return {
       time: state.slot,
       client: entry.name,
@@ -322,9 +323,9 @@ export function createSandbox(): SandboxStore {
         ? state
         : {
             ...state,
-            professionalId: "bruno",
-            serviceId: "corte",
-            slot: "15:00",
+            professionalId: SEGMENT.demo.professionalId,
+            serviceId: SEGMENT.demo.serviceId,
+            slot: SEGMENT.demo.slot,
           };
 
       if (chapter === 1) {

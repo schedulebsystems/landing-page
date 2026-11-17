@@ -8,6 +8,7 @@ import {
   BASE_TO_RECEIVE,
   PROFESSIONALS,
   QUEUE,
+  SEGMENT,
   STATUS_LABEL,
   TENANT,
   formatBRL,
@@ -19,6 +20,16 @@ interface Props {
 
 const { compact = false } = Astro.props;
 const nowTime = "14:03";
+// Quem está sendo atendida agora (o item "andamento" da agenda do segmento).
+const atual = BASE_AGENDA.find((item) => item.status === "andamento");
+const atualServico = atual ? SEGMENT.services.find((s) => s.name === atual.service) : null;
+const atualFim = (() => {
+  if (!atual) return "";
+  const [h, m] = atual.time.split(":").map(Number);
+  const total = h * 60 + m + (atualServico?.duration ?? 35);
+  return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+})();
+const modoFila = SEGMENT.fillMode === "queue";
 ---
 <div
   class:list={["md-owner", { "md-owner--compact": compact }]}
@@ -32,7 +43,7 @@ const nowTime = "14:03";
       <span class="md-tab">Caixa</span>
     </nav>
     <span class="md-topbar__shop">{TENANT.name}</span>
-    <span class="md-avatar md-avatar--xs">J</span>
+    <span class="md-avatar md-avatar--xs">{TENANT.ownerInitials}</span>
   </div>
 
   <div class="md-mobile-head">
@@ -127,19 +138,20 @@ const nowTime = "14:03";
 
   <div class="md-body">
     <aside class="md-rail">
-      <section class="md-chair" aria-label="Na cadeira">
-        <h4>Na cadeira</h4>
+      <section class="md-chair" aria-label={SEGMENT.nowLabel}>
+        <h4>{SEGMENT.nowLabel}</h4>
         <div class="md-chair__card">
-          <span class="md-avatar md-avatar--sm">G</span>
+          <span class="md-avatar md-avatar--sm">{atual?.client.charAt(0)}</span>
           <div class="md-chair__body">
-            <strong>Gustavo Lima</strong>
-            <span>Barba · Bruno</span>
-            <small>14:00–14:35</small>
+            <strong>{atual?.client}</strong>
+            <span>{atual?.service} · {atual?.professional}</span>
+            <small>{atual?.time}–{atualFim}</small>
           </div>
           <span class="md-status md-status--info">Em andamento</span>
         </div>
       </section>
 
+      {modoFila ? (
       <section class="md-queue" aria-label="Fila de espera">
         <header class="md-queue__head">
           <h4>Fila de espera</h4>
@@ -181,6 +193,21 @@ const nowTime = "14:03";
           ))}
         </ul>
       </section>
+      ) : (
+        <section class="md-queue md-link" aria-label="Seu link de agendamento">
+          <header class="md-queue__head">
+            <h4>Seu link</h4>
+            <span class="md-link__live"><i aria-hidden="true"></i>No ar</span>
+          </header>
+          <p class="md-link__url">{TENANT.handle}.skedoole.com.br</p>
+          <p class="md-link__note">Horário cancelado volta para o link na hora.</p>
+          <ul class="md-queue__list" data-queue-list hidden>
+            {QUEUE.map((entry) => (
+              <li class="md-queue__row" data-queue-row={entry.id}></li>
+            ))}
+          </ul>
+        </section>
+      )}
     </aside>
 
     <section class="md-timeline" aria-label="Agenda do dia">
@@ -279,7 +306,7 @@ const nowTime = "14:03";
           data-action="fill"
           data-gap-fill
         >
-          Encaixar 1º da fila
+          {modoFila ? "Encaixar 1º da fila" : "Reabrir no link"}
         </button>
       </div>
     </li>

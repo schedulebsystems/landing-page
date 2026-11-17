@@ -4,45 +4,68 @@ import ChapterRail from "@components/sandbox/ChapterRail.astro";
 import SandboxStage from "@components/sandbox/SandboxStage.astro";
 import OutcomeCard from "@components/sandbox/OutcomeCard.astro";
 import { SITE } from "@config/site";
+import { useSegment } from "@data/sandbox";
+import { SEGMENT_PAGES, type SegmentKey } from "@data/segments";
 import "@styles/sandbox.css";
 
+interface Props {
+  segment?: SegmentKey;
+}
+
+// Define o segmento ANTES dos filhos renderizarem: ChapterRail, SandboxStage
+// e OutcomeCard leem os dados do segmento ativo (live bindings).
+const seg = useSegment(Astro.props.segment ?? "geral");
 const app = `${SITE.appUrl}/criar-conta`;
 ---
 <section
   class="sb-hero"
   id="experiencia"
   data-live-sandbox
+  data-segment={seg.key}
   aria-labelledby="sb-title"
 >
   <div class="sb-hero__glow" aria-hidden="true"></div>
 
   <div class="container-tight">
     <div class="sb-hero__copy">
-      <span class="eyebrow">Experimente a Skedoole</span>
+      <span class="eyebrow">{seg.hero.eyebrow}</span>
       <h1 id="sb-title" class="sb-hero__title">
-        Sua cadeira não fica
-        <span class="sb-hl">vazia</span>.
+        {seg.hero.lead}
+        <span class="sb-hl">{seg.hero.highlight}</span>.
       </h1>
-      <p class="sb-hero__lede">
-        O cliente marca sozinho, o lembrete confirma e a fila cobre quem
-        cancela. Você só atende.
-      </p>
+      <p class="sb-hero__lede">{seg.hero.lede}</p>
 
       <div class="sb-hero__actions">
-        <a href="#capitulos" class="btn btn-primary">
-          <Icon name="play" size={15} />
-          Ver a simulação
-        </a>
-        <a href={app} class="btn btn-ghost" data-cta="sandbox-hero">
+        <a href={app} class="btn btn-primary" data-cta="sandbox-hero">
           Começar grátis
           <Icon name="arrow-right" size={16} />
+        </a>
+        <a href="#capitulos" class="btn btn-ghost">
+          <Icon name="play" size={15} />
+          Ver a simulação
         </a>
       </div>
 
       <p class="sb-hero__fine">
         <Icon name="check" size={13} />
-        14 dias grátis · sem cartão · sem instalação
+        14 dias grátis · sem cartão · agenda no ar em 1 minuto
       </p>
+
+      {seg.key === "geral" ? (
+        <nav class="sb-segments" aria-label="Veja no seu tipo de negócio">
+          <span class="sb-segments__label">Veja no seu negócio:</span>
+          {SEGMENT_PAGES.map((item) => (
+            <a class="sb-segments__chip" href={item.path}>{item.label}</a>
+          ))}
+        </nav>
+      ) : (
+        <p class="sb-segments sb-segments--back">
+          <a class="sb-segments__chip" href="/">
+            <Icon name="arrow-left" size={13} />
+            Outros tipos de negócio
+          </a>
+        </p>
+      )}
     </div>
 
     <ChapterRail />

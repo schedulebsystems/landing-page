@@ -1,6 +1,9 @@
 ---
 import Icon from "@components/Icon.astro";
-import { TENANT } from "@data/sandbox";
+import { SEGMENT, TENANT, professionalById, serviceById } from "@data/sandbox";
+
+const pro = professionalById(SEGMENT.demo.professionalId);
+const servico = serviceById(SEGMENT.demo.serviceId);
 ---
 <div class="sb-wa" data-wa hidden>
   <div class="sb-wa__scrim" aria-hidden="true"></div>
@@ -28,8 +31,10 @@ import { TENANT } from "@data/sandbox";
       <div class="sb-wa__bubble">
         <p id="sb-wa-title">
           <strong>Lembrete de horário</strong>
-          Oi, Mariana! Confirma seu <span data-wa-service>corte</span> hoje às
-          <span data-wa-time>15h</span> com o <span data-wa-pro>Bruno</span>?
+          Oi, Mariana! Confirma <span data-wa-possessive>{servico.gender === "f" ? "sua" : "seu"}</span>
+          <span data-wa-service>{servico.name.toLowerCase()}</span> hoje às
+          <span data-wa-time>15h</span> com <span data-wa-article>{pro.article}</span>
+          <span data-wa-pro>{pro.name}</span>?
         </p>
         <span class="sb-wa__meta">14:00 <span aria-hidden="true">✓✓</span></span>
       </div>

@@ -254,7 +254,7 @@ export const COMPARISON: ComparisonRow[] = [
 export const FAQS: Faq[] = [
   {
     q: "Vou ter trabalho para configurar?",
-    a: "Não. São três campos de cadastro, seus profissionais e o link. Em poucos minutos seu negócio está no ar — sem instalar nada e sem migrar planilha.",
+    a: "Não. Você cria a conta em 1 minuto, confirma os serviços (já sugerimos os mais pedidos do seu segmento) e o horário de atendimento. A agenda sai no ar com o seu link — sem instalar nada e sem migrar planilha.",
   },
   {
     q: "Meu cliente vai usar?",
@@ -262,11 +262,11 @@ export const FAQS: Faq[] = [
   },
   {
     q: "E se o cliente cancelar?",
-    a: "O lembrete chega antes, ele confirma com um toque e, se cancelar, a vaga volta para a fila na hora. O próximo da fila pode ocupar o horário.",
+    a: "O lembrete chega antes e a pessoa confirma com um toque. Se cancelar, o horário volta para a agenda na hora: aparece de novo no seu link e, se você usa a fila de espera, o próximo da fila pode ocupar.",
   },
   {
     q: "Quanto custa?",
-    a: "R$ 59,90/mês para o primeiro profissional e R$ 39,90 por profissional a mais, com desconto por volume a partir do 6º. Tudo incluso: agenda, lembretes e a IA no WhatsApp — sem add-on e sem taxa extra por IA. Você testa 14 dias grátis, sem cartão.",
+    a: "R$ 59,90/mês para o primeiro profissional e R$ 39,90 por profissional a mais, com desconto por volume a partir do 6º. Tudo incluso: agenda, lembretes e a IA no WhatsApp — sem add-on e sem taxa extra por IA. Você testa 14 dias grátis, sem cartão; a IA no WhatsApp é liberada quando você assina.",
   },
   {
     q: "Meus dados e os dos meus clientes ficam seguros?",

@@ -1,6 +1,7 @@
 export interface Professional {
   id: string;
   name: string;
+  article: "o" | "a";
   role: string;
   initials: string;
   rating: string;
@@ -11,6 +12,7 @@ export interface Professional {
 export interface Service {
   id: string;
   name: string;
+  gender: "m" | "f";
   duration: number;
   price: number;
   description: string;
@@ -49,74 +51,28 @@ export interface Chapter {
   icon: string;
 }
 
-export const TENANT = {
-  name: "Barbearia do Jão",
-  handle: "barbearia-do-jao",
-  neighborhood: "Vila Madalena",
-  rating: "4,9",
-  reviews: "312",
-  address: "Rua Aspicuelta, 420",
-  hours: "Hoje, 9h às 19h",
-  chairs: 3,
-  cover: "/images/sandbox/barbearia.webp",
-  dateLong: "Sexta-feira, 23 de outubro",
-  dateShort: "Hoje, 23 out",
-  monthLabel: "Outubro 2026",
-} as const;
+import {
+  getSegment,
+  type Segment,
+  type SegmentKey,
+} from "./segments";
 
-export const PROFESSIONALS: Professional[] = [
-  {
-    id: "jao",
-    name: "Jão",
-    role: "Dono · 12 anos de tesoura",
-    initials: "J",
-    rating: "4,9",
-    reviews: "184",
-    tone: 1,
-  },
-  {
-    id: "bruno",
-    name: "Bruno",
-    role: "Cortes e degradê",
-    initials: "B",
-    rating: "4,8",
-    reviews: "96",
-    tone: 2,
-  },
-  {
-    id: "diego",
-    name: "Diego",
-    role: "Barba e acabamento",
-    initials: "D",
-    rating: "4,9",
-    reviews: "72",
-    tone: 3,
-  },
-];
-
-export const SERVICES: Service[] = [
-  {
-    id: "corte",
-    name: "Corte",
-    duration: 45,
-    price: 50,
-    description: "Máquina, tesoura e finalização",
-  },
-  {
-    id: "corte-barba",
-    name: "Corte + barba",
-    duration: 60,
-    price: 70,
-    description: "O combo completo da casa",
-  },
-  {
-    id: "barba",
-    name: "Barba",
-    duration: 30,
-    price: 35,
-    description: "Toalha quente e navalha",
-  },
-];
+// Dados da simulação do segmento ativo. São `export let` de propósito: o
+// `useSegment()` troca o segmento e quem importou (store/ui no navegador,
+// componentes Astro no build) passa a ler os valores novos (live bindings).
+export let SEGMENT: Segment = getSegment("barbearia");
+export let TENANT: Segment["tenant"] = SEGMENT.tenant;
+export let PROFESSIONALS: Professional[] = SEGMENT.professionals;
+export let SERVICES: Service[] = SEGMENT.services;
+export let BASE_AGENDA: AgendaItem[] = SEGMENT.agenda;
+export let QUEUE: QueueEntry[] = SEGMENT.waiting;
+export let CHAPTERS: Chapter[] = chaptersFor(SEGMENT);
+export let REMINDER_TEXT = "";
+export let BASE_APPOINTMENTS = 0;
+export let BASE_COMPLETED = 0;
+export let BASE_REVENUE = 0;
+export let BASE_RECEIVED = 0;
+export let BASE_TO_RECEIVE = 0;
 
 export const AVAILABLE_SLOTS = ["15:00"] as const;
 
@@ -124,156 +80,77 @@ export function slotsForService(service: Service): string[] {
   return service.duration <= 45 ? [...AVAILABLE_SLOTS] : [];
 }
 
-export const BASE_AGENDA: AgendaItem[] = [
-  {
-    time: "09:00",
-    client: "João Pedro",
-    service: "Corte",
-    professional: "Jão",
-    price: 50,
-    status: "pago",
-  },
-  {
-    time: "10:00",
-    client: "Pedro Henrique",
-    service: "Corte + barba",
-    professional: "Bruno",
-    price: 70,
-    status: "pago",
-  },
-  {
-    time: "11:00",
-    client: "Lucas Moreira",
-    service: "Corte",
-    professional: "Diego",
-    price: 50,
-    status: "pago",
-  },
-  {
-    time: "12:00",
-    client: "Almoço",
-    service: "Almoço",
-    professional: "—",
-    price: 0,
-    status: "bloqueio",
-  },
-  {
-    time: "13:00",
-    client: "Rafael Souza",
-    service: "Corte",
-    professional: "Jão",
-    price: 50,
-    status: "pago",
-  },
-  {
-    time: "14:00",
-    client: "Gustavo Lima",
-    service: "Barba",
-    professional: "Bruno",
-    price: 35,
-    status: "andamento",
-  },
-  {
-    time: "16:00",
-    client: "Felipe Rocha",
-    service: "Corte",
-    professional: "Diego",
-    price: 50,
-    status: "confirmado",
-  },
-  {
-    time: "17:00",
-    client: "André Nunes",
-    service: "Corte",
-    professional: "Jão",
-    price: 50,
-    status: "confirmado",
-  },
-  {
-    time: "18:00",
-    client: "Tiago Alves",
-    service: "Barba",
-    professional: "Bruno",
-    price: 35,
-    status: "confirmado",
-  },
-];
-
-export const QUEUE: QueueEntry[] = [
-  {
-    id: "marcos",
-    name: "Marcos Vinícius",
-    service: "Corte",
-    preference: "Bruno",
-    wait: 12,
-    initials: "MV",
-  },
-  {
-    id: "tiago",
-    name: "Tiago Lopes",
-    service: "Corte + barba",
-    preference: "Sem preferência",
-    wait: 25,
-    initials: "TL",
-  },
-];
-
-export const BASE_APPOINTMENTS = BASE_AGENDA.filter(
-  (item) => item.status !== "bloqueio",
-).length;
-
-export const BASE_COMPLETED = BASE_AGENDA.filter(
-  (item) => item.status === "pago",
-).length;
-
-export const BASE_REVENUE = BASE_AGENDA.reduce(
-  (total, item) => total + item.price,
-  0,
-);
-
-export const BASE_RECEIVED = BASE_AGENDA.filter(
-  (item) => item.status === "pago",
-).reduce((total, item) => total + item.price, 0);
-
-export const BASE_TO_RECEIVE = BASE_AGENDA.filter(
-  (item) => item.price > 0 && item.status !== "pago",
-).reduce((total, item) => total + item.price, 0);
-
 export const COMMISSION_RATE = 0.4;
 
-export const CHAPTERS: Chapter[] = [
-  {
-    id: 1,
-    time: "09:12",
-    title: "Ela marca em 3 toques",
-    desc: "Profissional, serviço e horário. Sem ligação, sem cadastro.",
-    icon: "calendar-check",
-  },
-  {
-    id: 2,
-    time: "14:00",
-    title: "O lembrete chega",
-    desc: "No WhatsApp que ela já usa, com o horário e o profissional.",
-    icon: "bell",
-  },
-  {
-    id: 3,
-    time: "14:02",
-    title: "Ela responde",
-    desc: "Um toque para confirmar ou liberar a vaga na hora.",
-    icon: "message-circle",
-  },
-  {
-    id: 4,
-    time: "14:03",
-    title: "A fila preenche",
-    desc: "A brecha não fica vazia: o próximo da fila entra no lugar.",
-    icon: "users",
-  },
-];
+function chaptersFor(seg: Segment): Chapter[] {
+  const fila = seg.fillMode === "queue";
+  return [
+    {
+      id: 1,
+      time: "09:12",
+      title: "Ela marca em 3 toques",
+      desc: "Profissional, serviço e horário. Sem ligação, sem cadastro.",
+      icon: "calendar-check",
+    },
+    {
+      id: 2,
+      time: "14:00",
+      title: "O lembrete chega",
+      desc: "No WhatsApp que ela já usa, com o horário e o profissional.",
+      icon: "bell",
+    },
+    {
+      id: 3,
+      time: "14:02",
+      title: "Ela responde",
+      desc: "Um toque para confirmar ou liberar a vaga na hora.",
+      icon: "message-circle",
+    },
+    fila
+      ? {
+          id: 4,
+          time: "14:03",
+          title: "A fila preenche",
+          desc: "A brecha não fica vazia: o próximo da fila entra no lugar.",
+          icon: "users",
+        }
+      : {
+          id: 4,
+          time: "14:03",
+          title: "A vaga volta para o link",
+          desc: "O horário cancelado reabre no seu link e outra cliente marca.",
+          icon: "link",
+        },
+  ];
+}
 
-export const REMINDER_TEXT =
-  "Oi, Mariana! Confirma seu corte hoje às 15h com o Bruno?";
+export function useSegment(key: SegmentKey | string | undefined): Segment {
+  SEGMENT = getSegment(key);
+  TENANT = SEGMENT.tenant;
+  PROFESSIONALS = SEGMENT.professionals;
+  SERVICES = SEGMENT.services;
+  BASE_AGENDA = SEGMENT.agenda;
+  QUEUE = SEGMENT.waiting;
+  CHAPTERS = chaptersFor(SEGMENT);
+
+  const demoPro = PROFESSIONALS.find((p) => p.id === SEGMENT.demo.professionalId) ?? PROFESSIONALS[0];
+  const demoService = SERVICES.find((s) => s.id === SEGMENT.demo.serviceId) ?? SERVICES[0];
+  REMINDER_TEXT = `Oi, Mariana! Confirma ${demoService.gender === "f" ? "sua" : "seu"} ${demoService.name.toLowerCase()} hoje às 15h com ${demoPro.article} ${demoPro.name}?`;
+
+  BASE_APPOINTMENTS = BASE_AGENDA.filter((item) => item.status !== "bloqueio").length;
+  BASE_COMPLETED = BASE_AGENDA.filter((item) => item.status === "pago").length;
+  BASE_REVENUE = BASE_AGENDA.reduce((total, item) => total + item.price, 0);
+  BASE_RECEIVED = BASE_AGENDA.filter((item) => item.status === "pago").reduce(
+    (total, item) => total + item.price,
+    0,
+  );
+  BASE_TO_RECEIVE = BASE_AGENDA.filter(
+    (item) => item.price > 0 && item.status !== "pago",
+  ).reduce((total, item) => total + item.price, 0);
+  return SEGMENT;
+}
+
+useSegment("barbearia");
 
 export const STATUS_LABEL: Record<AgendaStatus, string> = {
   pago: "Pago",
@@ -291,9 +168,17 @@ export function formatBRL(value: number): string {
 }
 
 export function professionalById(id: string): Professional {
-  return PROFESSIONALS.find((item) => item.id === id) ?? PROFESSIONALS[1];
+  return (
+    PROFESSIONALS.find((item) => item.id === id) ??
+    PROFESSIONALS.find((item) => item.id === SEGMENT.demo.professionalId) ??
+    PROFESSIONALS[0]
+  );
 }
 
 export function serviceById(id: string): Service {
-  return SERVICES.find((item) => item.id === id) ?? SERVICES[0];
+  return (
+    SERVICES.find((item) => item.id === id) ??
+    SERVICES.find((item) => item.id === SEGMENT.demo.serviceId) ??
+    SERVICES[0]
+  );
 }
