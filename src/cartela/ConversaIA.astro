@@ -1,0 +1,331 @@
+---
+/**
+ * Demo da Secretária 24h: reproduz uma conversa REAL da IA (gerada por scripts/tour/conversa_ia.rb
+ * contra o salão de exemplo, sem enviar nada) com digitando…, horários e o agendamento no fim.
+ */
+import conversa from "../data/conversa-ia.json";
+
+const ag = conversa.agendamento;
+const quando = ag ? new Date(ag.inicio) : null;
+const hora = quando
+  ? quando.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" })
+  : "";
+const dia = quando
+  ? new Intl.DateTimeFormat("pt-BR", { weekday: "long", timeZone: "America/Sao_Paulo" }).format(quando).replace("-feira", "")
+  : "";
+const primeiroNome = (n?: string | null) => (n ?? "").split(" ")[0];
+
+// horário "de madrugada" para a conversa: começa 23:12 e anda 1 min por troca
+const relogio = (i: number) => {
+  const m = 12 + i;
+  return `23:${String(m).padStart(2, "0")}`;
+};
+---
+<section id="ia" class="c-sec c-sec-escura ia" aria-labelledby="ia-titulo">
+  <div class="c-wrap ia-grid">
+    <div class="ia-texto">
+      <h2 id="ia-titulo" class="c-h2">23h12 de uma quinta. A IA atendeu.</h2>
+      <p class="c-lead ia-lead">
+        Esta conversa não foi escrita por ninguém. É a Secretária do Skedoole respondendo uma
+        cliente do salão de exemplo: ela consulta a agenda, diz o preço, marca o horário e manda o link pra cliente confirmar ou remarcar.
+      </p>
+      {ag && (
+        <p class="ia-resultado" data-resultado hidden>
+          <span class="ia-resultado-ok">Marcado pela IA</span>
+          <strong>{ag.servico}</strong> com {primeiroNome(ag.profissional)}, {dia} às {hora}.
+          Já aparece na agenda da {primeiroNome(ag.profissional)} e a cliente recebe o lembrete na véspera.
+        </p>
+      )}
+      <button type="button" class="ia-repetir" data-repetir hidden>Ver a conversa de novo</button>
+    </div>
+
+    <div class="ia-cel" aria-label="Conversa no WhatsApp entre uma cliente e a IA do salão">
+      <div class="ia-tela">
+        <div class="ia-topo">
+          <span class="ia-avatar" aria-hidden="true">SC</span>
+          <span>
+            <strong>Studio Camila</strong>
+            <small data-status>online</small>
+          </span>
+        </div>
+        <ol class="ia-msgs" data-msgs>
+          {conversa.trocas.map((t, i) => (
+            <li class={`ia-msg ia-${t.de}`} data-msg data-de={t.de}>
+              <p>{t.texto}</p>
+              <time>{relogio(i)}{t.de === "cliente" ? "" : " ✓✓"}</time>
+            </li>
+          ))}
+          <li class="ia-digitando" data-digitando hidden aria-hidden="true"><span></span><span></span><span></span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ia-grid {
+    display: grid;
+    gap: 3rem;
+  }
+  .ia-lead {
+    margin-top: 1.5rem;
+  }
+  .ia-resultado {
+    margin-top: 2rem;
+    max-width: 30rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: 18px;
+    background: rgb(248 246 250 / 0.08);
+    color: var(--louca);
+    animation: ia-entra 0.4s ease both;
+  }
+  .ia-resultado[hidden] {
+    display: none;
+  }
+  .ia-resultado-ok {
+    display: inline-block;
+    margin-right: 0.4rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: #2fbf71;
+    color: var(--tinta);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .ia-repetir {
+    margin-top: 1.25rem;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-weight: 600;
+    color: var(--louca);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+  .ia-repetir[hidden] {
+    display: none;
+  }
+
+  .ia-cel {
+    justify-self: center;
+    width: min(360px, 84vw);
+    padding: 10px;
+    border-radius: 54px;
+    background: #0b050e;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1) inset, 0 50px 100px -40px rgb(0 0 0 / 0.8);
+  }
+  .ia-tela {
+    aspect-ratio: 390 / 760;
+    border-radius: 44px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* fundo de conversa: tom quente discreto, sem imitar a marca do WhatsApp */
+    background: #efe7e1;
+    color: #1d1420;
+  }
+  .ia-topo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 2.4rem 1.1rem 0.8rem;
+    background: #fff;
+    border-bottom: 1px solid rgb(36 20 46 / 0.08);
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+  .ia-topo small {
+    display: block;
+    color: #6d607a;
+    font-size: 0.78rem;
+  }
+  .ia-avatar {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--tinta);
+    color: var(--louca);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .ia-msgs {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0.8rem 1.2rem;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    scrollbar-width: none;
+  }
+  .ia-msgs::-webkit-scrollbar {
+    display: none;
+  }
+  .ia-msg {
+    max-width: 84%;
+    padding: 0.5rem 0.7rem 0.3rem;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.38;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 0.06);
+    animation: ia-entra 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+  }
+  .ia-msg p {
+    margin: 0;
+    white-space: pre-line;
+  }
+  .ia-msg time {
+    display: block;
+    text-align: right;
+    font-size: 0.68rem;
+    color: #6d607a;
+    margin-top: 0.15rem;
+  }
+  .ia-cliente {
+    align-self: flex-end;
+    background: #d9fdd3;
+    border-bottom-right-radius: 4px;
+  }
+  .ia-ia {
+    align-self: flex-start;
+    background: #fff;
+    border-bottom-left-radius: 4px;
+  }
+  .ia-msg[data-oculta] {
+    display: none;
+  }
+  .ia-digitando {
+    align-self: flex-start;
+    display: flex;
+    gap: 4px;
+    padding: 0.7rem 0.8rem;
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    background: #fff;
+  }
+  .ia-digitando[hidden] {
+    display: none;
+  }
+  .ia-digitando span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #9b8fa6;
+    animation: ia-ponto 1s infinite ease-in-out;
+  }
+  .ia-digitando span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .ia-digitando span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  @keyframes ia-ponto {
+    0%,
+    80%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.5;
+    }
+    40% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+  @keyframes ia-entra {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .ia-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      gap: 4rem;
+      align-items: center;
+    }
+    .ia-cel {
+      justify-self: end;
+    }
+  }
+</style>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>("#ia");
+  if (raiz) {
+    const msgs = Array.from(raiz.querySelectorAll<HTMLElement>("[data-msg]"));
+    const lista = raiz.querySelector<HTMLElement>("[data-msgs]")!;
+    const digitando = raiz.querySelector<HTMLElement>("[data-digitando]")!;
+    const status = raiz.querySelector<HTMLElement>("[data-status]")!;
+    const resultado = raiz.querySelector<HTMLElement>("[data-resultado]");
+    const repetir = raiz.querySelector<HTMLButtonElement>("[data-repetir]")!;
+    const reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timers: number[] = [];
+    let tocando = false;
+
+    const rolar = () => lista.scrollTo({ top: lista.scrollHeight, behavior: reduzido ? "auto" : "smooth" });
+    const fim = () => {
+      tocando = false;
+      digitando.hidden = true;
+      status.textContent = "online";
+      if (resultado) resultado.hidden = false;
+      repetir.hidden = false;
+    };
+
+    const tocar = () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      tocando = true;
+      repetir.hidden = true;
+      if (resultado) resultado.hidden = true;
+      if (reduzido) {
+        msgs.forEach((m) => m.removeAttribute("data-oculta"));
+        rolar();
+        return fim();
+      }
+      msgs.forEach((m) => m.setAttribute("data-oculta", ""));
+      let t = 600;
+      for (const m of msgs) {
+        const texto = m.textContent ?? "";
+        if (m.dataset.de === "ia") {
+          // "digitando…" proporcional ao tamanho da resposta
+          const espera = Math.min(2600, 900 + texto.length * 12);
+          timers.push(window.setTimeout(() => {
+            digitando.hidden = false;
+            status.textContent = "digitando…";
+            lista.appendChild(digitando);
+            rolar();
+          }, t));
+          t += espera;
+        } else {
+          t += Math.min(1800, 500 + texto.length * 25);
+        }
+        timers.push(window.setTimeout(() => {
+          digitando.hidden = true;
+          status.textContent = "online";
+          m.removeAttribute("data-oculta");
+          lista.insertBefore(m, digitando);
+          rolar();
+        }, t));
+        t += 350;
+      }
+      timers.push(window.setTimeout(fim, t + 400));
+    };
+
+    // começa quando a conversa aparece na tela; uma vez só (depois, botão de repetir)
+    msgs.forEach((m) => m.setAttribute("data-oculta", ""));
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !tocando) {
+        io.disconnect();
+        tocar();
+      }
+    }, { threshold: 0.45 });
+    io.observe(raiz.querySelector(".ia-cel")!);
+    repetir.addEventListener("click", tocar);
+  }
+</script>

@@ -1,0 +1,45 @@
+{
+  "gerado_em": "2026-11-19T11:08:13-03:00",
+  "modelo": "gemini-3.5-flash-lite",
+  "cliente": "Raquel",
+  "trocas": [
+    {
+      "de": "cliente",
+      "texto": "oii boa noite! vcs fazem pé e mão? queria pra sábado de manhã"
+    },
+    {
+      "de": "ia",
+      "texto": "Fazemos sim! Para sábado (21/11) de manhã, tenho vagas às 09:00, 09:15, 09:30 ou 11:45. Qual horário você prefere?"
+    },
+    {
+      "de": "cliente",
+      "texto": "quanto fica?"
+    },
+    {
+      "de": "ia",
+      "texto": "O serviço de pé e mão custa R$ 55,00. Prefere às 09:00 ou outro horário?"
+    },
+    {
+      "de": "cliente",
+      "texto": "pode ser 9h30 então"
+    },
+    {
+      "de": "ia",
+      "texto": "Agendado! Seu horário de Pé e mão está confirmado para sábado (21/11) às 09:30 com Bruna Oliveira. Se precisar ver, remarcar ou cancelar, acesse: https://app.skedoole.com.br/h/r9hrcdds"
+    },
+    {
+      "de": "cliente",
+      "texto": "obrigadaaa 🥰"
+    },
+    {
+      "de": "ia",
+      "texto": "Por nada! 🥰"
+    }
+  ],
+  "agendamento": {
+    "servico": "Pé e mão",
+    "profissional": "Bruna Oliveira",
+    "inicio": "2026-11-21T09:30:00-03:00",
+    "origem": "whatsapp_bot"
+  }
+}

@@ -1,0 +1,356 @@
+---
+/**
+ * "Dá uma volta no sistema": telas REAIS do app (capturadas por scripts/tour/capturar.cjs num salão
+ * de exemplo), navegáveis por toque nos próprios botões do app ou pela lista ao lado.
+ */
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import tour from "../data/tour.json";
+
+const arquivos = import.meta.glob<{ default: ImageMetadata }>("../assets/tour/*.png", { eager: true });
+const img = (nome: string) => arquivos[`../assets/tour/${nome}.png`]?.default;
+
+const TEXTOS: Record<string, { titulo: string; texto: string; menu?: string }> = {
+  meudia: { titulo: "Meu dia", texto: "A agenda de hoje numa linha do tempo: quem está na cadeira, o que falta cobrar e as brechas que ainda dá pra encaixar.", menu: "Meu dia" },
+  semana: { titulo: "Semana", texto: "Quanto de cada dia já está ocupado e quanto ainda vai entrar na semana.", menu: "Semana" },
+  whatsapp: { titulo: "Secretária no WhatsApp", texto: "A IA atende sozinha. Quando precisa de você, a conversa cai aqui com o motivo, e você responde quando puder.", menu: "Secretária no WhatsApp" },
+  chat: { titulo: "Conversa", texto: "Você lê tudo o que a IA já falou, responde por ali mesmo e devolve a conversa pra ela com um toque." },
+  clientes: { titulo: "Clientes", texto: "Quem está na hora de voltar e quem faz aniversário, cada uma com o botão de chamar no WhatsApp.", menu: "Clientes" },
+  ficha: { titulo: "Ficha da cliente", texto: "Quanto ela já gastou, de quanto em quanto tempo volta, o que costuma fazer e o próximo passo sugerido.", menu: "Ficha da cliente" },
+  caixa: { titulo: "Caixa", texto: "As entradas do dia separadas por Pix, cartão e dinheiro. O que é pago no atendimento já cai aqui.", menu: "Caixa" },
+  comissoes: { titulo: "Comissões", texto: "Cada atendimento pago já calcula a comissão de cada profissional. Você só registra o acerto.", menu: "Comissões" },
+  mais: { titulo: "Mais", texto: "Tudo o que configura o salão num lugar só: horários, serviços, equipe, clube de assinatura e WhatsApp." },
+  vitrine: { titulo: "Vitrine", texto: "A página do seu salão pra bio do Instagram, com serviços, fotos e o botão de agendar.", menu: "Vitrine" },
+};
+const telas = tour.telas.filter((t) => img(t.id) && TEXTOS[t.id]);
+const menu = telas.filter((t) => TEXTOS[t.id].menu);
+const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
+---
+<section id="tour" class="c-sec tour" aria-labelledby="tour-titulo">
+  <div class="c-wrap tour-grid">
+    <div class="tour-cabeca">
+      <h2 id="tour-titulo" class="c-h2">Dá uma volta no sistema.</h2>
+      <p class="c-lead tour-lead">
+        São as telas de verdade do Skedoole, num salão de exemplo. Toque nos botões dentro do celular
+        pra navegar, do jeito que você usaria.
+      </p>
+    </div>
+    <div class="tour-controles">
+      <nav class="tour-menu" aria-label="Telas do sistema">
+        {menu.map((t, i) => (
+          <button type="button" class="tour-chip" data-ir={t.id} aria-pressed={i === 0 ? "true" : "false"}>
+            {TEXTOS[t.id].menu}
+          </button>
+        ))}
+      </nav>
+      <div class="tour-legenda" aria-live="polite">
+        <p class="tour-legenda-titulo" data-legenda-titulo>{TEXTOS[telas[0].id].titulo}</p>
+        <p class="tour-legenda-texto" data-legenda-texto>{TEXTOS[telas[0].id].texto}</p>
+      </div>
+    </div>
+
+    <div class="tour-cel" data-tour>
+      <div class="tour-tela">
+        {telas.map((t, i) => {
+          const conteudo = img(t.id)!;
+          return (
+            <div
+              class="tour-pagina"
+              data-pagina={t.id}
+              data-titulo={TEXTOS[t.id].titulo}
+              data-texto={TEXTOS[t.id].texto}
+              data-menu={TEXTOS[t.id].menu ? t.id : t.id === "chat" ? "whatsapp" : ""}
+              hidden={i !== 0}
+            >
+              <div class="tour-rolagem" tabindex="0" aria-label={`Tela ${TEXTOS[t.id].titulo} do app`}>
+                <div class="tour-conteudo">
+                  <Image
+                    src={conteudo}
+                    alt={`Tela ${TEXTOS[t.id].titulo} do Skedoole com dados de um salão de exemplo`}
+                    widths={[390, 780]}
+                    sizes="(min-width: 960px) 360px, 82vw"
+                    loading={i === 0 ? "eager" : "lazy"}
+                    class="tour-img"
+                  />
+                  {t.links.map((l) => (
+                    <button
+                      type="button"
+                      class="tour-hot"
+                      data-ir={l.para}
+                      aria-label={`Abrir ${rotuloDe(l.para)}`}
+                      style={`left:${l.x * 100}%;top:${l.y * 100}%;width:${l.w * 100}%;height:${l.h * 100}%`}
+                    />
+                  ))}
+                </div>
+              </div>
+              {t.camadas.map((c) => {
+                const camada = img(`${t.id}-${c.nome}`);
+                return camada ? (
+                  <div class={`tour-fixo tour-fixo-${c.nome}`}>
+                    <Image src={camada} alt="" widths={[390, 780]} sizes="(min-width: 960px) 360px, 82vw" loading={i === 0 ? "eager" : "lazy"} class="tour-img" />
+                    {c.links.map((l) => (
+                      <button
+                        type="button"
+                        class="tour-hot"
+                        data-ir={l.para}
+                        aria-label={`Abrir ${rotuloDe(l.para)}`}
+                        style={`left:${l.x * 100}%;top:${l.y * 100}%;width:${l.w * 100}%;height:${l.h * 100}%`}
+                      />
+                    ))}
+                  </div>
+                ) : null;
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+  <p class="c-wrap c-fino tour-nota">Salão, clientes e valores de exemplo. As telas são do app como ele é hoje.</p>
+</section>
+
+<style>
+  .tour {
+    background: var(--louca);
+  }
+  .tour-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-areas: "cabeca" "cel" "controles";
+  }
+  .tour-cabeca {
+    grid-area: cabeca;
+  }
+  .tour-controles {
+    grid-area: controles;
+    min-width: 0;
+  }
+  .tour-cel {
+    grid-area: cel;
+  }
+  .tour-lead {
+    margin-top: 1.5rem;
+  }
+  .tour-menu {
+    display: flex;
+    gap: 0.5rem;
+    /* mobile: faixa que rola de lado, encostando nas bordas */
+    overflow-x: auto;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0.25rem var(--gutter);
+    scrollbar-width: none;
+  }
+  .tour-menu::-webkit-scrollbar {
+    display: none;
+  }
+  .tour-chip {
+    flex: none;
+  }
+  .tour-chip {
+    border: 1.5px solid var(--linha);
+    background: transparent;
+    color: var(--tinta);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.98rem;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  }
+  .tour-chip:hover {
+    border-color: var(--tinta);
+  }
+  .tour-chip[aria-pressed="true"] {
+    background: var(--tinta);
+    border-color: var(--tinta);
+    color: var(--louca);
+  }
+  .tour-legenda {
+    margin-top: 1.25rem;
+    min-height: 7.5rem;
+  }
+  .tour-legenda-titulo {
+    font-family: var(--f-display);
+    font-variation-settings: "SOFT" 100;
+    font-weight: 540;
+    font-size: var(--t-h3);
+    line-height: 1.1;
+  }
+  .tour-legenda-texto {
+    margin-top: 0.5rem;
+    color: var(--tinta-2);
+    max-width: 34ch;
+  }
+
+  /* celular */
+  .tour-cel {
+    justify-self: center;
+    width: min(350px, 82vw, calc((100svh - 8rem) * 0.462));
+    min-width: 260px;
+    padding: 10px;
+    border-radius: 54px;
+    background: #120a17;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08) inset,
+      0 50px 90px -40px rgb(36 20 46 / 0.7),
+      0 20px 40px -24px rgb(36 20 46 / 0.5);
+  }
+  .tour-tela {
+    position: relative;
+    aspect-ratio: 390 / 844;
+    border-radius: 44px;
+    overflow: hidden;
+    background: #fff;
+    isolation: isolate;
+  }
+  .tour-pagina {
+    position: absolute;
+    inset: 0;
+    animation: tour-entra 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .tour-pagina[hidden] {
+    display: none;
+  }
+  .tour-pagina[data-volta] {
+    animation-name: tour-volta;
+  }
+  @keyframes tour-entra {
+    from {
+      opacity: 0;
+      transform: translateX(14%);
+    }
+  }
+  @keyframes tour-volta {
+    from {
+      opacity: 0;
+      transform: translateX(-14%);
+    }
+  }
+  .tour-rolagem {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    scrollbar-width: none;
+  }
+  .tour-rolagem::-webkit-scrollbar {
+    display: none;
+  }
+  .tour-rolagem:focus-visible {
+    outline: 3px solid var(--laranja);
+    outline-offset: -3px;
+  }
+  .tour-conteudo {
+    position: relative;
+  }
+  .tour-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .tour-fixo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  .tour-fixo-topo {
+    top: 0;
+  }
+  .tour-fixo-barra {
+    bottom: 0;
+  }
+  .tour-hot {
+    position: absolute;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.18s ease, background-color 0.18s ease;
+  }
+  .tour-hot:hover {
+    background: rgb(255 90 36 / 0.1);
+    box-shadow: 0 0 0 2px rgb(255 90 36 / 0.65);
+  }
+  .tour-hot:focus-visible {
+    outline: 3px solid var(--laranja);
+    outline-offset: 1px;
+  }
+  /* dica: na primeira tela, os botões navegáveis piscam uma vez */
+  .tour-cel:not([data-mexeu]) .tour-pagina:first-child .tour-hot {
+    animation: tour-dica 1.6s ease 1.2s 2;
+  }
+  @keyframes tour-dica {
+    50% {
+      box-shadow: 0 0 0 3px rgb(255 90 36 / 0.7);
+      background: rgb(255 90 36 / 0.12);
+    }
+  }
+  .tour-nota {
+    margin-top: 2.5rem;
+  }
+
+  @media (min-width: 960px) {
+    .tour-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      grid-template-areas: "cabeca cel" "controles cel";
+      grid-template-rows: auto 1fr;
+      column-gap: 4rem;
+      row-gap: 2rem;
+    }
+    .tour-menu {
+      flex-wrap: wrap;
+      overflow: visible;
+      margin-inline: 0;
+      padding: 0;
+    }
+    .tour-cel {
+      justify-self: end;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-pagina,
+    .tour-cel .tour-hot {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>("#tour");
+  const cel = raiz?.querySelector<HTMLElement>("[data-tour]");
+  if (raiz && cel) {
+    const paginas = Array.from(cel.querySelectorAll<HTMLElement>("[data-pagina]"));
+    const ordem = paginas.map((p) => p.dataset.pagina!);
+    const chips = Array.from(raiz.querySelectorAll<HTMLButtonElement>(".tour-chip"));
+    const titulo = raiz.querySelector<HTMLElement>("[data-legenda-titulo]")!;
+    const texto = raiz.querySelector<HTMLElement>("[data-legenda-texto]")!;
+    let atual = ordem[0];
+
+    const ir = (id: string) => {
+      const destino = paginas.find((p) => p.dataset.pagina === id);
+      if (!destino || id === atual) return;
+      cel.setAttribute("data-mexeu", "");
+      const volta = ordem.indexOf(id) < ordem.indexOf(atual);
+      paginas.forEach((p) => (p.hidden = p !== destino));
+      destino.toggleAttribute("data-volta", volta);
+      // reinicia a animação de entrada
+      destino.style.animation = "none";
+      void destino.offsetWidth;
+      destino.style.animation = "";
+      destino.querySelector<HTMLElement>(".tour-rolagem")?.scrollTo(0, 0);
+      atual = id;
+      titulo.textContent = destino.dataset.titulo ?? "";
+      texto.textContent = destino.dataset.texto ?? "";
+      const menu = destino.dataset.menu;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.ir === menu)));
+    };
+
+    raiz.addEventListener("click", (e) => {
+      const alvo = (e.target as HTMLElement).closest<HTMLElement>("[data-ir]");
+      if (alvo) ir(alvo.dataset.ir!);
+    });
+  }
+</script>

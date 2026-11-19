@@ -71,3 +71,30 @@ Alinhamento à esquerda em todo lugar; o único elemento centralizado é nenhum.
 - `src/three/kit.ts`: geometria e materiais compartilhados entre a cena ao vivo e os renders.
 - Renders pré-gerados em `src/assets/3d/*.png` por `scripts/render-3d/` (puppeteer + página estática), usados via `<Image />`.
 - Estilo da home isolado em `src/styles/cartela.css` sob `.cartela`; blog e `/experiencia` continuam no visual antigo até migrarem.
+
+## Tour do sistema e demo da IA (2026-11-19, pedido do dono)
+
+Decidido: **tour clicável com as telas reais do app** (opção A; conta demo de verdade fica pra depois).
+
+- Seção `#tour` logo após o hero: celular com as telas reais, em mobile, de um salão de exemplo ("Studio Camila":
+  4 profissionais, 10 serviços, 40 clientes, 4 meses de histórico). Navega pelos próprios botões do app
+  (hotspots medidos na captura) ou pela lista de telas ao lado. Telas: Meu dia, Semana, Secretária no WhatsApp
+  (+ conversa), Clientes (Chamar hoje), Ficha da cliente, Caixa, Comissões, Mais, Vitrine.
+- Seção `#ia`: conversa **real** da Secretária 24h (Gemini) com uma cliente do salão de exemplo, reproduzida
+  com "digitando…"; no fim mostra o agendamento que a IA criou.
+- A história do dia (celular fixo no scroll) saiu: ficou redundante com o tour e a demo; lembrete e
+  "cancelou, a vaga volta" foram para a lista "Vem junto".
+
+### Como regerar (quando o app mudar)
+
+Tudo local e isolado; nada sai da máquina.
+
+1. Worktrees destacados de `origin/main` do scheduler_api e do scheduler_web; banco `scheduler_tour` novo;
+   Redis num db vazio; **nenhum Sidekiq**.
+2. `bin/rails db:schema:load db:seed skedoole:plans` + `bin/rails runner scripts/tour/seed_demo.rb`
+   (precisa de `TOUR_IMG_DIR` com logo/capa/fotos dos serviços — geradas a partir dos renders 3D).
+3. API do tour com `EVOLUTION_API_URL` apontando para um stub local (status `open`); o envio de mensagens
+   (`WhatsApp::EvolutionService`) lê as credentials direto, por isso os scripts neutralizam esse serviço em processo.
+4. Web do tour com `.env.dev.local` apontando para a API do tour, aberto em `localhost` (o app lê o subdomínio do host).
+5. Token da dona via `rails runner` (`create_new_auth_token`) → `node scripts/tour/capturar.cjs`.
+6. `GEMINI_API_KEY=... bin/rails runner scripts/tour/conversa_ia.rb` → **ler a transcrição** antes de publicar.
