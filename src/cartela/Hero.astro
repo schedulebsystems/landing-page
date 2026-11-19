@@ -1,0 +1,276 @@
+---
+import { Image } from "astro:assets";
+import { SITE } from "@config/site";
+import poster from "../assets/3d/agenda-hero.png";
+
+const criarConta = `${SITE.appUrl}/criar-conta`;
+---
+<section class="hero" aria-labelledby="hero-titulo">
+  <div class="c-wrap hero-grid">
+    <div class="hero-texto">
+      <h1 id="hero-titulo" class="hero-titulo">Enquanto você atende, a IA marca a próxima.</h1>
+      <p class="c-lead hero-lead">
+        O Skedoole conversa com suas clientes no WhatsApp, acha o horário, marca, lembra na
+        véspera e remarca quando precisa. De dia, de madrugada e no domingo.
+      </p>
+      <div class="hero-acoes">
+        <a class="c-btn c-btn-laranja" href={criarConta} data-cta="hero-criar-conta">Criar conta grátis</a>
+        <a class="c-link" href="#preco">Ver quanto custa</a>
+      </div>
+      <p class="c-fino hero-fino">14 dias com a IA ligada. Não pede cartão.</p>
+    </div>
+
+    <div class="hero-visual">
+    <div class="hero-palco" data-agenda>
+      <Image
+        src={poster}
+        alt="Agenda da semana, de terça a sábado, com vários horários já marcados em peças coloridas"
+        widths={[560, 800, 1120, 1600]}
+        sizes="(min-width: 960px) 52vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="hero-poster"
+      />
+    </div>
+      <div class="hero-conversa" data-conversa aria-live="polite">
+        <p class="bolha bolha-cliente" data-msg-cliente>Oi! Tem horário pra pé e mão sexta às 10h?</p>
+        <p class="bolha bolha-ia" data-msg-ia>Marquei sexta às 10h. Te lembro na véspera.</p>
+      </div>
+    </div>
+  </div>
+  <div class="c-wrap hero-rodape">
+    <p class="c-fino" data-contador>Cada peça colorida é um horário marcado. Toque num vazio para marcar.</p>
+    <button type="button" class="hero-tocar" data-proximo hidden>
+      Marcar o próximo horário livre
+    </button>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(2.5rem, 1rem + 5vw, 5.5rem);
+    padding-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .hero-titulo {
+    font-size: var(--t-display);
+    max-width: 11ch;
+    font-weight: 520;
+  }
+  .hero-lead {
+    margin-top: 1.75rem;
+  }
+  .hero-acoes {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+  .hero-fino {
+    margin-top: 1rem;
+  }
+
+  .hero-visual {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .hero-palco {
+    position: relative;
+    aspect-ratio: 1;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+  .hero-poster,
+  .hero-palco :global(.c-agenda-canvas) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-poster {
+    object-fit: contain;
+    transition: opacity 0.5s ease;
+  }
+  .hero-palco :global(.c-agenda-canvas) {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    touch-action: pan-y;
+  }
+  .hero-palco.is-vivo :global(.c-agenda-canvas) {
+    opacity: 1;
+  }
+  .hero-palco.is-vivo .hero-poster {
+    opacity: 0;
+  }
+
+  .hero-conversa {
+    position: relative;
+    z-index: 1;
+    margin: 0 var(--gutter) -22%;
+    min-height: 6.6rem;
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+    max-width: min(20rem, 78%);
+    pointer-events: none;
+  }
+  .bolha {
+    margin: 0;
+    padding: 0.7rem 0.95rem;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    box-shadow: 0 12px 30px -16px rgb(36 20 46 / 0.55);
+    animation: bolha-entra 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  }
+  .bolha[hidden] {
+    display: none;
+  }
+  .bolha-cliente {
+    background: var(--louca);
+    color: var(--tinta);
+    border-bottom-left-radius: 4px;
+    justify-self: start;
+  }
+  .bolha-ia {
+    background: var(--tinta);
+    color: var(--louca);
+    border-bottom-right-radius: 4px;
+    justify-self: end;
+  }
+  @keyframes bolha-entra {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+  }
+
+  .hero-rodape {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: baseline;
+    margin-top: 0.5rem;
+  }
+  .hero-tocar {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-size: var(--t-mini);
+    color: var(--tinta-2);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+  .hero-tocar[hidden] {
+    display: none;
+  }
+
+  @media (min-width: 960px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+      align-items: center;
+      gap: 1rem;
+    }
+    .hero-visual {
+      display: block;
+    }
+    .hero-palco {
+      margin-inline: 0 calc(-1 * var(--gutter) - 4vw);
+      margin-block: -3rem -2rem;
+    }
+    .hero-conversa {
+      position: absolute;
+      margin: 0;
+      min-height: 0;
+      left: 2%;
+      top: 8%;
+    }
+    .hero-rodape {
+      justify-content: flex-end;
+      margin-top: -1rem;
+    }
+  }
+</style>
+
+<script>
+  const DIA_LONGO: Record<string, string> = { ter: "terça", qua: "quarta", qui: "quinta", sex: "sexta", "sáb": "sábado" };
+  const PEDIDOS = [
+    (d: string, h: number) => `Oi! Tem horário pra pé e mão ${d} às ${h}h?`,
+    (d: string, h: number) => `Consegue corte com barba ${d}, ${h}h?`,
+    (d: string, h: number) => `Queria fazer lash lift ${d}. Tem às ${h}h?`,
+    (d: string, h: number) => `Design de sobrancelha ${d} às ${h}h, tem vaga?`,
+    (d: string, h: number) => `Tem spa dos pés ${d} às ${h}h?`,
+    (d: string, h: number) => `Dá pra fazer uma escova ${d} às ${h}h?`,
+  ];
+
+  const palco = document.querySelector<HTMLElement>("[data-agenda]");
+  const msgCliente = document.querySelector<HTMLElement>("[data-msg-cliente]");
+  const msgIa = document.querySelector<HTMLElement>("[data-msg-ia]");
+  const contador = document.querySelector<HTMLElement>("[data-contador]");
+  const proximo = document.querySelector<HTMLButtonElement>("[data-proximo]");
+  const conversa = document.querySelector<HTMLElement>("[data-conversa]");
+
+  const temWebGL = () => {
+    try {
+      return !!document.createElement("canvas").getContext("webgl2");
+    } catch {
+      return false;
+    }
+  };
+  const economia = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+
+  if (palco && msgCliente && msgIa && contador && proximo && conversa && temWebGL() && !economia) {
+    const reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let marcados = 0;
+    let n = 0;
+    let respostaTimer = 0;
+
+    const iniciar = async () => {
+      const { montarAgenda } = await import("../scripts/agenda3d");
+      const cena = await montarAgenda({
+        container: palco,
+        reduzido,
+        onPronto: () => {
+          palco.classList.add("is-vivo");
+          proximo.hidden = false;
+        },
+        onMarcar: ({ dia, hora, auto, livres }) => {
+          marcados++;
+          const d = DIA_LONGO[dia] ?? dia;
+          // anúncio só para ação da pessoa; o autoplay não fala com leitor de tela
+          conversa.setAttribute("aria-live", auto ? "off" : "polite");
+          msgCliente.textContent = PEDIDOS[n++ % PEDIDOS.length](d, hora);
+          msgCliente.hidden = false;
+          msgIa.hidden = true;
+          // reinicia a animação de entrada
+          msgCliente.style.animation = "none";
+          void msgCliente.offsetWidth;
+          msgCliente.style.animation = "";
+          clearTimeout(respostaTimer);
+          respostaTimer = window.setTimeout(() => {
+            msgIa.textContent = `Marquei ${d} às ${hora}h. Te lembro na véspera.`;
+            msgIa.hidden = false;
+          }, reduzido ? 0 : 900);
+          contador.textContent =
+            livres === 0
+              ? "Semana cheia. É isso que a gente quer pra você."
+              : `${marcados} ${marcados === 1 ? "horário marcado" : "horários marcados"} desde que você chegou.`;
+        },
+      });
+      proximo.addEventListener("click", () => cena.marcarProximo());
+    };
+
+    const quandoOcioso = (fn: () => void) =>
+      "requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 1200);
+    if (document.readyState === "complete") quandoOcioso(iniciar);
+    else window.addEventListener("load", () => quandoOcioso(iniciar), { once: true });
+  }
+</script>

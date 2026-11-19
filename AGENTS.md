@@ -9,7 +9,9 @@ Projeto Astro 5 estático um-pager + blog (Content Collections) + Tailwind v4.
 - `astro`: 5.18.2, `@astrojs/check`: 0.9.9, `@astrojs/mdx`: 4.2.6 (não subir p/ 7.x), `@astrojs/rss`: 4.0.11, `@astrojs/sitemap`: 3.2.1
 - `tailwindcss`: ^4.0.0 com `@tailwindcss/vite` (não usar `@tailwindcss/cli`, não usar PostCSS)
 - `typescript`: 5.7.3 (não subir p/ 7.x — quebra `@astrojs/check`)
-- `@fontsource/bricolage-grotesque` (display) + `@fontsource/inter` (corpo). **Não usar Poppins**.
+- `@fontsource/bricolage-grotesque` (display) + `@fontsource/inter` (corpo) no blog e em `/experiencia`. **Não usar Poppins**.
+- Home (`/`): `@fontsource-variable/fraunces` + `@fontsource-variable/hanken-grotesk` — ver "Home Cartela" abaixo.
+- `three` 0.187.0 (+ `@types/three`): **só** na ilha da agenda 3D do hero (`src/scripts/agenda3d.ts`, import dinâmico) e no gerador de renders (`scripts/render-3d/`). Nenhum outro uso de lib 3D/animação em runtime.
 - `sharp`: ^0.33.5
 
 ## Comandos
@@ -23,7 +25,19 @@ npx astro check                      # typecheck only
 npx astro check --minimumSeverity error   # CI: falha só em erros
 ```
 
-## Convenções do projeto
+## Home Cartela (identidade nova, 2026-11)
+
+A home (`src/pages/index.astro` + `src/cartela/`) tem identidade própria, isolada sob `body.cartela` (`src/styles/cartela.css`).
+Direção, paleta e princípios: `docs/redesign-2026-11/DIRECAO.md`. Resumo:
+
+- Porcelana `#ECE7EF` + Tinta `#24142E`; laranja `#FF5A24` **só** em CTA e logo (texto Tinta sobre laranja, por contraste). Lacas (amora, nude, lavanda) só nas peças 3D.
+- Fraunces (SOFT 100) nos títulos, Hanken Grotesk no texto. Sem eyebrow em caixa alta, sem palavra destacada em cor no título, sem `→` nos botões, sem fade-up por seção.
+- Agenda 3D: `src/three/kit.ts` é a fonte única de geometria/material. Mudou o kit → regerar os PNGs: `PUPPETEER=<caminho do puppeteer-core> node scripts/render-3d/render.mjs` (saem em `src/assets/3d/`, consumidos via `<Image />`).
+- O 3D é progressivo: poster pré-renderizado primeiro, cena ao vivo após `load` + ocioso; sem WebGL, com `saveData` ou com movimento reduzido a página continua completa.
+
+As regras abaixo valem para o blog e `/experiencia` (visual anterior) até migrarem.
+
+## Convenções do projeto (blog e /experiencia)
 
 - **Design system dark-first** canon é `src/styles/tokens.css` (superfícies em camadas de cinza, laranja `#FF5A24` reservado para ação, verde `#3ECF72` para status positivo, WhatsApp verde `#25D366` só no bloco de mensagem). **Não usar cores hex soltas** — sempre variáveis `--cor-*`.
 - **Regra de ouro: laranja só em ação.** O único uso de laranja preenchido é o botão CTA principal. Permitido também: a barrinha do "eyebrow" e no máximo UM acento pontual por seção (ex: badge "-8%" no pricing). **NÃO usar laranja em**: headlines inteiras, ícones de recurso, checks de lista, bordas de card comum, ou status.

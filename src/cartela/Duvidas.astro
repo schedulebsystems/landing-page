@@ -1,0 +1,66 @@
+---
+import { FAQS } from "@data/content";
+---
+<section id="duvidas" class="c-sec duv" aria-labelledby="duv-titulo">
+  <div class="c-wrap duv-grid">
+    <h2 id="duv-titulo" class="c-h2">O que todo mundo pergunta antes.</h2>
+    <div class="duv-lista">
+      {FAQS.map((f) => (
+        <details class="duv-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .duv {
+    background: var(--louca);
+  }
+  .duv-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .duv-item {
+    border-top: 1px solid var(--linha);
+  }
+  .duv-item:last-child {
+    border-bottom: 1px solid var(--linha);
+  }
+  .duv-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.35rem 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .duv-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .duv-item summary::after {
+    content: "+";
+    font-family: var(--f-display);
+    font-size: 1.6rem;
+    line-height: 1;
+    transition: transform 0.25s ease;
+  }
+  .duv-item[open] summary::after {
+    transform: rotate(45deg);
+  }
+  .duv-item p {
+    margin: 0 0 1.5rem;
+    max-width: 60ch;
+    color: var(--tinta-2);
+  }
+  @media (min-width: 960px) {
+    .duv-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 4rem;
+    }
+  }
+</style>

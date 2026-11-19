@@ -1,0 +1,173 @@
+---
+import Tela from "./Tela.astro";
+
+const momentos = [
+  {
+    hora: "23:41",
+    titulo: "A cliente pede pra remarcar. Você está dormindo.",
+    texto: "A IA olha a agenda da profissional, oferece os horários livres, confirma e solta o horário antigo. De manhã você só vê que mudou.",
+  },
+  {
+    hora: "08:00",
+    titulo: "O lembrete sai sozinho.",
+    texto: "Na véspera, cada cliente recebe no WhatsApp o link do horário. Um toque confirma. Se precisar, ela remarca por ali mesmo.",
+  },
+  {
+    hora: "14:10",
+    titulo: "Alguém cancelou. A vaga não fica parada.",
+    texto: "O horário volta livre na hora, no seu link e na IA, para a próxima pessoa que chamar.",
+  },
+  {
+    hora: "19:00",
+    titulo: "O dia fecha sem caderno.",
+    texto: "Quanto entrou, quanto cada profissional fez de comissão e quem atendeu quem. Tudo somado quando você fecha o caixa.",
+  },
+] as const;
+---
+<section id="o-dia" class="c-sec c-sec-escura dia" aria-labelledby="dia-titulo">
+  <div class="c-wrap">
+    <h2 id="dia-titulo" class="c-h2">Um dia seu, com a IA no WhatsApp.</h2>
+    <div class="dia-grid">
+      <ol class="dia-momentos">
+        {momentos.map((m, i) => (
+          <li class="dia-momento" data-momento={i + 1} data-ativo={i === 0 ? "" : undefined}>
+            <time class="dia-hora">{m.hora}</time>
+            <h3 class="dia-titulo">{m.titulo}</h3>
+            <p class="dia-texto">{m.texto}</p>
+            <div class="dia-cel dia-cel-mobile" aria-hidden="true"><Tela n={(i + 1) as 1 | 2 | 3 | 4} /></div>
+          </li>
+        ))}
+      </ol>
+      <div class="dia-fixo" aria-hidden="true">
+        <div class="dia-cel" data-cel data-tela="1">
+          {[1, 2, 3, 4].map((n) => (
+            <div class="dia-camada" data-camada={n}><Tela n={n as 1 | 2 | 3 | 4} /></div>
+          ))}
+        </div>
+      </div>
+    </div>
+    <p class="c-fino dia-nota">Nomes e valores de exemplo.</p>
+  </div>
+</section>
+
+<style>
+  .dia-grid {
+    margin-top: clamp(3rem, 2rem + 4vw, 5rem);
+  }
+  .dia-momentos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4.5rem;
+  }
+  .dia-hora {
+    display: block;
+    font-family: var(--f-display);
+    font-variation-settings: "SOFT" 100;
+    font-weight: 400;
+    font-size: clamp(3rem, 2rem + 4vw, 5.5rem);
+    line-height: 1;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--lavanda);
+  }
+  .dia-titulo {
+    margin-top: 1rem;
+    font-size: var(--t-h3);
+    max-width: 20ch;
+  }
+  .dia-texto {
+    margin-top: 0.85rem;
+    max-width: 36ch;
+    color: rgb(248 246 250 / 0.75);
+  }
+  .dia-cel {
+    position: relative;
+    width: min(19rem, 100%);
+    aspect-ratio: 9 / 17;
+    border-radius: 2.4rem;
+    padding: 0.6rem;
+    background: #0f0714;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08) inset, 0 40px 80px -40px rgb(0 0 0 / 0.8);
+  }
+  .dia-cel :global(.tela) {
+    border-radius: 1.9rem;
+    background: var(--porcelana);
+    overflow: hidden;
+  }
+  .dia-cel-mobile {
+    margin-top: 2rem;
+  }
+  .dia-fixo {
+    display: none;
+  }
+  .dia-nota {
+    margin-top: 4rem;
+  }
+
+  @media (min-width: 960px) {
+    .dia-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 3rem;
+    }
+    .dia-momentos {
+      gap: 0;
+    }
+    .dia-momento {
+      min-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0.32;
+      transition: opacity 0.4s ease;
+    }
+    .dia-momento[data-ativo] {
+      opacity: 1;
+    }
+    .dia-cel-mobile {
+      display: none;
+    }
+    .dia-fixo {
+      display: block;
+    }
+    .dia-fixo .dia-cel {
+      position: sticky;
+      top: calc(50vh - min(19rem, 100%) * 17 / 9 / 2);
+      margin-top: 10vh;
+    }
+    .dia-camada {
+      position: absolute;
+      inset: 0.6rem;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .dia-cel[data-tela="1"] [data-camada="1"],
+    .dia-cel[data-tela="2"] [data-camada="2"],
+    .dia-cel[data-tela="3"] [data-camada="3"],
+    .dia-cel[data-tela="4"] [data-camada="4"] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const cel = document.querySelector<HTMLElement>("[data-cel]");
+  const momentos = Array.from(document.querySelectorAll<HTMLElement>("[data-momento]"));
+  if (cel && momentos.length) {
+    const io = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (!e.isIntersecting) continue;
+          const n = (e.target as HTMLElement).dataset.momento!;
+          cel.dataset.tela = n;
+          momentos.forEach((m) => m.toggleAttribute("data-ativo", m === e.target));
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px" }
+    );
+    momentos.forEach((m) => io.observe(m));
+  }
+</script>

@@ -1,0 +1,68 @@
+---
+import Logo from "@components/Logo.astro";
+import { SITE } from "@config/site";
+const ano = new Date().getFullYear();
+---
+<footer class="rod">
+  <div class="c-wrap rod-grid">
+    <a href="/" class="c-marca rod-marca" aria-label="Skedoole, início">
+      <Logo size={28} />
+      <span>Skedoole</span>
+    </a>
+    <nav class="rod-links" aria-label="Rodapé">
+      <a href="#pra-quem">Pra quem é</a>
+      <a href="#preco">Preço</a>
+      <a href="/blog">Blog</a>
+      <a href={`${SITE.appUrl}/acessar`}>Entrar</a>
+      <a href={SITE.whatsapp}>WhatsApp</a>
+    </nav>
+    <p class="rod-legal">© {ano} {SITE.legalName}. Agenda e IA no WhatsApp para negócios de beleza.</p>
+  </div>
+</footer>
+
+<style>
+  .rod {
+    background: var(--tinta);
+    color: rgb(248 246 250 / 0.75);
+    padding-block: 3.5rem;
+  }
+  .rod-grid {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .rod-marca {
+    color: var(--louca);
+  }
+  .rod-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+  }
+  .rod a:not(.rod-marca) {
+    color: rgb(248 246 250 / 0.85);
+    text-decoration: none;
+  }
+  .rod a:not(.rod-marca):hover {
+    color: var(--louca);
+    text-decoration: underline;
+  }
+  .rod-legal {
+    font-size: var(--t-mini);
+    color: rgb(248 246 250 / 0.55);
+  }
+  .rod :focus-visible {
+    outline-color: var(--louca);
+  }
+  @media (min-width: 960px) {
+    .rod-grid {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+    }
+    .rod-links {
+      justify-content: flex-end;
+    }
+    .rod-legal {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

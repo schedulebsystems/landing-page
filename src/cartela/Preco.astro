@@ -1,0 +1,287 @@
+---
+import { SITE } from "@config/site";
+
+/** Mesma tabela do produto (PLANOS_B2B.md): preço por profissional em faixas. */
+const FAIXAS = [
+  { de: "1º profissional", preco: "59,90" },
+  { de: "do 2º ao 5º", preco: "39,90" },
+  { de: "do 6º ao 10º", preco: "29,90" },
+  { de: "do 11º ao 20º", preco: "24,90" },
+  { de: "21º em diante", preco: "19,90" },
+];
+---
+<section id="preco" class="c-sec c-sec-escura preco" aria-labelledby="preco-titulo">
+  <div class="c-wrap preco-grid">
+    <div>
+      <h2 id="preco-titulo" class="c-h2">Você paga pelo tamanho da equipe.</h2>
+      <p class="c-lead preco-lead">
+        R$ 59,90 por mês para o primeiro profissional, com a IA no WhatsApp inclusa. Cada
+        profissional a mais custa menos que o anterior. Sem taxa de adesão e sem fidelidade.
+      </p>
+      <table class="preco-faixas">
+        <caption class="sr-only">Preço por profissional, por mês</caption>
+        <tbody>
+          {FAIXAS.map((f) => (
+            <tr><th scope="row">{f.de}</th><td>R$ {f.preco}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="calc" data-calc>
+      <fieldset class="calc-ciclo">
+        <legend class="sr-only">Forma de pagamento</legend>
+        <label><input type="radio" name="ciclo" value="mensal" checked /> <span>Mensal</span></label>
+        <label><input type="radio" name="ciclo" value="anual" /> <span>Anual, 8% menos</span></label>
+      </fieldset>
+
+      <div class="calc-linha">
+        <span id="calc-profs-rotulo">Profissionais</span>
+        <div class="calc-stepper" role="group" aria-labelledby="calc-profs-rotulo">
+          <button type="button" data-passo="profs" data-delta="-1" aria-label="Menos um profissional">−</button>
+          <output data-profs aria-live="polite">3</output>
+          <button type="button" data-passo="profs" data-delta="1" aria-label="Mais um profissional">+</button>
+        </div>
+      </div>
+      <div class="calc-linha">
+        <span id="calc-unid-rotulo">Unidades <small>(a 1ª não paga)</small></span>
+        <div class="calc-stepper" role="group" aria-labelledby="calc-unid-rotulo">
+          <button type="button" data-passo="units" data-delta="-1" aria-label="Menos uma unidade">−</button>
+          <output data-units aria-live="polite">1</output>
+          <button type="button" data-passo="units" data-delta="1" aria-label="Mais uma unidade">+</button>
+        </div>
+      </div>
+
+      <p class="calc-total" aria-live="polite">
+        <span class="calc-rs">R$</span><span data-valor>139,70</span><span class="calc-per">por mês</span>
+      </p>
+      <p class="calc-nota" data-nota>Cobrado todo mês.</p>
+
+      <a class="c-btn c-btn-laranja calc-cta" href={`${SITE.appUrl}/criar-conta`} data-cta="preco-criar-conta">Criar conta grátis</a>
+      <p class="calc-nota">Os 14 dias de teste não cobram nada. Você escolhe o plano depois.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .preco-grid {
+    display: grid;
+    gap: 3.5rem;
+  }
+  .preco-lead {
+    margin-top: 1.5rem;
+  }
+  .preco-faixas {
+    margin-top: 2.5rem;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 26rem;
+  }
+  .preco-faixas th,
+  .preco-faixas td {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgb(248 246 250 / 0.14);
+    font-weight: 450;
+    text-align: left;
+  }
+  .preco-faixas td {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--louca);
+    font-weight: 600;
+  }
+  .preco-faixas th {
+    color: rgb(248 246 250 / 0.72);
+  }
+
+  .calc {
+    background: var(--louca);
+    color: var(--tinta);
+    border-radius: 28px;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+  .calc :focus-visible {
+    outline-color: var(--tinta);
+  }
+  .calc-ciclo {
+    border: 0;
+    padding: 0.3rem;
+    margin: 0;
+    display: flex;
+    gap: 0.25rem;
+    background: var(--porcelana);
+    border-radius: 12px;
+  }
+  .calc-ciclo label {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+  }
+  .calc-ciclo input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .calc-ciclo span {
+    display: block;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--tinta-2);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .calc-ciclo input:checked + span {
+    background: #fff;
+    color: var(--tinta);
+    box-shadow: 0 2px 8px -4px rgb(36 20 46 / 0.4);
+  }
+  .calc-ciclo input:focus-visible + span {
+    outline: 3px solid var(--tinta);
+    outline-offset: 2px;
+  }
+  .calc-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 600;
+  }
+  .calc-linha small {
+    font-weight: 450;
+    color: var(--tinta-3);
+  }
+  .calc-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .calc-stepper button {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--linha);
+    background: #fff;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--tinta);
+    cursor: pointer;
+  }
+  .calc-stepper button:hover:not(:disabled) {
+    border-color: var(--tinta);
+  }
+  .calc-stepper button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .calc-stepper output {
+    min-width: 2.5rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+  .calc-total {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-family: var(--f-display);
+    font-variation-settings: "SOFT" 100;
+    font-weight: 520;
+    font-size: clamp(3.4rem, 2.4rem + 4vw, 5.2rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .calc-rs,
+  .calc-per {
+    font-family: var(--f-texto);
+    font-size: 1.05rem;
+    letter-spacing: 0;
+    font-weight: 600;
+    color: var(--tinta-2);
+  }
+  .calc-nota {
+    font-size: var(--t-mini);
+    color: var(--tinta-3);
+  }
+  .calc-cta {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+  @media (min-width: 960px) {
+    .preco-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+</style>
+
+<script>
+  const FAIXAS = [
+    { ate: 1, preco: 59.9 },
+    { ate: 5, preco: 39.9 },
+    { ate: 10, preco: 29.9 },
+    { ate: 20, preco: 24.9 },
+    { ate: Infinity, preco: 19.9 },
+  ];
+  const UNIDADE_EXTRA = 59.9;
+  const MAX = 99;
+
+  const raiz = document.querySelector<HTMLElement>("[data-calc]");
+  if (raiz) {
+    const estado = { profs: 3, units: 1, anual: false };
+    const fmt = (n: number) => n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const assentos = (qtd: number) => {
+      let total = 0;
+      let anterior = 0;
+      for (const f of FAIXAS) {
+        const n = Math.max(0, Math.min(qtd, f.ate) - anterior);
+        total += n * f.preco;
+        anterior = f.ate;
+        if (qtd <= f.ate) break;
+      }
+      return total;
+    };
+    const $ = <T extends HTMLElement>(s: string) => raiz.querySelector<T>(s)!;
+
+    const render = () => {
+      const mensal = assentos(estado.profs) + (estado.units - 1) * UNIDADE_EXTRA;
+      const anualTotal = mensal * 12 * 0.92;
+      $("[data-valor]").textContent = fmt(estado.anual ? anualTotal / 12 : mensal);
+      $("[data-nota]").textContent = estado.anual
+        ? `R$ ${fmt(anualTotal)} cobrados uma vez por ano.`
+        : "Cobrado todo mês.";
+      $("[data-profs]").textContent = String(estado.profs);
+      $("[data-units]").textContent = String(estado.units);
+      raiz.querySelectorAll<HTMLButtonElement>("[data-passo]").forEach((b) => {
+        const k = b.dataset.passo as "profs" | "units";
+        const d = Number(b.dataset.delta);
+        b.disabled = (d < 0 && estado[k] <= 1) || (d > 0 && estado[k] >= MAX);
+      });
+    };
+
+    raiz.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-passo]");
+      if (!b) return;
+      const k = b.dataset.passo as "profs" | "units";
+      estado[k] = Math.min(MAX, Math.max(1, estado[k] + Number(b.dataset.delta)));
+      render();
+    });
+    raiz.addEventListener("change", (e) => {
+      const r = e.target as HTMLInputElement;
+      if (r.name === "ciclo") {
+        estado.anual = r.value === "anual";
+        render();
+      }
+    });
+    render();
+  }
+</script>

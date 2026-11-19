@@ -1,0 +1,67 @@
+---
+const itens = [
+  { t: "Seu link de agendamento", d: "Uma página com seus serviços, fotos e o botão de marcar. Vai na bio do Instagram e no status do WhatsApp." },
+  { t: "Agenda de cada profissional", d: "Horários, folgas e o tempo de cada serviço do jeito que cada uma trabalha." },
+  { t: "Caixa e comissão", d: "Fecha o atendimento, recebe em Pix ou cartão e a comissão de cada profissional já sai separada." },
+  { t: "Clube de assinatura", d: "A cliente paga por mês e usa os serviços do plano. Você sabe quanto entra antes do mês começar." },
+  { t: "Quem chamar hoje", d: "A lista de clientes que sumiram ou estão na hora de voltar, pronta pra você mandar mensagem." },
+  { t: "A equipe no celular", d: "Cada profissional vê a própria agenda e o que já fez no mês, sem te perguntar." },
+];
+---
+<section class="c-sec junto" aria-labelledby="junto-titulo">
+  <div class="c-wrap junto-grid">
+    <div class="junto-topo">
+      <h2 id="junto-titulo" class="c-h2">E o resto vem junto, no mesmo preço.</h2>
+      <p class="c-lead">A IA no WhatsApp não é um extra que se paga à parte. Ela e tudo isto estão em todo plano.</p>
+    </div>
+    <ul class="junto-lista">
+      {itens.map((i) => (
+        <li>
+          <h3>{i.t}</h3>
+          <p>{i.d}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .junto-grid {
+    display: grid;
+    gap: 3rem;
+  }
+  .junto-topo .c-lead {
+    margin-top: 1.5rem;
+  }
+  .junto-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2.25rem 3rem;
+  }
+  .junto-lista h3 {
+    font-size: var(--t-h3);
+  }
+  .junto-lista p {
+    margin-top: 0.5rem;
+    color: var(--tinta-2);
+    max-width: 34ch;
+  }
+  @media (min-width: 720px) {
+    .junto-lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .junto-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 4rem;
+    }
+    .junto-topo {
+      position: sticky;
+      top: 7rem;
+      align-self: start;
+    }
+  }
+</style>

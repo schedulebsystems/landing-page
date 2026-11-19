@@ -1,0 +1,93 @@
+---
+import { Image } from "astro:assets";
+import pente from "../assets/3d/pente.png";
+import escova from "../assets/3d/escova.png";
+import esmalte from "../assets/3d/esmalte.png";
+import pinca from "../assets/3d/pinca.png";
+import toalhas from "../assets/3d/toalhas.png";
+
+const itens = [
+  { img: pente, alt: "Pente de barbeiro", nome: "Barbearia", texto: "Corte e barba em sequência, com encaixe no fim da tarde." },
+  { img: escova, alt: "Escova redonda", nome: "Salão", texto: "Escova, coloração e química, cada uma com o tempo de cada profissional." },
+  { img: esmalte, alt: "Vidro de esmalte", nome: "Manicure e nail designer", texto: "Pé e mão, alongamento e manutenção na agenda de cada manicure." },
+  { img: pinca, alt: "Pinça de sobrancelha", nome: "Lash e sobrancelha", texto: "Lash lift, extensão de cílios e design sem buraco entre uma e outra." },
+  { img: toalhas, alt: "Toalhas de spa enroladas", nome: "Spa dos pés e podologia", texto: "Sessões marcadas e a cliente lembrada na véspera, sem você ligar." },
+];
+---
+<section id="pra-quem" class="c-sec pq" aria-labelledby="pq-titulo">
+  <div class="c-wrap">
+    <div class="pq-topo">
+      <h2 id="pq-titulo" class="c-h2">Pra quem vive de horário marcado.</h2>
+      <p class="c-lead">
+        A agenda muda de cara para cada negócio: os serviços, o tempo de cada um e quem faz o quê.
+        A IA responde com os seus serviços, os seus preços e os seus horários.
+      </p>
+    </div>
+    <ul class="pq-lista">
+      {itens.map((i) => (
+        <li class="pq-item">
+          <Image src={i.img} alt={i.alt} widths={[240, 360, 480]} sizes="(min-width: 960px) 18vw, 40vw" class="pq-img" />
+          <h3 class="pq-nome">{i.nome}</h3>
+          <p class="pq-texto">{i.texto}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pq {
+    background: var(--louca);
+  }
+  .pq-topo {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .pq-lista {
+    list-style: none;
+    margin: clamp(3rem, 2rem + 4vw, 5.5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 1.25rem;
+  }
+  .pq-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .pq-nome {
+    font-size: var(--t-h3);
+    margin-top: 0.25rem;
+  }
+  .pq-texto {
+    margin-top: 0.5rem;
+    color: var(--tinta-2);
+    font-size: var(--t-mini);
+    max-width: 24ch;
+  }
+  .pq-item:last-child {
+    grid-column: 1 / -1;
+    max-width: 50%;
+  }
+
+  @media (min-width: 960px) {
+    .pq-topo {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+    }
+    .pq-lista {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+    /* fileira desencontrada: cada objeto numa altura */
+    .pq-item:nth-child(2) { margin-top: 5rem; }
+    .pq-item:nth-child(3) { margin-top: 1.5rem; }
+    .pq-item:nth-child(4) { margin-top: 7rem; }
+    .pq-item:nth-child(5) { margin-top: 2.5rem; }
+    .pq-item:last-child {
+      grid-column: auto;
+      max-width: none;
+    }
+  }
+</style>

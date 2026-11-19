@@ -1,31 +1,38 @@
 ---
 import Base from "@layouts/Base.astro";
-import Nav from "@components/Nav.astro";
-import Footer from "@components/Footer.astro";
-import LiveSandbox from "@sections/LiveSandbox.astro";
-import ProblemSolution from "@sections/ProblemSolution.astro";
-import Pricing from "@sections/Pricing.astro";
-import FAQ from "@sections/FAQ.astro";
-import CTA from "@sections/CTA.astro";
-import {
-  FAQS,
-  NAV_LINKS_EXPERIENCIA,
-  FOOTER_LINKS_EXPERIENCIA,
-} from "@data/content";
+import "@fontsource-variable/fraunces/full.css";
+import "@fontsource-variable/hanken-grotesk/index.css";
+import "@styles/cartela.css";
+import Nav from "../cartela/Nav.astro";
+import Hero from "../cartela/Hero.astro";
+import ParaQuem from "../cartela/ParaQuem.astro";
+import Dia from "../cartela/Dia.astro";
+import Junto from "../cartela/Junto.astro";
+import Preco from "../cartela/Preco.astro";
+import Duvidas from "../cartela/Duvidas.astro";
+import Fim from "../cartela/Fim.astro";
+import Rodape from "../cartela/Rodape.astro";
+import { FAQS } from "@data/content";
 ---
 <Base
-  title="Sua cadeira não fica vazia | Skedoole"
-  description="O cliente marca sozinho, o lembrete confirma e a fila cobre quem cancela. Veja o dia inteiro funcionando no simulador."
+  title="Agenda com IA no WhatsApp para salão, barbearia e estética"
+  description="A IA do Skedoole conversa com suas clientes no WhatsApp, marca, lembra e remarca sozinha. Para barbearia, salão, manicure, lash, sobrancelha, spa dos pés e podologia. 14 dias grátis, sem cartão."
+  bodyClass="cartela"
 >
-  <Nav links={NAV_LINKS_EXPERIENCIA} />
+  <Fragment slot="head">
+    <meta name="theme-color" content="#ECE7EF" />
+  </Fragment>
+  <Nav />
   <main id="main">
-    <LiveSandbox />
-    <ProblemSolution />
-    <Pricing />
-    <FAQ />
-    <CTA />
+    <Hero />
+    <ParaQuem />
+    <Dia />
+    <Junto />
+    <Preco />
+    <Duvidas />
+    <Fim />
   </main>
-  <Footer links={FOOTER_LINKS_EXPERIENCIA} />
+  <Rodape />
 </Base>
 
 <script

@@ -1,0 +1,35 @@
+---
+import Logo from "@components/Logo.astro";
+import { SITE } from "@config/site";
+
+const links = [
+  { label: "Pra quem é", href: "#pra-quem" },
+  { label: "Como funciona", href: "#o-dia" },
+  { label: "Preço", href: "#preco" },
+  { label: "Dúvidas", href: "#duvidas" },
+];
+---
+<header class="c-nav" data-nav>
+  <div class="c-wrap c-nav-in">
+    <a href="/" class="c-marca" aria-label="Skedoole, início">
+      <Logo size={30} />
+      <span>Skedoole</span>
+    </a>
+    <nav class="c-nav-links" aria-label="Seções">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <div class="c-nav-acoes">
+      <a class="c-nav-entrar" href={`${SITE.appUrl}/acessar`} data-cta="nav-login">Entrar</a>
+      <a class="c-btn c-btn-laranja" href={`${SITE.appUrl}/criar-conta`} data-cta="nav-criar-conta">Criar conta grátis</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  if (nav) {
+    const marcar = () => nav.toggleAttribute("data-scrolled", window.scrollY > 8);
+    marcar();
+    window.addEventListener("scroll", marcar, { passive: true });
+  }
+</script>

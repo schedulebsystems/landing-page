@@ -1,0 +1,69 @@
+---
+import { Image } from "astro:assets";
+import { SITE } from "@config/site";
+import cheia from "../assets/3d/agenda-cheia.png";
+---
+<section class="c-sec fim" aria-labelledby="fim-titulo">
+  <div class="c-wrap fim-grid">
+    <Image
+      src={cheia}
+      alt="A mesma agenda da semana, agora com todos os horários marcados"
+      widths={[560, 800, 1120]}
+      sizes="(min-width: 960px) 46vw, 100vw"
+      class="fim-img"
+    />
+    <div>
+      <h2 id="fim-titulo" class="c-h2">Sua semana, assim.</h2>
+      <p class="c-lead fim-lead">
+        Cria a conta, cadastra seus serviços e conecta o WhatsApp. Em poucos minutos a IA já está
+        respondendo as suas clientes.
+      </p>
+      <div class="fim-acoes">
+        <a class="c-btn c-btn-laranja" href={`${SITE.appUrl}/criar-conta`} data-cta="fim-criar-conta">Criar conta grátis</a>
+        <p class="c-fino">14 dias com tudo liberado. Não pede cartão.</p>
+      </div>
+      <p class="fim-wpp">
+        Prefere conversar antes? <a class="c-link" href={SITE.whatsapp} data-cta="fim-whatsapp">Chama a gente no WhatsApp</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fim {
+    overflow: hidden;
+  }
+  .fim-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .fim-img {
+    width: calc(100% + 2 * var(--gutter));
+    height: auto;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+  .fim-lead {
+    margin-top: 1.5rem;
+  }
+  .fim-acoes {
+    margin-top: 2rem;
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+  }
+  .fim-wpp {
+    margin-top: 2.5rem;
+    color: var(--tinta-2);
+  }
+  @media (min-width: 960px) {
+    .fim-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+      gap: 3rem;
+    }
+    .fim-img {
+      width: 108%;
+      margin-inline: -4% 0;
+    }
+  }
+</style>

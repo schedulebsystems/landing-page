@@ -19,6 +19,8 @@ export interface Props {
   jsonLd?: boolean;
   /** Tipo de página p/ JSON-LD. */
   type?: "website" | "article";
+  /** Classe no <body> (ex.: "cartela" para a home nova, que tem visual próprio). */
+  bodyClass?: string;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   noindex = false,
   jsonLd = true,
   type = "website",
+  bodyClass,
 } = Astro.props;
 
 const pageTitle = title ? `${title} | Skedoole` : SITE.defaultTitle;
@@ -162,7 +165,7 @@ const jsonLdObject =
 
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLdObject)} />}
   </head>
-  <body>
+  <body class={bodyClass}>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:z-[100] focus:top-2 focus:left-2 focus:rounded-md focus:px-4 focus:py-2 focus:bg-[var(--cor-primaria)] focus:text-[#0A0A0A] focus:font-semibold"
