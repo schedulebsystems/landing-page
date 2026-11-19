@@ -67,7 +67,7 @@ const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
                   <Image
                     src={conteudo}
                     alt={`Tela ${TEXTOS[t.id].titulo} do Skedoole com dados de um salão de exemplo`}
-                    widths={[390, 780]}
+                    widths={[390, 780, 1170]} quality={90}
                     sizes="(min-width: 960px) 360px, 82vw"
                     loading={i === 0 ? "eager" : "lazy"}
                     class="tour-img"
@@ -87,7 +87,7 @@ const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
                 const camada = img(`${t.id}-${c.nome}`);
                 return camada ? (
                   <div class={`tour-fixo tour-fixo-${c.nome}`}>
-                    <Image src={camada} alt="" widths={[390, 780]} sizes="(min-width: 960px) 360px, 82vw" loading={i === 0 ? "eager" : "lazy"} class="tour-img" />
+                    <Image src={camada} alt="" widths={[390, 780, 1170]} quality={90} sizes="(min-width: 960px) 360px, 82vw" loading={i === 0 ? "eager" : "lazy"} class="tour-img" />
                     {c.links.map((l) => (
                       <button
                         type="button"

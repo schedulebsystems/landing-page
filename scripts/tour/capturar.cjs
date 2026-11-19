@@ -18,7 +18,7 @@ const API = process.env.TOUR_API || 'http://127.0.0.1:3100';
 const SUB = 'studio-camila';
 const ROOT = resolve(__dirname, '../..');
 const OUT = resolve(ROOT, 'src/assets/tour');
-const W = 390, H = 844, DPR = 2, MAX_H = 3000;
+const W = 390, H = 844, DPR = 3, MAX_H = 3000;
 
 // Destinos comuns: barra de baixo e topo.
 const GLOBAIS = [
