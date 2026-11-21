@@ -1,0 +1,99 @@
+---
+import Reveal from "@components/Reveal.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import { testimonialsFor } from "@data/testimonials";
+import type { SegmentKey } from "@data/segments";
+
+interface Props {
+  segment?: SegmentKey;
+}
+
+// Só renderiza com depoimento real cadastrado em src/data/testimonials.ts.
+const items = testimonialsFor(Astro.props.segment ?? "geral").slice(0, 3);
+---
+{items.length > 0 && (
+  <section id="depoimentos" class="py-16 md:py-24">
+    <div class="container-tight">
+      <SectionHeading eyebrow="Quem já usa" class="max-w-2xl">
+        <Fragment slot="title">Agenda cheia, contada por quem atende.</Fragment>
+      </SectionHeading>
+
+      <div class="tst-grid">
+        {items.map((item, i) => (
+          <Reveal>
+            <figure class="tst-card" style={i > 0 ? `transition-delay:${i * 80}ms` : undefined}>
+              {item.metric && <p class="tst-metric">{item.metric}</p>}
+              <blockquote class="tst-quote">“{item.quote}”</blockquote>
+              <figcaption class="tst-who">
+                <span class="tst-avatar" aria-hidden="true">{item.name.charAt(0)}</span>
+                <span>
+                  <strong>{item.name}</strong>
+                  <small>{item.business} · {item.city}</small>
+                </span>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .tst-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .tst-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .tst-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    margin: 0;
+    padding: 24px;
+    border: 1px solid var(--cor-borda-geral);
+    border-radius: var(--radius-xl);
+    background: var(--cor-cards);
+  }
+
+  .tst-metric {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cor-status-ok);
+  }
+
+  .tst-quote {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: var(--cor-texto-primario);
+  }
+
+  .tst-who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+
+    strong { display: block; font-size: 0.95rem; color: var(--cor-texto-primario); }
+    small { font-size: 0.85rem; color: var(--cor-texto-secundario); }
+  }
+
+  .tst-avatar {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: var(--cor-cards-hover);
+    color: var(--cor-texto-primario);
+    font-weight: 700;
+  }
+</style>

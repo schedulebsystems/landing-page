@@ -1,8 +1,11 @@
 ---
 import Icon from "@components/Icon.astro";
 import { SITE } from "@config/site";
+import { SEGMENT } from "@data/sandbox";
+import { lugarVazio } from "@data/segments";
 
 const app = `${SITE.appUrl}/criar-conta`;
+const modoFila = SEGMENT.fillMode === "queue";
 ---
 <div class="sb-outcome" data-outcome hidden>
   <span class="sb-outcome__icon" aria-hidden="true">
@@ -11,21 +14,20 @@ const app = `${SITE.appUrl}/criar-conta`;
 
   <div class="sb-outcome__body">
     <p class="sb-outcome__kicker" data-outcome-kicker>Simulação concluída</p>
-    <h3 data-outcome-title>Um cancelamento. Zero cadeira vazia.</h3>
-    <p data-outcome-text>
-      Marcos entrou no lugar da Mariana às 15:00. A cadeira do Bruno
-      continuou cheia e a comissão do dia também.
-    </p>
+    <h3 data-outcome-title>
+      {modoFila ? `Um cancelamento. Zero ${lugarVazio(SEGMENT)}.` : "Um cancelamento. Zero horário perdido."}
+    </h3>
+    <p data-outcome-text></p>
     <div class="sb-outcome__chips" data-outcome-chips>
-      <span data-outcome-chip="recovered">R$ 50,00 recuperados</span>
+      <span data-outcome-chip="recovered"></span>
       <span data-outcome-chip="filled">1 vaga preenchida</span>
-      <span data-outcome-chip="empty">0 cadeira vazia</span>
+      <span data-outcome-chip="empty"></span>
     </div>
   </div>
 
   <div class="sb-outcome__actions">
     <a href={app} class="btn btn-primary text-sm" data-cta="sandbox-outcome">
-      Quero isso na minha barbearia
+      Quero isso {SEGMENT.ctaPlace}
       <Icon name="arrow-right" size={15} />
     </a>
     <button

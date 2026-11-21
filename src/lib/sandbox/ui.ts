@@ -1,4 +1,7 @@
-import { formatBRL, TENANT } from "@data/sandbox";
+import { formatBRL, SEGMENT, TENANT, useSegment } from "@data/sandbox";
+import { comArtigo, lugarGarantido, lugarVazio } from "@data/segments";
+
+const modoFila = (): boolean => SEGMENT.fillMode === "queue";
 import { createSandbox, type SandboxSnapshot } from "./store";
 
 const STEP_LABEL: Record<string, string> = {
@@ -129,8 +132,10 @@ function renderClient(root: HTMLElement, snapshot: SandboxSnapshot): void {
   const wa = root.querySelector<HTMLElement>("[data-wa]");
   if (wa) {
     wa.hidden = state.phase !== "reminder";
+    setText(wa, "[data-wa-possessive]", snapshot.service.gender === "f" ? "sua" : "seu");
     setText(wa, "[data-wa-service]", snapshot.service.name.toLowerCase());
     setText(wa, "[data-wa-time]", state.slot.replace(":", "h"));
+    setText(wa, "[data-wa-article]", snapshot.professional.article);
     setText(wa, "[data-wa-pro]", snapshot.professional.name);
   }
 }
@@ -175,7 +180,9 @@ function renderTimeline(owner: HTMLElement, snapshot: SandboxSnapshot): void {
       const fill = row.querySelector<HTMLButtonElement>("[data-gap-fill]");
       if (fill) {
         const waiting = snapshot.queue.some((entry) => !entry.called);
-        fill.textContent = waiting ? "Encaixar 1º da fila" : "Encaixar";
+        fill.textContent = modoFila()
+          ? waiting ? "Encaixar 1º da fila" : "Encaixar"
+          : "Reabrir no link";
         fill.hidden = !waiting;
       }
       insert(row, snapshot.state.slot);
@@ -279,12 +286,16 @@ function renderChapters(root: HTMLElement, snapshot: SandboxSnapshot): void {
   const fourthTitle = fourth?.querySelector<HTMLElement>("[data-chapter-title]");
   const fourthDesc = fourth?.querySelector<HTMLElement>("[data-chapter-desc]");
   if (fourthTitle) {
-    fourthTitle.textContent = confirmed ? "Cadeira garantida" : "A fila preenche";
+    fourthTitle.textContent = confirmed
+      ? lugarGarantido(SEGMENT)
+      : modoFila() ? "A fila preenche" : "A vaga volta para o link";
   }
   if (fourthDesc) {
     fourthDesc.textContent = confirmed
       ? "O lembrete fez o trabalho: sem ligação, sem brecha."
-      : "A brecha não fica vazia: o próximo da fila entra no lugar.";
+      : modoFila()
+        ? "A brecha não fica vazia: o próximo da fila entra no lugar."
+        : "O horário cancelado reabre no seu link e outra cliente marca.";
   }
 }
 
@@ -304,14 +315,22 @@ function renderOutcome(root: HTMLElement, snapshot: SandboxSnapshot): void {
   setText(
     outcome,
     "[data-outcome-title]",
-    confirmed ? "Ela confirmou. Cadeira garantida." : "Um cancelamento. Zero cadeira vazia.",
+    confirmed
+      ? `Ela confirmou. ${lugarGarantido(SEGMENT)}.`
+      : modoFila()
+        ? `Um cancelamento. Zero ${lugarVazio(SEGMENT)}.`
+        : "Um cancelamento. Zero horário perdido.",
   );
+  const quemEntrou = (snapshot.booking?.client ?? "").split(" ")[0] || "A próxima";
+  const pro = snapshot.professional;
   setText(
     outcome,
     "[data-outcome-text]",
     confirmed
       ? "O lembrete chegou às 14:00 e a Mariana confirmou com um toque. Sem ligação, sem brecha, sem correria."
-      : "Marcos entrou no lugar da Mariana às 15:00. A cadeira do Bruno continuou cheia e a comissão do dia também.",
+      : modoFila()
+        ? `${quemEntrou} entrou no lugar da Mariana às ${snapshot.state.slot}. A ${SEGMENT.place.noun} d${comArtigo(pro)} continuou cheia e a comissão do dia também.`
+        : `A vaga das ${snapshot.state.slot} voltou para o seu link e a ${quemEntrou} marcou sozinha. Você nem precisou abrir o WhatsApp.`,
   );
 
   const chips = outcome.querySelectorAll<HTMLElement>("[data-outcome-chip]");
@@ -324,7 +343,7 @@ function renderOutcome(root: HTMLElement, snapshot: SandboxSnapshot): void {
     : [
         `${formatBRL(recovered)} recuperados`,
         "1 vaga preenchida",
-        "0 cadeira vazia",
+        modoFila() ? `0 ${lugarVazio(SEGMENT)}` : "0 mensagens trocadas",
       ];
   chips.forEach((chip, index) => {
     chip.textContent = values[index] ?? "";
@@ -360,10 +379,12 @@ function renderLive(root: HTMLElement, snapshot: SandboxSnapshot): void {
       message = `Mariana cancelou. A vaga das ${state.slot} está livre.`;
       break;
     case "confirmed":
-      message = "Mariana confirmou. A cadeira está garantida.";
+      message = `Mariana confirmou. ${lugarGarantido(SEGMENT)}.`;
       break;
     case "filled":
-      message = `${snapshot.booking?.client ?? "O próximo da fila"} foi encaixado às ${state.slot}. A vaga foi preenchida.`;
+      message = modoFila()
+        ? `${snapshot.booking?.client ?? "O próximo da fila"} foi encaixado às ${state.slot}. A vaga foi preenchida.`
+        : `${snapshot.booking?.client ?? "Outra cliente"} marcou pelo link às ${state.slot}. A vaga foi preenchida.`;
       break;
     case "done":
       message = "Simulação concluída.";
@@ -431,6 +452,8 @@ export function initSandbox(root: HTMLElement): void {
   if (root.dataset.ready === "true") return;
   root.dataset.ready = "true";
 
+  // Cada página de nicho (/estetica, /barbearia…) informa o segmento no root.
+  useSegment(root.dataset.segment);
   const store = createSandbox();
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let timers: number[] = [];
@@ -464,9 +487,9 @@ export function initSandbox(root: HTMLElement): void {
     clearTimers();
     timers = [
       window.setTimeout(() => store.toClient(), 1200),
-      window.setTimeout(() => store.selectProfessional("bruno"), 1800),
-      window.setTimeout(() => store.selectService("corte"), 2700),
-      window.setTimeout(() => store.selectSlot("15:00"), 3600),
+      window.setTimeout(() => store.selectProfessional(SEGMENT.demo.professionalId), 1800),
+      window.setTimeout(() => store.selectService(SEGMENT.demo.serviceId), 2700),
+      window.setTimeout(() => store.selectSlot(SEGMENT.demo.slot), 3600),
       window.setTimeout(() => store.toOwner(), 4800),
       window.setTimeout(() => store.remind(), 7000),
       window.setTimeout(() => store.choose("cancel"), 10000),

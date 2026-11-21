@@ -1,4 +1,5 @@
 ---
+import { SEGMENT_PAGES } from "@data/segments";
 import { SITE } from "@config/site";
 import { FOOTER_LINKS_HOME, type NavLink } from "@data/content";
 
@@ -33,13 +34,19 @@ const wpp = SITE.whatsapp;
       </div>
 
       <div class="footer-col">
-        <h4>Produto</h4>
+        <h2 class="footer-heading">Produto</h2>
         {links.map((link) => (
           <a href={link.href}>{link.label}</a>
         ))}
       </div>
       <div class="footer-col">
-        <h4>Contato</h4>
+        <h2 class="footer-heading">Para o seu negócio</h2>
+        {SEGMENT_PAGES.map((seg) => (
+          <a href={seg.path}>{seg.label}</a>
+        ))}
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-heading">Contato</h2>
         <a href={wpp} target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
@@ -66,7 +73,7 @@ const wpp = SITE.whatsapp;
     gap: 32px;
     grid-template-columns: 1fr;
   }
-  @media (min-width: 720px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+  @media (min-width: 720px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
   .footer-brand { display: flex; flex-direction: column; align-items: flex-start; }
   .footer-tagline {
     margin-top: 14px;
@@ -74,7 +81,7 @@ const wpp = SITE.whatsapp;
     max-width: 36ch;
   }
   .footer-col { display: flex; flex-direction: column; gap: 10px; }
-  .footer-col h4 {
+  .footer-col .footer-heading {
     font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
     color: var(--cor-subtitulos); margin-bottom: 6px; font-weight: 700;
   }

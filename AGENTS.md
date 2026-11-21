@@ -10,7 +10,7 @@ Projeto Astro 5 estático um-pager + blog (Content Collections) + Tailwind v4.
 - `tailwindcss`: ^4.0.0 com `@tailwindcss/vite` (não usar `@tailwindcss/cli`, não usar PostCSS)
 - `typescript`: 5.7.3 (não subir p/ 7.x — quebra `@astrojs/check`)
 - `@fontsource/bricolage-grotesque` (display) + `@fontsource/inter` (corpo) no blog e em `/experiencia`. **Não usar Poppins**.
-- Home (`/`): `@fontsource-variable/fraunces` + `@fontsource-variable/hanken-grotesk` — ver "Home Cartela" abaixo.
+- Home nova em teste (`/v2`, `src/pages/v2.astro`, noindex e fora do sitemap; `/` segue a SegmentLanding): `@fontsource-variable/fraunces` + `@fontsource-variable/hanken-grotesk` — ver "Home Cartela" abaixo.
 - `three` 0.187.0 (+ `@types/three`): **só** na ilha da agenda 3D do hero (`src/scripts/agenda3d.ts`, import dinâmico) e no gerador de renders (`scripts/render-3d/`). Nenhum outro uso de lib 3D/animação em runtime.
 - `sharp`: ^0.33.5
 
@@ -27,11 +27,11 @@ npx astro check --minimumSeverity error   # CI: falha só em erros
 
 ## Home Cartela (identidade nova, 2026-11)
 
-A home (`src/pages/index.astro` + `src/cartela/`) tem identidade própria, isolada sob `body.cartela` (`src/styles/cartela.css`).
+A home nova, em teste em `/v2` (`src/pages/v2.astro` + `src/cartela/`), tem identidade própria, isolada sob `body.cartela` (`src/styles/cartela.css`).
 Direção, paleta e princípios: `docs/redesign-2026-11/DIRECAO.md`. Resumo:
 
 - Porcelana `#ECE7EF` + Tinta `#24142E`; laranja `#FF5A24` **só** em CTA e logo (texto Tinta sobre laranja, por contraste). Lacas (amora, nude, lavanda) só nas peças 3D.
-- Fraunces (SOFT 100) nos títulos, Hanken Grotesk no texto. Sem eyebrow em caixa alta, sem palavra destacada em cor no título, sem `→` nos botões, sem fade-up por seção.
+- Fraunces (SOFT 100) nos títulos, Hanken Grotesk no texto. Sem eyebrow em caixa alta, sem palavra destacada em cor no título, sem `→` nos botões. Entradas curtas e rápidas (`src/scripts/revela.ts`, timelines de scroll em `cartela.css`).
 - Agenda 3D: `src/three/kit.ts` é a fonte única de geometria/material. Mudou o kit → regerar os PNGs: `PUPPETEER=<caminho do puppeteer-core> node scripts/render-3d/render.mjs` (saem em `src/assets/3d/`, consumidos via `<Image />`).
 - O 3D é progressivo: poster pré-renderizado primeiro, cena ao vivo após `load` + ocioso; sem WebGL, com `saveData` ou com movimento reduzido a página continua completa.
 
@@ -69,6 +69,17 @@ src/
   pages/robots.txt.ts     — robots dinâmico
 public/                   — favicons, manifest.webmanifest, og.svg
 ```
+
+## Páginas por segmento (2026-11-16)
+
+- Home (`/`, segmento `geral`) + `/barbearia`, `/salao`, `/estetica`, `/unhas` (rota `src/pages/[segmento].astro`), todas montadas por `components/SegmentLanding.astro`.
+- **Fonte única**: `src/data/segments.ts` — headline, SEO, lugar ("cadeira/maca/mesa"), CTA ("Quero isso no meu estúdio"), dados da simulação (negócio, profissionais com artigo, serviços com gênero, agenda, fila/link) e `fillMode`:
+  - `queue` (barbearia/salão): capítulo 4 = a fila cobre quem cancelou.
+  - `link` (estética/unhas): capítulo 4 = o horário cancelado volta para o link e outra cliente marca (sem fila de espera).
+- `src/data/sandbox.ts` expõe os dados como `export let` + `useSegment(key)`: `LiveSandbox` chama no build (antes dos filhos) e `initSandbox` no navegador (lê `data-segment` do root). Não transformar em `const`.
+- Nicho sem foto própria: capa do celular em degradê + ícone (`tenant.cover = null`, `coverIcon`).
+- **Depoimentos**: `src/data/testimonials.ts` começa vazio e a seção `Testimonials.astro` só aparece com item real e autorizado. Nunca inventar depoimento.
+- **Promessa do teste**: 14 dias grátis sem cartão; a IA no WhatsApp **não** é liberada no teste (só em plano pago — `hub/PLANOS_B2B.md`). Não escrever "teste com a IA ligada".
 
 ## JSON-LD
 

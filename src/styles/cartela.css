@@ -249,6 +249,8 @@ body.cartela::after {
 .c-mesh {
   position: relative;
   isolation: isolate;
+  /* parallax com rotação não pode vazar para a lateral */
+  overflow-x: clip;
 }
 .c-mesh::before {
   content: "";
