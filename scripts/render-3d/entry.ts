@@ -8,7 +8,7 @@ import {
   esmalte, pente, pinca, toalhas, escova,
 } from "../../src/three/kit";
 
-type Cena = { obj: THREE.Object3D; cam: THREE.PerspectiveCamera; size: [number, number] };
+type Cena = { obj: THREE.Object3D; cam: THREE.PerspectiveCamera; size: [number, number]; acento?: boolean };
 
 /** Apoia o objeto no chão e afasta a câmera (na direção `dir`) até ele caber com folga. */
 function objeto(o: THREE.Object3D, rot: [number, number, number], dir: [number, number, number], fov = 26): Cena {
@@ -25,8 +25,8 @@ function objeto(o: THREE.Object3D, rot: [number, number, number], dir: [number, 
 }
 
 const CENAS: Record<string, () => Cena> = {
-  "agenda-hero": () => ({ obj: agenda({ prefill: PREFILL_HERO }).group, cam: cameraAgenda(1), size: [1600, 1600] }),
-  "agenda-cheia": () => ({ obj: agenda({ prefill: Array.from({ length: 30 }, (_, i) => i) }).group, cam: cameraAgenda(1), size: [1600, 1600] }),
+  "agenda-hero": () => ({ obj: agenda({ prefill: PREFILL_HERO }).group, cam: cameraAgenda(1), size: [1600, 1600], acento: true }),
+  "agenda-cheia": () => ({ obj: agenda({ prefill: Array.from({ length: 30 }, (_, i) => i) }).group, cam: cameraAgenda(1), size: [1600, 1600], acento: true }),
   esmalte: () => objeto(esmalte(COR.amora), [0, 0.4, 0], [3, 3.4, 7]),
   pente: () => objeto(pente(COR.tinta), [0, -0.5, 0], [2, 3.6, 7]),
   pinca: () => objeto(pinca(COR.lavanda), [0, 0.3, -0.28], [2.4, 3.2, 7]),
@@ -43,7 +43,7 @@ const CENAS: Record<string, () => Cena> = {
   renderer.setSize(w, h);
   renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene();
-  estudio(renderer, scene);
+  estudio(renderer, scene, { acento: cena.acento });
   scene.add(chaoDeSombra());
   scene.add(cena.obj);
   cena.cam.aspect = w / h;
