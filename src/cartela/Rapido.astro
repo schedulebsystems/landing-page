@@ -1,0 +1,364 @@
+---
+/**
+ * "Em dois palitos tá rodando": os três passos reais do cadastro (conta → serviços → WhatsApp)
+ * tocando rápido quando a seção aparece. Passa a sensação do app: pequeno, direto, sem técnico.
+ */
+import { SITE } from "@config/site";
+
+const servicos = [
+  { n: "Corte", p: "45" },
+  { n: "Barba", p: "35" },
+  { n: "Pé e mão", p: "55" },
+  { n: "Sobrancelha", p: "40" },
+];
+---
+<section class="c-sec rap c-mesh" aria-labelledby="rap-titulo" style="--m1x:90%;--m1y:30%;--m2x:5%;--m2y:70%">
+  <div class="c-wrap">
+    <div class="rap-topo">
+      <h2 id="rap-titulo" class="c-h2" data-revela>Em dois palitos tá rodando.</h2>
+      <p class="c-lead" data-sobe>
+        Não instala nada, não chama técnico, não assina contrato. Você faz pelo celular, entre uma
+        cliente e outra, e a IA já começa a responder.
+      </p>
+    </div>
+
+    <ol class="rap-passos" data-rap>
+      <li class="rap-passo" data-sobe style="--d:0">
+        <span class="rap-num">1</span>
+        <h3>Cria a conta</h3>
+        <div class="rap-mini">
+          <label class="rap-campo">
+            <small>Nome do seu negócio</small>
+            <span class="rap-digita" data-digita="Barbearia do Léo"></span>
+          </label>
+          <span class="rap-botao">Continuar</span>
+        </div>
+      </li>
+      <li class="rap-passo" data-sobe style="--d:1">
+        <span class="rap-num">2</span>
+        <h3>Põe os serviços</h3>
+        <div class="rap-mini">
+          <ul class="rap-servicos">
+            {servicos.map((s, i) => (
+              <li style={`--k:${i}`}><span>{s.n}</span><b>R$ {s.p}</b></li>
+            ))}
+          </ul>
+        </div>
+      </li>
+      <li class="rap-passo" data-sobe style="--d:2">
+        <span class="rap-num">3</span>
+        <h3>Conecta o WhatsApp</h3>
+        <div class="rap-mini rap-wpp">
+          <div class="rap-qr" aria-hidden="true">
+            {Array.from({ length: 49 }, (_, i) => (
+              <i class={(i * 37 + (i % 7) * 11) % 5 < 2 ? "on" : ""} />
+            ))}
+            <span class="rap-ok">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+          </div>
+          <p class="rap-status"><span class="rap-ponto"></span><span data-status-wpp>Aponte a câmera</span></p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="rap-fim" data-sobe style="--d:3">
+      <p class="rap-pronto"><span class="rap-ponto rap-ponto-vivo"></span> Pronto. A IA já está respondendo suas clientes.</p>
+      <a class="c-btn c-btn-laranja" href={`${SITE.appUrl}/criar-conta`} data-cta="rapido-criar-conta">Criar conta grátis</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rap {
+    background: var(--porcelana);
+    overflow: clip;
+  }
+  .rap-topo {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .rap-passos {
+    list-style: none;
+    margin: clamp(3rem, 2rem + 3vw, 4.5rem) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+    counter-reset: passo;
+    position: relative;
+  }
+  .rap-passo {
+    position: relative;
+    padding: 1.4rem 1.4rem 1.5rem;
+    border-radius: 26px;
+    background: rgb(248 246 250 / 0.72);
+    backdrop-filter: blur(16px) saturate(1.3);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 24px 50px -30px rgb(36 20 46 / 0.45);
+  }
+  .rap-passo h3 {
+    font-size: var(--t-h3);
+    margin-top: 0.9rem;
+  }
+  .rap-num {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--tinta);
+    color: var(--louca);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+  }
+  .rap-passo.is-feito .rap-num {
+    background: var(--ok);
+  }
+  .rap-mini {
+    margin-top: 1.1rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--linha);
+    min-height: 9.5rem;
+    display: grid;
+    align-content: center;
+    gap: 0.7rem;
+    font-size: 0.95rem;
+  }
+  .rap-campo {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1.5px var(--tinta);
+  }
+  .rap-campo small {
+    color: var(--tinta-3);
+    font-size: 0.78rem;
+  }
+  .rap-digita {
+    min-height: 1.4em;
+    font-weight: 600;
+  }
+  .rap-digita::after {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 1.05em;
+    margin-left: 1px;
+    vertical-align: -0.15em;
+    background: var(--laranja);
+    animation: rap-cursor 0.9s steps(1) infinite;
+  }
+  @keyframes rap-cursor {
+    50% {
+      opacity: 0;
+    }
+  }
+  .rap-botao {
+    justify-self: stretch;
+    text-align: center;
+    padding: 0.6rem;
+    border-radius: 12px;
+    background: var(--laranja);
+    color: var(--tinta);
+    font-weight: 650;
+    transition: transform 0.15s ease;
+  }
+  .rap-passo.is-feito .rap-botao {
+    animation: rap-aperta 0.25s ease;
+  }
+  @keyframes rap-aperta {
+    50% {
+      transform: scale(0.95);
+    }
+  }
+  .rap-servicos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .rap-servicos li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0.7rem;
+    border-radius: 10px;
+    background: var(--porcelana);
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+  }
+  .rap-servicos b {
+    font-weight: 650;
+  }
+  [data-rap].is-passo2 .rap-servicos li {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--k) * 130ms);
+  }
+  .rap-wpp {
+    justify-items: center;
+  }
+  .rap-qr {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    width: 6.4rem;
+    aspect-ratio: 1;
+    padding: 6px;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px var(--linha);
+  }
+  .rap-qr i {
+    border-radius: 2px;
+  }
+  .rap-qr i.on {
+    background: var(--tinta);
+  }
+  /* cantos de leitura */
+  .rap-qr i:nth-child(1), .rap-qr i:nth-child(2), .rap-qr i:nth-child(8), .rap-qr i:nth-child(9),
+  .rap-qr i:nth-child(6), .rap-qr i:nth-child(7), .rap-qr i:nth-child(13), .rap-qr i:nth-child(14),
+  .rap-qr i:nth-child(36), .rap-qr i:nth-child(37), .rap-qr i:nth-child(43), .rap-qr i:nth-child(44) {
+    background: var(--tinta);
+  }
+  .rap-ok {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--ok);
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.2s ease, transform 0.4s cubic-bezier(0.2, 1.5, 0.4, 1);
+  }
+  [data-rap].is-passo3 .rap-ok {
+    opacity: 1;
+    transform: none;
+  }
+  .rap-status {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .rap-ponto {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #c9bfd2;
+    transition: background-color 0.2s ease;
+  }
+  [data-rap].is-passo3 .rap-status .rap-ponto,
+  .rap-ponto-vivo {
+    background: #2fbf71;
+    box-shadow: 0 0 0 0 rgb(47 191 113 / 0.6);
+    animation: rap-pulsa 1.6s ease-out infinite;
+  }
+  @keyframes rap-pulsa {
+    to {
+      box-shadow: 0 0 0 10px rgb(47 191 113 / 0);
+    }
+  }
+  .rap-fim {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+  }
+  .rap-pronto {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 650;
+    font-size: 1.1rem;
+  }
+
+  @media (min-width: 860px) {
+    .rap-topo {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      align-items: end;
+      gap: 3rem;
+    }
+    .rap-passos {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    /* trilho que liga os passos e enche conforme anda */
+    .rap-passos::before {
+      content: "";
+      position: absolute;
+      left: 2.4rem;
+      right: 2.4rem;
+      top: 2.4rem;
+      height: 3px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--ok) var(--prog, 0%), rgb(36 20 46 / 0.1) var(--prog, 0%));
+      z-index: 0;
+      transition: --prog 0.6s ease;
+    }
+    .rap-passo {
+      z-index: 1;
+    }
+  }
+</style>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>("[data-rap]");
+  if (raiz) {
+    const passos = Array.from(raiz.querySelectorAll<HTMLElement>(".rap-passo"));
+    const campo = raiz.querySelector<HTMLElement>("[data-digita]")!;
+    const status = raiz.querySelector<HTMLElement>("[data-status-wpp]")!;
+    const nome = campo.dataset.digita ?? "";
+    const reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const espera = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const prog = (p: number) => raiz.style.setProperty("--prog", `${p}%`);
+
+    const final = () => {
+      campo.textContent = nome;
+      raiz.classList.add("is-passo2", "is-passo3");
+      passos.forEach((p) => p.classList.add("is-feito"));
+      status.textContent = "Conectado";
+      prog(100);
+    };
+
+    const tocar = async () => {
+      if (reduzido) return final();
+      await espera(500);
+      for (let i = 1; i <= nome.length; i++) {
+        campo.textContent = nome.slice(0, i);
+        await espera(38);
+      }
+      await espera(180);
+      passos[0].classList.add("is-feito");
+      prog(50);
+      await espera(250);
+      raiz.classList.add("is-passo2");
+      await espera(700);
+      passos[1].classList.add("is-feito");
+      prog(100);
+      await espera(250);
+      status.textContent = "Lendo…";
+      await espera(550);
+      raiz.classList.add("is-passo3");
+      status.textContent = "Conectado";
+      passos[2].classList.add("is-feito");
+    };
+
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      tocar();
+    }, { threshold: 0.35 });
+    io.observe(raiz);
+  }
+</script>

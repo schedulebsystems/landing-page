@@ -14,19 +14,21 @@ const itens = [
   { img: toalhas, alt: "Toalhas de spa enroladas", nome: "Spa dos pés e podologia", texto: "Sessões marcadas e a cliente lembrada na véspera, sem você ligar." },
 ];
 ---
-<section id="pra-quem" class="c-sec pq" aria-labelledby="pq-titulo">
+<section id="pra-quem" class="c-sec pq c-mesh" style="--m1x:15%;--m1y:20%;--m2x:90%;--m2y:80%" aria-labelledby="pq-titulo">
   <div class="c-wrap">
     <div class="pq-topo">
-      <h2 id="pq-titulo" class="c-h2">Pra quem vive de horário marcado.</h2>
-      <p class="c-lead">
+      <h2 id="pq-titulo" class="c-h2" data-revela>Pra quem vive de horário marcado.</h2>
+      <p class="c-lead" data-sobe>
         A agenda muda de cara para cada negócio: os serviços, o tempo de cada um e quem faz o quê.
         A IA responde com os seus serviços, os seus preços e os seus horários.
       </p>
     </div>
     <ul class="pq-lista">
-      {itens.map((i) => (
-        <li class="pq-item">
-          <Image src={i.img} alt={i.alt} widths={[240, 360, 480]} sizes="(min-width: 960px) 18vw, 40vw" class="pq-img" />
+      {itens.map((i, n) => (
+        <li class="pq-item" data-sobe style={`--d:${n}`}>
+          <div class="c-parallax" style={`--vel:${[0.6, 1.3, 0.9, 1.6, 1.1][n]};--gira:${n % 2 ? 1 : -1}`}>
+            <Image src={i.img} alt={i.alt} widths={[240, 360, 480]} sizes="(min-width: 960px) 18vw, 40vw" class="pq-img" />
+          </div>
           <h3 class="pq-nome">{i.nome}</h3>
           <p class="pq-texto">{i.texto}</p>
         </li>

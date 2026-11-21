@@ -1,69 +1,641 @@
 ---
-const itens = [
-  { t: "Lembrete na véspera", d: "Cada cliente recebe no WhatsApp o link do horário pra confirmar ou remarcar, sem você mandar nada." },
-  { t: "Cancelou, a vaga volta", d: "O horário fica livre na hora, no seu link e na IA, pra próxima pessoa que chamar." },
-  { t: "Seu link de agendamento", d: "Uma página com seus serviços, fotos e o botão de marcar. Vai na bio do Instagram e no status do WhatsApp." },
-  { t: "Agenda de cada profissional", d: "Horários, folgas e o tempo de cada serviço do jeito que cada uma trabalha." },
-  { t: "Caixa e comissão", d: "Fecha o atendimento, recebe em Pix ou cartão e a comissão de cada profissional já sai separada." },
-  { t: "Clube de assinatura", d: "A cliente paga por mês e usa os serviços do plano. Você sabe quanto entra antes do mês começar." },
-  { t: "Quem chamar hoje", d: "A lista de clientes que sumiram ou estão na hora de voltar, pronta pra você mandar mensagem." },
-  { t: "A equipe no celular", d: "Cada profissional vê a própria agenda e o que já fez no mês, sem te perguntar." },
-];
+/**
+ * "Vem junto": tudo o que o salão precisa, em pequeno. Cada card tem uma mini-tela que mexe
+ * sozinha quando aparece (CSS puro, pausa fora da tela e com movimento reduzido).
+ * Nomes e valores são de exemplo, como no tour.
+ */
 ---
-<section class="c-sec junto" aria-labelledby="junto-titulo">
-  <div class="c-wrap junto-grid">
+<section class="c-sec junto c-pontos" aria-labelledby="junto-titulo">
+  <div class="c-wrap">
     <div class="junto-topo">
-      <h2 id="junto-titulo" class="c-h2">E o resto vem junto, no mesmo preço.</h2>
-      <p class="c-lead">A IA no WhatsApp não é um extra que se paga à parte. Ela e tudo isto estão em todo plano.</p>
+      <h2 id="junto-titulo" class="c-h2" data-revela>O resto vem junto, no mesmo preço.</h2>
+      <p class="c-lead" data-sobe>
+        A IA no WhatsApp não é extra pago à parte. Ela e tudo isto estão em todo plano, cada coisa
+        do tamanho que precisa ser.
+      </p>
     </div>
-    <ul class="junto-lista">
-      {itens.map((i) => (
-        <li>
-          <h3>{i.t}</h3>
-          <p>{i.d}</p>
-        </li>
-      ))}
+
+    <ul class="bento">
+      <li class="b b-lembrete" data-sobe style="--d:0">
+        <div class="b-mini">
+          <div class="b-wpp">
+            <p>Oi, Ana! Amanhã às 14h tem <b>pé e mão</b> com a Bruna. Confirma ou remarca por aqui:</p>
+            <span class="b-wpp-link">app.skedoole.com.br/h/…</span>
+            <time>18:00 ✓✓</time>
+          </div>
+          <div class="b-wpp b-wpp-cli"><p>Confirmado! 💅</p><time>18:03</time></div>
+        </div>
+        <h3>Lembrete na véspera</h3>
+        <p>Cada cliente recebe o link do horário pra confirmar ou remarcar, sem você mandar nada.</p>
+      </li>
+
+      <li class="b b-vaga" data-sobe style="--d:1">
+        <div class="b-mini">
+          <div class="b-slot">
+            <span class="b-hora">15h</span>
+            <span class="b-estado">
+              <span class="e1">Cancelado</span>
+              <span class="e2">Livre</span>
+              <span class="e3">Marcado pela IA</span>
+            </span>
+          </div>
+        </div>
+        <h3>Cancelou, a vaga volta</h3>
+        <p>O horário fica livre na hora, no seu link e na IA.</p>
+      </li>
+
+      <li class="b b-link" data-sobe style="--d:2">
+        <div class="b-mini b-vitrine">
+          <div class="b-capa"></div>
+          <span class="b-logo">SC</span>
+          <strong>Studio Camila</strong>
+          <ul>
+            <li><span>Pé e mão</span><b>R$ 55</b></li>
+            <li><span>Lash lift</span><b>R$ 120</b></li>
+            <li><span>Sobrancelha</span><b>R$ 40</b></li>
+          </ul>
+          <span class="b-agendar">Agendar</span>
+          <div class="b-fotos" aria-hidden="true"><i></i><i></i><i></i></div>
+          <small class="b-aberto"><span class="b-on"></span>Aberto hoje até 19h</small>
+        </div>
+        <h3>Seu link de agendamento</h3>
+        <p>Serviços, fotos e o botão de marcar. Vai na bio do Instagram e no status.</p>
+      </li>
+
+      <li class="b b-agenda" data-sobe style="--d:0">
+        <div class="b-mini b-cols">
+          {[
+            { n: "Bruna", c: "var(--amora)", b: [[0, 2], [3, 2], [6, 1]] },
+            { n: "Lívia", c: "var(--lavanda)", b: [[1, 2], [4, 3]] },
+            { n: "Camila", c: "var(--nude)", b: [[0, 1], [2, 2], [5, 2]] },
+          ].map((p) => (
+            <div class="b-col">
+              <span class="b-av" style={`background:${p.c};color:${p.n === "Bruna" ? "var(--louca)" : "var(--tinta)"}`}>{p.n[0]}</span>
+              <small class="b-nome">{p.n}</small>
+              <div class="b-trilho">
+                {p.b.map(([ini, dur]) => (
+                  <i style={`--ini:${ini};--dur:${dur};background:${p.c}`} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <h3>Agenda de cada profissional</h3>
+        <p>Horários, folgas e o tempo de cada serviço do jeito que cada uma trabalha.</p>
+      </li>
+
+      <li class="b b-caixa" data-sobe style="--d:1">
+        <div class="b-mini">
+          <p class="b-pix"><span>Pix recebido</span><b>R$ 120,00</b></p>
+          <div class="b-divide"><i class="d1"></i><i class="d2"></i></div>
+          <p class="b-legenda"><span><i class="p1"></i>Bruna R$ 48,00</span><span><i class="p2"></i>Salão R$ 72,00</span></p>
+        </div>
+        <h3>Caixa e comissão</h3>
+        <p>Recebe em Pix ou cartão e a comissão de cada uma já sai separada.</p>
+      </li>
+
+      <li class="b b-chamar" data-sobe style="--d:0">
+        <div class="b-mini">
+          {[
+            ["Marina S.", "38 dias sem vir"],
+            ["Juliana P.", "aniversário hoje 🎂"],
+            ["Fernanda L.", "na hora da manutenção"],
+          ].map(([n, m], i) => (
+            <div class="b-linha" style={`--k:${i}`}>
+              <span class="b-av b-av-p">{n[0]}</span>
+              <span class="b-quem"><b>{n}</b><small>{m}</small></span>
+              <span class="b-chama">Chamar</span>
+            </div>
+          ))}
+        </div>
+        <h3>Quem chamar hoje</h3>
+        <p>Quem sumiu ou está na hora de voltar, pronta pra você mandar mensagem.</p>
+      </li>
+
+      <li class="b b-clube" data-sobe style="--d:1">
+        <div class="b-mini b-cartao">
+          <small>Clube</small>
+          <strong>Mãos sempre feitas</strong>
+          <span class="b-usos"><i class="u"></i><i class="u"></i><i></i><i></i></span>
+          <small>2 de 4 no mês</small>
+        </div>
+        <h3>Clube de assinatura</h3>
+        <p>A cliente paga por mês e você sabe quanto entra antes do mês começar.</p>
+      </li>
+
+      <li class="b b-equipe" data-sobe style="--d:2">
+        <div class="b-mini b-meu">
+          <span class="b-av" style="background:var(--lavanda)">L</span>
+          <p><small>Lívia, este mês</small><b data-conta="1860">R$ 1.860</b><small>em comissão</small></p>
+        </div>
+        <h3>A equipe no celular</h3>
+        <p>Cada uma vê a própria agenda e quanto já fez, sem te perguntar.</p>
+      </li>
     </ul>
   </div>
 </section>
 
 <style>
-  .junto-grid {
+  .junto {
+    background: var(--porcelana);
+  }
+  .junto-topo {
     display: grid;
-    gap: 3rem;
+    gap: 1.5rem;
   }
-  .junto-topo .c-lead {
-    margin-top: 1.5rem;
-  }
-  .junto-lista {
+  .bento {
     list-style: none;
-    margin: 0;
+    margin: clamp(2.5rem, 2rem + 3vw, 4rem) 0 0;
     padding: 0;
     display: grid;
-    gap: 2.25rem 3rem;
+    gap: 1rem;
   }
-  .junto-lista h3 {
-    font-size: var(--t-h3);
+  .b {
+    display: flex;
+    flex-direction: column;
+    padding: 1.1rem 1.1rem 1.4rem;
+    border-radius: 28px;
+    background: var(--louca);
+    box-shadow: 0 0 0 1px rgb(36 20 46 / 0.06), 0 18px 40px -30px rgb(36 20 46 / 0.5);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
   }
-  .junto-lista p {
-    margin-top: 0.5rem;
+  .b:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 1px rgb(36 20 46 / 0.08), 0 28px 50px -30px rgb(36 20 46 / 0.6);
+  }
+  .b h3 {
+    font-size: 1.35rem;
+    margin-top: 1.1rem;
+    padding-inline: 0.3rem;
+  }
+  .b > p {
+    margin-top: 0.4rem;
+    padding-inline: 0.3rem;
     color: var(--tinta-2);
-    max-width: 34ch;
+    font-size: var(--t-mini);
+    line-height: 1.5;
+    max-width: 38ch;
   }
-  @media (min-width: 720px) {
-    .junto-lista {
+  .b-mini {
+    position: relative;
+    flex: 1;
+    min-height: 9rem;
+    display: grid;
+    align-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 20px;
+    background: linear-gradient(160deg, #fff, #f3eff6);
+    box-shadow: 0 0 0 1px rgb(36 20 46 / 0.05) inset;
+    font-size: 0.86rem;
+    line-height: 1.35;
+    overflow: hidden;
+  }
+  /* animações só rodam com o card na tela */
+  .b * {
+    animation-play-state: paused !important;
+  }
+  .b.is-visto *,
+  html:not(.js-rv) .b * {
+    animation-play-state: running !important;
+  }
+
+  .b-av {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    color: var(--tinta);
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  /* lembrete */
+  .b-lembrete .b-mini {
+    background: linear-gradient(160deg, #f4ede7, #ebe2da);
+  }
+  .b-wpp {
+    max-width: 88%;
+    padding: 0.5rem 0.65rem 0.3rem;
+    border-radius: 12px 12px 12px 4px;
+    background: #fff;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 0.06);
+    animation: b-entra 6s ease infinite both;
+  }
+  .b-wpp p {
+    margin: 0;
+  }
+  .b-wpp-link {
+    display: block;
+    margin-top: 0.2rem;
+    color: #1f6fb2;
+    text-decoration: underline;
+  }
+  .b-wpp time {
+    display: block;
+    text-align: right;
+    font-size: 0.68rem;
+    color: var(--tinta-3);
+  }
+  .b-wpp-cli {
+    justify-self: end;
+    border-radius: 12px 12px 4px 12px;
+    background: #d9fdd3;
+    animation-name: b-entra-2;
+  }
+  @keyframes b-entra {
+    0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+    8%, 92% { opacity: 1; transform: none; }
+    100% { opacity: 0; }
+  }
+  @keyframes b-entra-2 {
+    0%, 22% { opacity: 0; transform: translateY(10px) scale(0.97); }
+    30%, 92% { opacity: 1; transform: none; }
+    100% { opacity: 0; }
+  }
+
+  /* vaga */
+  .b-slot {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .b-hora {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .b-estado {
+    position: relative;
+    flex: 1;
+    height: 3rem;
+  }
+  .b-estado > span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding-inline: 0.8rem;
+    border-radius: 12px;
+    font-weight: 650;
+    opacity: 0;
+    animation: b-tres 6s ease infinite;
+  }
+  .b-estado .e1 {
+    background: #fde3e1;
+    color: #9b2c22;
+    text-decoration: line-through;
+  }
+  .b-estado .e2 {
+    background: #fff;
+    color: var(--tinta-3);
+    outline: 1.5px dashed rgb(36 20 46 / 0.25);
+    outline-offset: -1.5px;
+    animation-delay: 2s;
+  }
+  .b-estado .e3 {
+    background: var(--amora);
+    color: var(--louca);
+    animation-delay: 4s;
+  }
+  @keyframes b-tres {
+    0% { opacity: 0; transform: translateY(6px) scale(0.96); }
+    5%, 30% { opacity: 1; transform: none; }
+    36%, 100% { opacity: 0; transform: translateY(-6px); }
+  }
+
+  /* vitrine */
+  .b-vitrine {
+    align-content: start;
+    justify-items: center;
+    text-align: center;
+    padding-top: 0;
+  }
+  .b-capa {
+    justify-self: stretch;
+    height: 4.2rem;
+    margin: 0 -1rem;
+    background:
+      radial-gradient(60% 90% at 20% 10%, var(--lavanda), transparent 70%),
+      radial-gradient(60% 90% at 90% 30%, var(--nude), transparent 70%),
+      var(--amora);
+  }
+  .b-logo {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-top: -1.6rem;
+    border-radius: 50%;
+    background: var(--tinta);
+    color: var(--louca);
+    font-weight: 700;
+    box-shadow: 0 0 0 3px #fff;
+  }
+  .b-vitrine strong {
+    font-size: 1rem;
+  }
+  .b-vitrine ul {
+    list-style: none;
+    margin: 0.2rem 0 0;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .b-vitrine li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0.65rem;
+    border-radius: 10px;
+    background: var(--porcelana);
+  }
+  .b-agendar {
+    justify-self: stretch;
+    margin-top: 0.35rem;
+    padding: 0.55rem;
+    border-radius: 12px;
+    background: var(--laranja);
+    color: var(--tinta);
+    font-weight: 700;
+    animation: b-pulso 2.4s ease-in-out infinite;
+  }
+  @keyframes b-pulso {
+    50% { box-shadow: 0 0 0 6px rgb(255 90 36 / 0.18); }
+  }
+
+  .b-fotos {
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+  }
+  .b-fotos i {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    background: radial-gradient(70% 70% at 30% 30%, var(--nude), var(--amora));
+  }
+  .b-fotos i:nth-child(2) {
+    background: radial-gradient(70% 70% at 60% 30%, #fff, var(--lavanda));
+  }
+  .b-fotos i:nth-child(3) {
+    background: radial-gradient(70% 70% at 40% 60%, var(--nude), var(--tinta));
+  }
+  .b-aberto {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.2rem;
+    color: var(--tinta-3);
+  }
+  .b-on {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #2fbf71;
+  }
+  .b-nome {
+    color: var(--tinta-3);
+    font-size: 0.75rem;
+  }
+
+  /* agenda por profissional */
+  .b-cols {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    align-content: stretch;
+  }
+  .b-col {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    justify-items: center;
+    gap: 0.3rem;
+  }
+  .b-trilho {
+    position: relative;
+    width: 100%;
+    min-height: 11rem;
+    margin-top: 0.3rem;
+    border-radius: 10px;
+    background: repeating-linear-gradient(180deg, transparent 0 calc(100% / 8 - 1px), rgb(36 20 46 / 0.07) calc(100% / 8 - 1px) calc(100% / 8));
+  }
+  .b-trilho i {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: calc(var(--ini) * 100% / 8 + 2px);
+    height: calc(var(--dur) * 100% / 8 - 4px);
+    border-radius: 7px;
+    transform-origin: top;
+    animation: b-cresce 0.5s cubic-bezier(0.2, 1.2, 0.4, 1) both;
+    animation-delay: calc(var(--ini) * 90ms + 200ms);
+  }
+  @keyframes b-cresce {
+    from { transform: scaleY(0); opacity: 0; }
+  }
+
+  /* caixa */
+  .b-pix {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .b-pix b {
+    font-size: 1.35rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+  .b-divide {
+    display: flex;
+    height: 0.8rem;
+    border-radius: 99px;
+    overflow: hidden;
+    background: var(--porcelana);
+  }
+  .b-divide i {
+    transform-origin: left;
+    animation: b-barra 0.8s cubic-bezier(0.2, 0.9, 0.2, 1) both 0.3s;
+  }
+  .b-divide .d1 { width: 40%; background: var(--lavanda); }
+  .b-divide .d2 { width: 60%; background: var(--tinta); animation-delay: 0.6s; }
+  @keyframes b-barra {
+    from { transform: scaleX(0); }
+  }
+  .b-legenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+    color: var(--tinta-2);
+  }
+  .b-legenda span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .b-legenda i {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 3px;
+  }
+  .b-legenda .p1 { background: var(--lavanda); }
+  .b-legenda .p2 { background: var(--tinta); }
+
+  /* chamar hoje */
+  .b-linha {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.4rem;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgb(36 20 46 / 0.06);
+    animation: b-desliza 0.5s cubic-bezier(0.2, 1, 0.3, 1) both;
+    animation-delay: calc(var(--k) * 120ms + 200ms);
+  }
+  @keyframes b-desliza {
+    from { opacity: 0; transform: translateX(16px); }
+  }
+  .b-av-p {
+    background: var(--nude);
+  }
+  .b-quem {
+    flex: 1;
+    display: grid;
+    min-width: 0;
+  }
+  .b-quem small {
+    color: var(--tinta-3);
+    font-size: 0.75rem;
+  }
+  .b-chama {
+    padding: 0.3rem 0.65rem;
+    border-radius: 99px;
+    background: #2fbf71;
+    color: #08311b;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  /* clube */
+  .b-cartao {
+    align-content: end;
+    gap: 0.25rem;
+    color: var(--louca);
+    background:
+      radial-gradient(80% 70% at 100% 0%, rgb(169 154 240 / 0.7), transparent 70%),
+      radial-gradient(60% 60% at 0% 100%, rgb(255 90 36 / 0.35), transparent 70%),
+      var(--tinta);
+    animation: b-flutua 5s ease-in-out infinite;
+  }
+  .b-cartao small {
+    opacity: 0.75;
+    font-size: 0.75rem;
+  }
+  .b-cartao strong {
+    font-family: var(--f-display);
+    font-variation-settings: "SOFT" 100;
+    font-weight: 540;
+    font-size: 1.2rem;
+  }
+  .b-usos {
+    display: flex;
+    gap: 0.3rem;
+    margin-top: 0.4rem;
+  }
+  .b-usos i {
+    width: 1.3rem;
+    height: 0.45rem;
+    border-radius: 99px;
+    background: rgb(248 246 250 / 0.25);
+  }
+  .b-usos i.u {
+    background: var(--louca);
+  }
+  @keyframes b-flutua {
+    50% { transform: translateY(-4px) rotate(-1deg); }
+  }
+
+  /* equipe */
+  .b-meu {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .b-meu .b-av {
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: 1rem;
+  }
+  .b-meu p {
+    display: grid;
+    margin: 0;
+  }
+  .b-meu small {
+    color: var(--tinta-3);
+  }
+  .b-meu b {
+    font-size: 1.6rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 640px) {
+    .bento {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
-  @media (min-width: 1100px) {
-    .junto-grid {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      gap: 4rem;
+    .b-lembrete,
+    .b-agenda,
+    .b-chamar {
+      grid-column: span 2;
     }
+  }
+  @media (min-width: 1080px) {
     .junto-topo {
-      position: sticky;
-      top: 7rem;
-      align-self: start;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+      gap: 3rem;
+    }
+    .bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-flow: dense;
+    }
+    .b-link {
+      grid-row: span 2;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .b * {
+      animation: none !important;
+      opacity: 1;
+    }
+    .b-estado .e2,
+    .b-estado .e3 {
+      display: none;
     }
   }
 </style>
+
+<script>
+  // conta o valor da comissão quando o card aparece
+  const el = document.querySelector<HTMLElement>("[data-conta]");
+  if (el && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const alvo = Number(el.dataset.conta);
+    const fmt = (v: number) => `R$ ${Math.round(v).toLocaleString("pt-BR")}`;
+    el.textContent = fmt(0);
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      const t0 = performance.now();
+      const passo = (agora: number) => {
+        const t = Math.min(1, (agora - t0) / 900);
+        el.textContent = fmt(alvo * (1 - Math.pow(1 - t, 3)));
+        if (t < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    }, { threshold: 0.5 });
+    io.observe(el);
+  }
+</script>

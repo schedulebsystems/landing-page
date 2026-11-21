@@ -26,11 +26,11 @@ const telas = tour.telas.filter((t) => img(t.id) && TEXTOS[t.id]);
 const menu = telas.filter((t) => TEXTOS[t.id].menu);
 const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
 ---
-<section id="tour" class="c-sec tour" aria-labelledby="tour-titulo">
+<section id="tour" class="c-sec tour c-mesh" style="--m1x:88%;--m1y:40%;--m2x:8%;--m2y:95%" aria-labelledby="tour-titulo">
   <div class="c-wrap tour-grid">
     <div class="tour-cabeca">
-      <h2 id="tour-titulo" class="c-h2">Dá uma volta no sistema.</h2>
-      <p class="c-lead tour-lead">
+      <h2 id="tour-titulo" class="c-h2" data-revela>Dá uma volta no sistema.</h2>
+      <p class="c-lead tour-lead" data-sobe>
         São as telas de verdade do Skedoole, num salão de exemplo. Toque nos botões dentro do celular
         pra navegar, do jeito que você usaria.
       </p>
@@ -49,7 +49,7 @@ const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
       </div>
     </div>
 
-    <div class="tour-cel" data-tour>
+    <div class="tour-cel c-entra-escala" data-tour>
       <div class="tour-tela">
         {telas.map((t, i) => {
           const conteudo = img(t.id)!;

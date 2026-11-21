@@ -21,11 +21,11 @@ const relogio = (i: number) => {
   return `23:${String(m).padStart(2, "0")}`;
 };
 ---
-<section id="ia" class="c-sec c-sec-escura ia" aria-labelledby="ia-titulo">
+<section id="ia" class="c-sec c-sec-escura ia c-abre" aria-labelledby="ia-titulo">
   <div class="c-wrap ia-grid">
     <div class="ia-texto">
-      <h2 id="ia-titulo" class="c-h2">23h12 de uma quinta. A IA atendeu.</h2>
-      <p class="c-lead ia-lead">
+      <h2 id="ia-titulo" class="c-h2" data-revela>23h12 de uma quinta. A IA atendeu.</h2>
+      <p class="c-lead ia-lead" data-sobe>
         Esta conversa não foi escrita por ninguém. É a Secretária do Skedoole respondendo uma
         cliente do salão de exemplo: ela consulta a agenda, diz o preço, marca o horário e manda o link pra cliente confirmar ou remarcar.
       </p>
@@ -289,12 +289,12 @@ const relogio = (i: number) => {
         return fim();
       }
       msgs.forEach((m) => m.setAttribute("data-oculta", ""));
-      let t = 600;
+      let t = 150;
       for (const m of msgs) {
         const texto = m.textContent ?? "";
         if (m.dataset.de === "ia") {
           // "digitando…" proporcional ao tamanho da resposta
-          const espera = Math.min(2600, 900 + texto.length * 12);
+          const espera = Math.min(1500, 550 + texto.length * 6);
           timers.push(window.setTimeout(() => {
             digitando.hidden = false;
             status.textContent = "digitando…";
@@ -303,7 +303,8 @@ const relogio = (i: number) => {
           }, t));
           t += espera;
         } else {
-          t += Math.min(1800, 500 + texto.length * 25);
+          // a primeira mensagem da cliente já aparece; as outras com um respiro curto
+          t += m === msgs[0] ? 0 : Math.min(1000, 350 + texto.length * 12);
         }
         timers.push(window.setTimeout(() => {
           digitando.hidden = true;
@@ -312,7 +313,7 @@ const relogio = (i: number) => {
           lista.insertBefore(m, digitando);
           rolar();
         }, t));
-        t += 350;
+        t += 220;
       }
       timers.push(window.setTimeout(fim, t + 400));
     };
@@ -324,7 +325,7 @@ const relogio = (i: number) => {
         io.disconnect();
         tocar();
       }
-    }, { threshold: 0.45 });
+    }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
     io.observe(raiz.querySelector(".ia-cel")!);
     repetir.addEventListener("click", tocar);
   }

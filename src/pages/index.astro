@@ -8,6 +8,8 @@ import Hero from "../cartela/Hero.astro";
 import ParaQuem from "../cartela/ParaQuem.astro";
 import Tour from "../cartela/Tour.astro";
 import ConversaIA from "../cartela/ConversaIA.astro";
+import Rapido from "../cartela/Rapido.astro";
+import Ticker from "../cartela/Ticker.astro";
 import Junto from "../cartela/Junto.astro";
 import Preco from "../cartela/Preco.astro";
 import Duvidas from "../cartela/Duvidas.astro";
@@ -26,8 +28,10 @@ import { FAQS } from "@data/content";
   <Nav />
   <main id="main">
     <Hero />
+    <Ticker />
     <Tour />
     <ConversaIA />
+    <Rapido />
     <ParaQuem />
     <Junto />
     <Preco />
@@ -36,6 +40,10 @@ import { FAQS } from "@data/content";
   </main>
   <Rodape />
 </Base>
+
+<script>
+  import "../scripts/revela";
+</script>
 
 <script
   is:inline

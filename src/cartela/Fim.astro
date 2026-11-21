@@ -3,17 +3,18 @@ import { Image } from "astro:assets";
 import { SITE } from "@config/site";
 import cheia from "../assets/3d/agenda-cheia.png";
 ---
-<section class="c-sec fim" aria-labelledby="fim-titulo">
+<section class="c-sec fim c-mesh" style="--m1x:25%;--m1y:50%;--m2x:85%;--m2y:20%" aria-labelledby="fim-titulo">
   <div class="c-wrap fim-grid">
     <Image
       src={cheia}
       alt="A mesma agenda da semana, agora com todos os horários marcados"
       widths={[560, 800, 1120]}
       sizes="(min-width: 960px) 46vw, 100vw"
-      class="fim-img"
+      class="fim-img c-parallax"
+      style="--vel:0.8;--gira:0.5"
     />
     <div>
-      <h2 id="fim-titulo" class="c-h2">Sua semana, assim.</h2>
+      <h2 id="fim-titulo" class="c-h2" data-revela>Sua semana, assim.</h2>
       <p class="c-lead fim-lead">
         Cria a conta, cadastra seus serviços e conecta o WhatsApp. Em poucos minutos a IA já está
         respondendo as suas clientes.
