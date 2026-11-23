@@ -16,7 +16,7 @@ export const SITE = {
       .replace(/\/$/, "");
   },
   get whatsapp() {
-    return (import.meta.env.PUBLIC_WHATSAPP ?? "https://wa.me/5511999999999");
+    return (import.meta.env.PUBLIC_WHATSAPP ?? "https://wa.me/554788127466");
   },
   locale: "pt-BR",
   lang: "pt-br",
