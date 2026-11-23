@@ -139,7 +139,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
             <span>14:00</span><span class="is-sel">15:30</span><span>17:00</span><span>18:00</span>
           </div>
           <span class="b-agendar">Agendar lash lift às 15:30</span>
-          <p class="b-vt-rot">Trabalhos</p>
+          <p class="b-vt-rot b-vt-trab">Trabalhos</p>
           <div class="b-vt-galeria" aria-hidden="true">
             {[fLash, fManicure, fPes].map((f) => <Image src={f} alt="" widths={[200]} sizes="90px" loading="lazy" />)}
           </div>
@@ -545,7 +545,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
     border-radius: 9999px;
     background: rgb(255 255 255 / 0.9);
     backdrop-filter: blur(6px);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 600;
     white-space: nowrap;
   }
@@ -708,7 +708,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
   .b-wpp time {
     display: block;
     text-align: right;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     color: var(--tinta-3);
   }
   .b-wpp-cli {
@@ -1024,7 +1024,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
     margin-right: 0.375rem;
     border-radius: 50%;
     background: rgb(255 255 255 / 0.22);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
   }
   .b-valor-cta {
     align-self: flex-start;
@@ -1037,6 +1037,24 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
     text-underline-offset: 0.25em;
   }
 
+  /* celular: a vitrine fica sozinha na coluna, então sem galeria e avaliação (que só
+     preenchem a altura do card no desktop); mini-telas sem altura mínima artificial */
+  @media (max-width: 639px) {
+    .b {
+      padding: 1rem;
+    }
+    .b-mini {
+      min-height: 0;
+    }
+    .b-vt-trab,
+    .b-vt-galeria,
+    .b-vt-aval {
+      display: none;
+    }
+    .b-estado {
+      height: 2.75rem;
+    }
+  }
   @media (min-width: 640px) {
     .bento {
       grid-template-columns: repeat(2, minmax(0, 1fr));

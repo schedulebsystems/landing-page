@@ -21,7 +21,7 @@ import cheia from "../assets/3d/agenda-cheia.png";
       </p>
       <div class="fim-acoes">
         <a class="c-btn c-btn-laranja" href={`${SITE.appUrl}/criar-conta`} data-cta="fim-criar-conta">Criar conta grátis</a>
-        <p class="c-fino">14 dias com tudo liberado. Não pede cartão.</p>
+        <p class="c-fino">14 dias com a IA ligada. Não pede cartão.</p>
       </div>
       <p class="fim-wpp">
         Prefere conversar antes? <a class="c-link" href={SITE.whatsapp} data-cta="fim-whatsapp">Chama a gente no WhatsApp</a>.
@@ -52,6 +52,12 @@ import cheia from "../assets/3d/agenda-cheia.png";
     display: grid;
     gap: 0.75rem;
     justify-items: start;
+  }
+  @media (max-width: 599px) {
+    .fim-acoes {
+      justify-items: stretch;
+      text-align: center;
+    }
   }
   .fim-wpp {
     margin-top: 2.5rem;

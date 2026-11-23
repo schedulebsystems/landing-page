@@ -10,8 +10,8 @@ const criarConta = `${SITE.appUrl}/criar-conta`;
     <div class="hero-texto">
       <h1 id="hero-titulo" class="hero-titulo">Enquanto você atende, a IA marca a próxima.</h1>
       <p class="c-lead hero-lead">
-        Agenda, clientes, equipe e caixa num lugar só. E uma IA no WhatsApp que acha o horário,
-        marca, lembra na véspera e remarca enquanto você atende. De dia, de madrugada e no domingo.
+        Agenda, clientes, equipe e caixa num lugar só. E uma IA no WhatsApp que marca, lembra e
+        remarca enquanto você atende, até de madrugada.
       </p>
       <div class="hero-acoes">
         <a class="c-btn c-btn-laranja" href={criarConta} data-cta="hero-criar-conta">Criar conta grátis</a>
@@ -61,7 +61,7 @@ const criarConta = `${SITE.appUrl}/criar-conta`;
 
 <style>
   .hero {
-    padding-top: clamp(2.5rem, 1rem + 5vw, 5.5rem);
+    padding-top: clamp(1.75rem, 0.5rem + 5vw, 5.5rem);
     padding-bottom: clamp(3rem, 2rem + 4vw, 6rem);
     overflow: hidden;
   }
@@ -75,10 +75,10 @@ const criarConta = `${SITE.appUrl}/criar-conta`;
     font-weight: 780;
   }
   .hero-lead {
-    margin-top: 1.75rem;
+    margin-top: 1.25rem;
   }
   .hero-acoes {
-    margin-top: 2.25rem;
+    margin-top: 1.75rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -86,6 +86,33 @@ const criarConta = `${SITE.appUrl}/criar-conta`;
   }
   .hero-fino {
     margin-top: 1rem;
+  }
+  /* link secundário com área de toque de 44px sem mudar o desenho */
+  .hero-acoes .c-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  @media (max-width: 599px) {
+    .hero-grid {
+      gap: 1.5rem;
+    }
+    /* CTA principal na largura toda: alcançável com o polegar e sem disputar espaço */
+    .hero-acoes {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.25rem;
+    }
+    .hero-acoes .c-btn {
+      width: 100%;
+    }
+    .hero-acoes .c-link {
+      align-self: center;
+    }
+    .hero-fino {
+      margin-top: 0.5rem;
+      text-align: center;
+    }
   }
 
   .hero-visual {
@@ -216,7 +243,7 @@ const criarConta = `${SITE.appUrl}/criar-conta`;
     position: absolute;
     right: 0.75rem;
     bottom: 0.55rem;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     letter-spacing: -0.2em;
     color: #7fd3ff;
   }

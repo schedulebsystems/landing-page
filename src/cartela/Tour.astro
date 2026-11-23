@@ -120,7 +120,7 @@ const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
   .tour-grid {
     display: grid;
     gap: 2rem;
-    grid-template-areas: "cabeca" "cel" "controles";
+    grid-template-areas: "cabeca" "controles" "cel";
   }
   .tour-cabeca {
     grid-area: cabeca;
@@ -263,6 +263,12 @@ const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
   }
   .tour-fixo-barra {
     bottom: 0;
+  }
+  /* área de toque mínima nos botões dentro da tela, sem mudar onde ficam */
+  .tour-hot::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem;
   }
   .tour-hot {
     position: absolute;

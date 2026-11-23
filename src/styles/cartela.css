@@ -176,6 +176,7 @@ body.cartela h3 {
   letter-spacing: -0.02em;
   color: var(--tinta);
   text-decoration: none;
+  min-height: 2.75rem;
 }
 .c-logo {
   display: block;
@@ -209,6 +210,26 @@ body.cartela h3 {
   font-size: 1rem;
   padding: 0 1.1rem;
   border-radius: var(--raio-lg);
+  white-space: nowrap;
+}
+/* celular: barra mais baixa e botão que nunca quebra em duas linhas (testado em 320px) */
+@media (max-width: 959px) {
+  .c-nav-in {
+    height: 3.75rem;
+    gap: 1rem;
+  }
+  .c-logo {
+    height: 1.75rem;
+  }
+}
+@media (max-width: 374px) {
+  .c-logo {
+    height: 1.5rem;
+  }
+  .c-nav-acoes .c-btn {
+    font-size: 0.9375rem;
+    padding: 0 0.875rem;
+  }
 }
 @media (min-width: 960px) {
   .c-nav-links {
@@ -226,7 +247,7 @@ body.cartela h3 {
 
 /* ------------------------------------------------------------ seções */
 .c-sec {
-  padding-block: clamp(5rem, 3rem + 8vw, 10rem);
+  padding-block: clamp(4rem, 2.5rem + 8vw, 10rem);
 }
 .c-sec-escura {
   background: var(--tinta);
