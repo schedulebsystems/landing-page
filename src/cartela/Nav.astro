@@ -1,5 +1,4 @@
 ---
-import Logo from "@components/Logo.astro";
 import { SITE } from "@config/site";
 
 const links = [
@@ -13,8 +12,7 @@ const links = [
 <header class="c-nav" data-nav>
   <div class="c-wrap c-nav-in">
     <a href="/" class="c-marca" aria-label="Skedoole, início">
-      <Logo size={30} />
-      <span>Skedoole</span>
+      <img src="/logo-skedoole/logo-orange-black.svg" alt="Skedoole" width="558" height="139" class="c-logo" />
     </a>
     <nav class="c-nav-links" aria-label="Seções">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}

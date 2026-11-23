@@ -1,27 +1,162 @@
 ---
 /**
- * "Vem junto": tudo o que o salão precisa, em pequeno. Cada card tem uma mini-tela que mexe
- * sozinha quando aparece (CSS puro, pausa fora da tela e com movimento reduzido).
- * Nomes e valores são de exemplo, como no tour.
+ * "Vem junto": tudo o que o salão precisa, em pequeno. Cada card tem uma etiqueta da área
+ * (WhatsApp, Agenda, Vitrine...) e uma mini-tela no visual do app, que mexe sozinha quando
+ * aparece (CSS puro, pausa fora da tela e com movimento reduzido). Fecha com o card de valor.
+ * Nomes, horários e valores são de exemplo, como no tour.
  */
 import { Image } from "astro:assets";
 import fManicure from "../assets/fotos/manicure.jpg";
 import fLash from "../assets/fotos/lash.jpg";
 import fSalao from "../assets/fotos/salao.jpg";
+import fPes from "../assets/fotos/pes.jpg";
+import fBarbearia from "../assets/fotos/barbearia.jpg";
+import fDona from "../assets/fotos/dona-celular.jpg";
+
+// ícones de traço (24x24), no estilo dos ícones do app
+const ICONES: Record<string, string> = {
+  wpp: "M4 20l1.3-3.9A8 8 0 1 1 8 18.7L4 20z",
+  agenda: "M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z",
+  link: "M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1",
+  caixa: "M3 7h18v12H3zM3 11h18M7 15h3",
+  clientes: "M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM21 19v-1a4 4 0 0 0-3-3.9M15.5 3.2a3.5 3.5 0 0 1 0 6.6",
+  clube: "M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z",
+  equipe: "M8 3h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM11 18h2",
+};
+
+type Atend = { h: string; cli: string; sv: string; st: "pago" | "agora" | "conf" | "ia" | "livre"; dur: number };
+const profissionais: { nome: string; papel: string; foto: ImageMetadata; pos: string; itens: Atend[] }[] = [
+  {
+    nome: "Rafa", papel: "Barbeiro", foto: fBarbearia, pos: "38% 14%",
+    itens: [
+      { h: "09:00", cli: "Diego", sv: "Corte + barba", st: "pago", dur: 2 },
+      { h: "10:30", cli: "Léo", sv: "Corte", st: "agora", dur: 1 },
+      { h: "14:00", cli: "Caio", sv: "Barba", st: "conf", dur: 1 },
+    ],
+  },
+  {
+    nome: "Lívia", papel: "Cabeleireira", foto: fSalao, pos: "68% 22%",
+    itens: [
+      { h: "09:30", cli: "Ana", sv: "Escova", st: "pago", dur: 1 },
+      { h: "11:00", cli: "Bia", sv: "Coloração", st: "conf", dur: 2 },
+      { h: "15:00", cli: "Malu", sv: "Corte", st: "ia", dur: 1 },
+    ],
+  },
+  {
+    nome: "Camila", papel: "Lash designer", foto: fDona, pos: "42% 34%",
+    itens: [
+      { h: "10:00", cli: "Júlia", sv: "Lash lift", st: "agora", dur: 2 },
+      { h: "13:00", cli: "Nina", sv: "Sobrancelha", st: "conf", dur: 1 },
+      { h: "16:00", cli: "", sv: "", st: "livre", dur: 1 },
+    ],
+  },
+];
+const ROTULO = { pago: "Pago", agora: "Em atendimento", conf: "Confirmado", ia: "Marcado pela IA", livre: "Livre" };
+
+const servicos = [
+  { foto: fLash, nome: "Lash lift", tempo: "1h", preco: "R$ 120" },
+  { foto: fManicure, nome: "Pé e mão", tempo: "1h30", preco: "R$ 55" },
+  { foto: fPes, nome: "Spa dos pés", tempo: "50min", preco: "R$ 80" },
+];
+
+const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de agendamento", "Caixa e comissão", "Clube de assinatura", "Quem chamar hoje", "App da equipe"];
 ---
 <section class="c-sec junto c-pontos" aria-labelledby="junto-titulo">
   <div class="c-wrap">
     <div class="junto-topo">
       <h2 id="junto-titulo" class="c-h2" data-revela>O resto vem junto, no mesmo preço.</h2>
       <p class="c-lead" data-sobe>
-        A IA no WhatsApp não é extra pago à parte. Ela e tudo isto estão em todo plano, cada coisa
-        do tamanho que precisa ser.
+        A IA no WhatsApp não é extra pago à parte. Ela e tudo isto estão em todo plano: oito
+        ferramentas que o salão usaria separadas, numa assinatura só.
       </p>
     </div>
 
     <ul class="bento">
-      <li class="b b-lembrete" data-sobe style="--d:0">
-        <div class="b-mini">
+      <!-- AGENDA -->
+      <li class="b b-agenda" data-sobe style="--d:0">
+        <span class="b-tag" style="--tom:var(--laranja)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.agenda} /></svg>Agenda</span>
+        <h3>A agenda de cada profissional</h3>
+        <p>Cada uma com os próprios horários, folgas e o tempo de cada serviço. Você vê todas numa tela.</p>
+        <div class="b-mini b-dia">
+          <div class="b-dia-topo">
+            <b>Hoje, qua 25</b>
+            <span class="b-dia-kpi"><span>8 atendimentos</span><span class="b-dia-kpi-v">R$ 1.240 previstos</span></span>
+          </div>
+          <div class="b-dia-cols">
+            {profissionais.map((p, ip) => (
+              <div class="b-prof">
+                <div class="b-prof-quem">
+                  <Image src={p.foto} alt="" widths={[96]} sizes="40px" class="b-prof-foto" style={`object-position:${p.pos}`} loading="lazy" />
+                  <span><b>{p.nome}</b><small>{p.papel}</small></span>
+                </div>
+                <div class="b-prof-lista">
+                  {p.itens.map((a, ia) => (
+                    <div class={`b-at b-at--${a.st}`} style={`--k:${ip * 3 + ia};--dur:${a.dur}`}>
+                      {a.st === "livre" ? (
+                        <span class="b-at-livre">{a.h} · horário livre</span>
+                      ) : (
+                        <>
+                          <span class="b-at-h">{a.h}</span>
+                          <b class="b-at-cli">{a.cli}</b>
+                          <span class="b-at-sv">{a.sv}</span>
+                          <span class="b-at-st">{ROTULO[a.st]}</span>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </li>
+
+      <!-- VITRINE -->
+      <li class="b b-link" data-sobe style="--d:1">
+        <span class="b-tag" style="--tom:#2563eb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.link} /></svg>Vitrine</span>
+        <h3>Seu link de agendamento</h3>
+        <p>Fotos, serviços com preço e os horários livres. A cliente marca sozinha pela bio do Instagram.</p>
+        <div class="b-mini b-vitrine">
+          <div class="b-vt-capa">
+            <Image src={fSalao} alt="" widths={[480, 720]} sizes="(min-width: 1080px) 22vw, 90vw" loading="lazy" />
+            <span class="b-vt-url">studiocamila.skedoole.com.br</span>
+          </div>
+          <div class="b-vt-cab">
+            <span class="b-vt-logo">SC</span>
+            <span><b>Studio Camila</b><small><span class="b-on"></span>Aberto hoje até 19h</small></span>
+          </div>
+          <ul class="b-vt-servicos">
+            {servicos.map((s, i) => (
+              <li class={i === 0 ? "is-sel" : ""}>
+                <Image src={s.foto} alt="" widths={[96]} sizes="40px" loading="lazy" />
+                <span><b>{s.nome}</b><small>{s.tempo}</small></span>
+                <b>{s.preco}</b>
+              </li>
+            ))}
+          </ul>
+          <p class="b-vt-rot">Horários de hoje</p>
+          <div class="b-vt-horas">
+            <span>14:00</span><span class="is-sel">15:30</span><span>17:00</span><span>18:00</span>
+          </div>
+          <span class="b-agendar">Agendar lash lift às 15:30</span>
+          <p class="b-vt-rot">Trabalhos</p>
+          <div class="b-vt-galeria" aria-hidden="true">
+            {[fLash, fManicure, fPes].map((f) => <Image src={f} alt="" widths={[200]} sizes="90px" loading="lazy" />)}
+          </div>
+          <div class="b-vt-aval">
+            <span class="b-vt-estrelas" aria-hidden="true">★★★★★</span>
+            <p>“Marquei às 23h pelo link e já recebi a confirmação. Amei!”</p>
+            <small>Cliente do salão · exemplo</small>
+          </div>
+        </div>
+      </li>
+
+      <!-- LEMBRETE -->
+      <li class="b b-lembrete" data-sobe style="--d:2">
+        <span class="b-tag" style="--tom:#1da851"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.wpp} /></svg>WhatsApp</span>
+        <h3>Lembrete na véspera</h3>
+        <p>A cliente recebe o link do horário pra confirmar ou remarcar, sem você mandar nada.</p>
+        <div class="b-mini b-conversa">
           <div class="b-wpp">
             <p>Oi, Ana! Amanhã às 14h tem <b>pé e mão</b> com a Bruna. Confirma ou remarca por aqui:</p>
             <span class="b-wpp-link">app.skedoole.com.br/h/…</span>
@@ -29,111 +164,93 @@ import fSalao from "../assets/fotos/salao.jpg";
           </div>
           <div class="b-wpp b-wpp-cli"><p>Confirmado! 💅</p><time>18:03</time></div>
         </div>
-        <h3>Lembrete na véspera</h3>
-        <p>Cada cliente recebe o link do horário pra confirmar ou remarcar, sem você mandar nada.</p>
       </li>
 
-      <li class="b b-vaga" data-sobe style="--d:1">
+      <!-- VAGA -->
+      <li class="b b-vaga" data-sobe style="--d:3">
+        <span class="b-tag" style="--tom:var(--laranja)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.agenda} /></svg>Agenda</span>
+        <h3>Cancelou, a vaga volta</h3>
+        <p>O horário reabre na hora, no seu link e na IA.</p>
         <div class="b-mini">
           <div class="b-slot">
             <span class="b-hora">15h</span>
             <span class="b-estado">
-              <span class="e1">Cancelado</span>
-              <span class="e2">Livre</span>
-              <span class="e3">Marcado pela IA</span>
+              <span class="e1">Malu cancelou</span>
+              <span class="e2">Horário livre</span>
+              <span class="e3">Marcado pela IA ✓</span>
             </span>
           </div>
         </div>
-        <h3>Cancelou, a vaga volta</h3>
-        <p>O horário fica livre na hora, no seu link e na IA.</p>
       </li>
 
-      <li class="b b-link" data-sobe style="--d:2">
-        <div class="b-mini b-vitrine">
-          <div class="b-capa"></div>
-          <span class="b-logo">SC</span>
-          <strong>Studio Camila</strong>
-          <ul>
-            <li><span>Pé e mão</span><b>R$ 55</b></li>
-            <li><span>Lash lift</span><b>R$ 120</b></li>
-            <li><span>Sobrancelha</span><b>R$ 40</b></li>
-          </ul>
-          <span class="b-agendar">Agendar</span>
-          <div class="b-fotos" aria-hidden="true">{[fManicure, fLash, fSalao].map((f) => <Image src={f} alt="" widths={[160]} sizes="80px" loading="lazy" />)}</div>
-          <small class="b-aberto"><span class="b-on"></span>Aberto hoje até 19h</small>
-        </div>
-        <h3>Seu link de agendamento</h3>
-        <p>Serviços, fotos e o botão de marcar. Vai na bio do Instagram e no status.</p>
-      </li>
-
-      <li class="b b-agenda" data-sobe style="--d:0">
-        <div class="b-mini b-cols">
-          {[
-            { n: "Bruna", c: "var(--amora)", b: [[0, 2], [3, 2], [6, 1]] },
-            { n: "Lívia", c: "var(--azul)", b: [[1, 2], [4, 3]] },
-            { n: "Camila", c: "var(--verde)", b: [[0, 1], [2, 2], [5, 2]] },
-          ].map((p) => (
-            <div class="b-col">
-              <span class="b-av" style={`background:${p.c};color:${p.n === "Bruna" ? "var(--louca)" : "var(--tinta)"}`}>{p.n[0]}</span>
-              <small class="b-nome">{p.n}</small>
-              <div class="b-trilho">
-                {p.b.map(([ini, dur]) => (
-                  <i style={`--ini:${ini};--dur:${dur};background:${p.c}`} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-        <h3>Agenda de cada profissional</h3>
-        <p>Horários, folgas e o tempo de cada serviço do jeito que cada uma trabalha.</p>
-      </li>
-
-      <li class="b b-caixa" data-sobe style="--d:1">
-        <div class="b-mini">
-          <p class="b-pix"><span>Pix recebido</span><b>R$ 120,00</b></p>
-          <div class="b-divide"><i class="d1"></i><i class="d2"></i></div>
-          <p class="b-legenda"><span><i class="p1"></i>Bruna R$ 48,00</span><span><i class="p2"></i>Salão R$ 72,00</span></p>
-        </div>
+      <!-- CAIXA -->
+      <li class="b b-caixa" data-sobe style="--d:0">
+        <span class="b-tag" style="--tom:#1a9f55"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.caixa} /></svg>Financeiro</span>
         <h3>Caixa e comissão</h3>
         <p>Recebe em Pix ou cartão e a comissão de cada uma já sai separada.</p>
+        <div class="b-mini">
+          <p class="b-pix"><span><span class="b-ok">✓</span> Pix recebido</span><b>R$ 120,00</b></p>
+          <div class="b-divide"><i class="d1"></i><i class="d2"></i></div>
+          <p class="b-legenda"><span><i class="p1"></i>Lívia R$ 48,00</span><span><i class="p2"></i>Salão R$ 72,00</span></p>
+        </div>
       </li>
 
-      <li class="b b-chamar" data-sobe style="--d:0">
+      <!-- CHAMAR HOJE -->
+      <li class="b b-chamar" data-sobe style="--d:1">
+        <span class="b-tag" style="--tom:#7c3aed"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.clientes} /></svg>Clientes</span>
+        <h3>Quem chamar hoje</h3>
+        <p>Quem sumiu, faz aniversário ou está na hora da manutenção, pronta pra você mandar mensagem.</p>
         <div class="b-mini">
           {[
-            ["Marina S.", "38 dias sem vir"],
-            ["Juliana P.", "aniversário hoje 🎂"],
-            ["Fernanda L.", "na hora da manutenção"],
-          ].map(([n, m], i) => (
+            ["Marina S.", "38 dias sem vir", "Sumida"],
+            ["Juliana P.", "aniversário hoje 🎂", "Aniversário"],
+            ["Fernanda L.", "manutenção do alongamento", "Retorno"],
+          ].map(([n, m, t], i) => (
             <div class="b-linha" style={`--k:${i}`}>
-              <span class="b-av b-av-p">{n[0]}</span>
+              <span class="b-av">{n[0]}</span>
               <span class="b-quem"><b>{n}</b><small>{m}</small></span>
+              <span class="b-motivo">{t}</span>
               <span class="b-chama">Chamar</span>
             </div>
           ))}
         </div>
-        <h3>Quem chamar hoje</h3>
-        <p>Quem sumiu ou está na hora de voltar, pronta pra você mandar mensagem.</p>
       </li>
 
-      <li class="b b-clube" data-sobe style="--d:1">
-        <div class="b-mini b-cartao">
-          <small>Clube</small>
-          <strong>Mãos sempre feitas</strong>
-          <span class="b-usos"><i class="u"></i><i class="u"></i><i></i><i></i></span>
-          <small>2 de 4 no mês</small>
-        </div>
+      <!-- CLUBE -->
+      <li class="b b-clube" data-sobe style="--d:2">
+        <span class="b-tag" style="--tom:#d97706"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.clube} /></svg>Clube</span>
         <h3>Clube de assinatura</h3>
         <p>A cliente paga por mês e você sabe quanto entra antes do mês começar.</p>
+        <div class="b-mini b-cartao">
+          <small>Clube Studio Camila</small>
+          <strong>Mãos sempre feitas</strong>
+          <span class="b-usos"><i class="u"></i><i class="u"></i><i></i><i></i></span>
+          <small>2 de 4 usos no mês · R$ 149/mês</small>
+        </div>
       </li>
 
-      <li class="b b-equipe" data-sobe style="--d:2">
-        <div class="b-mini b-meu">
-          <span class="b-av" style="background:var(--azul)">L</span>
-          <p><small>Lívia, este mês</small><b data-conta="1860">R$ 1.860</b><small>em comissão</small></p>
-        </div>
+      <!-- EQUIPE -->
+      <li class="b b-equipe" data-sobe style="--d:0">
+        <span class="b-tag" style="--tom:var(--tinta)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.equipe} /></svg>Equipe</span>
         <h3>A equipe no celular</h3>
-        <p>Cada uma vê a própria agenda e quanto já fez, sem te perguntar.</p>
+        <p>Cada uma vê a própria agenda e quanto já fez no mês, sem te perguntar.</p>
+        <div class="b-mini b-meu">
+          <Image src={fSalao} alt="" widths={[120]} sizes="56px" class="b-meu-foto" style="object-position:68% 22%" loading="lazy" />
+          <p><small>Lívia, este mês</small><b data-conta="1860">R$ 1.860</b><small>em comissão · 42 atendimentos</small></p>
+          <div class="b-semana" aria-hidden="true">
+            {[40, 65, 50, 80, 95, 70].map((v, i) => <i style={`--v:${v};--k:${i}`} />)}
+          </div>
+        </div>
+      </li>
+
+      <!-- VALOR -->
+      <li class="b b-valor" data-sobe style="--d:1">
+        <p class="b-valor-rot">Tudo isso incluso</p>
+        <p class="b-valor-preco"><small>a partir de</small> R$ 59,90<small>/mês</small></p>
+        <ul class="b-valor-lista">
+          {inclusos.map((t) => <li>{t}</li>)}
+        </ul>
+        <a class="b-valor-cta" href="#preco" data-cta="junto-ver-preco">Ver quanto fica pra sua equipe →</a>
       </li>
     </ul>
   </div>
@@ -157,9 +274,9 @@ import fSalao from "../assets/fotos/salao.jpg";
   .b {
     display: flex;
     flex-direction: column;
-    padding: 1.1rem 1.1rem 1.4rem;
+    padding: 1.25rem 1.25rem 1.25rem;
     border-radius: var(--raio-card);
-    background: var(--louca);
+    background: #fff;
     box-shadow: 0 0 0 1px rgb(19 19 22 / 0.06), 0 18px 40px -30px rgb(19 19 22 / 0.5);
     transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
   }
@@ -167,31 +284,53 @@ import fSalao from "../assets/fotos/salao.jpg";
     transform: translateY(-4px);
     box-shadow: 0 0 0 1px rgb(19 19 22 / 0.08), 0 28px 50px -30px rgb(19 19 22 / 0.6);
   }
+  /* etiqueta da área: deixa claro o que é cada card */
+  .b-tag {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem 0.25rem 0.5rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--tom) 10%, #fff);
+    color: color-mix(in srgb, var(--tom) 80%, #131316);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .b-tag svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
   .b h3 {
     font-size: 1.35rem;
-    margin-top: 1.1rem;
-    padding-inline: 0.3rem;
+    margin-top: 0.75rem;
   }
-  .b > p {
-    margin-top: 0.4rem;
-    padding-inline: 0.3rem;
+  .b > p:not([class]) {
+    margin-top: 0.375rem;
     color: var(--tinta-2);
     font-size: var(--t-mini);
     line-height: 1.5;
-    max-width: 38ch;
+    max-width: 44ch;
   }
   .b-mini {
     position: relative;
     flex: 1;
-    min-height: 9rem;
+    min-height: 8rem;
+    margin-top: 1rem;
     display: grid;
     align-content: center;
     gap: 0.5rem;
     padding: 1rem;
-    border-radius: var(--raio-card);
-    background: linear-gradient(160deg, #fff, #f3f2ef);
-    box-shadow: 0 0 0 1px rgb(19 19 22 / 0.05) inset;
-    font-size: 0.86rem;
+    border-radius: var(--raio-xl);
+    background: #f3f4f6;
+    font-size: 0.875rem;
     line-height: 1.35;
     overflow: hidden;
   }
@@ -203,22 +342,351 @@ import fSalao from "../assets/fotos/salao.jpg";
   html:not(.js-rv) .b * {
     animation-play-state: running !important;
   }
-
   .b-av {
     display: inline-grid;
     place-items: center;
     flex: none;
-    width: 1.9rem;
-    height: 1.9rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
+    background: var(--nude);
     color: var(--tinta);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+  }
+  .b-on {
+    display: inline-block;
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-right: 0.3rem;
+    border-radius: 50%;
+    background: #1da851;
   }
 
-  /* lembrete */
-  .b-lembrete .b-mini {
-    background: linear-gradient(160deg, #f4ede7, #ebe2da);
+  /* ---------- agenda do dia (cards no padrão Meu Dia) */
+  .b-dia {
+    align-content: start;
+    gap: 0.75rem;
+    padding: 0.875rem;
+  }
+  .b-dia-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+  .b-dia-topo > b {
+    font-size: 1rem;
+  }
+  .b-dia-kpi {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--tinta-2);
+  }
+  .b-dia-kpi-v {
+    color: #1a7f4b;
+    font-weight: 700;
+  }
+  .b-dia-cols {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(11.5rem, 1fr);
+    gap: 0.625rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: -0.875rem;
+    padding-inline: 0.875rem;
+    scroll-snap-type: x mandatory;
+  }
+  .b-dia-cols::-webkit-scrollbar {
+    display: none;
+  }
+  .b-prof {
+    scroll-snap-align: start;
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+  }
+  .b-prof-quem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem;
+  }
+  .b-prof-foto {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--laranja);
+  }
+  .b-prof-quem span {
+    display: grid;
+    line-height: 1.2;
+  }
+  .b-prof-quem small {
+    color: var(--tinta-2);
+    font-size: 0.75rem;
+  }
+  .b-prof-lista {
+    display: grid;
+    gap: 0.375rem;
+  }
+  .b-at {
+    --tone: #2563eb;
+    --tone-bg: #eff6ff;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.5rem;
+    align-items: baseline;
+    min-height: calc(2.75rem + (var(--dur) - 1) * 1.6rem);
+    padding: 0.5rem 0.625rem 0.5rem 0.875rem;
+    border-radius: var(--raio-lg);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px #e5e7eb;
+    overflow: hidden;
+    animation: b-at-entra 0.5s cubic-bezier(0.2, 1.1, 0.3, 1) both;
+    animation-delay: calc(var(--k) * 90ms + 150ms);
+  }
+  .b-at::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--tone);
+  }
+  .b-at--pago { --tone: #1a9f55; --tone-bg: #e8f5ee; }
+  .b-at--agora { --tone: var(--laranja); --tone-bg: rgb(255 90 36 / 0.1); background: rgb(255 90 36 / 0.06); }
+  .b-at--ia { --tone: #1da851; --tone-bg: #e8f5ee; animation-delay: 2.2s; }
+  .b-at-h {
+    font-weight: 700;
+    font-size: 0.8125rem;
+  }
+  .b-at-cli {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .b-at-sv {
+    grid-column: 1 / -1;
+    color: var(--tinta-2);
+    font-size: 0.8125rem;
+  }
+  .b-at-st {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: var(--tone-bg);
+    color: var(--tinta);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .b-at--agora .b-at-st {
+    background: var(--laranja);
+    color: #fff;
+  }
+  .b-at--ia .b-at-st {
+    background: #1da851;
+    color: #fff;
+  }
+  .b-at--livre {
+    background: transparent;
+    box-shadow: none;
+    outline: 1.5px dashed rgb(19 19 22 / 0.22);
+    outline-offset: -1.5px;
+    align-items: center;
+  }
+  .b-at--livre::before {
+    display: none;
+  }
+  .b-at-livre {
+    grid-column: 1 / -1;
+    color: var(--tinta-2);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+  @keyframes b-at-entra {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  }
+
+  /* ---------- vitrine (página pública) */
+  .b-vitrine {
+    align-content: start;
+    gap: 0.625rem;
+    padding: 0 0 0.875rem;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px #e5e7eb;
+  }
+  .b-vt-capa {
+    position: relative;
+  }
+  .b-vt-capa img {
+    display: block;
+    width: 100%;
+    height: 7.5rem;
+    object-fit: cover;
+    object-position: 60% 30%;
+  }
+  .b-vt-url {
+    position: absolute;
+    left: 50%;
+    top: 0.625rem;
+    transform: translateX(-50%);
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.9);
+    backdrop-filter: blur(6px);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .b-vt-cab {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.625rem;
+    margin-top: -1.75rem;
+    padding-inline: 0.875rem;
+  }
+  .b-vt-logo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--tinta);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 0 0 3px #fff;
+    position: relative;
+  }
+  .b-vt-cab > span:last-child {
+    display: grid;
+    line-height: 1.25;
+  }
+  .b-vt-cab small {
+    color: var(--tinta-2);
+    font-size: 0.75rem;
+  }
+  .b-vt-servicos {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0 0.875rem;
+    display: grid;
+    gap: 0.375rem;
+  }
+  .b-vt-servicos li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.375rem 0.625rem 0.375rem 0.375rem;
+    border-radius: var(--raio-lg);
+    box-shadow: inset 0 0 0 1px #e5e7eb;
+  }
+  .b-vt-servicos li.is-sel {
+    background: rgb(255 90 36 / 0.08);
+    box-shadow: inset 0 0 0 1.5px var(--laranja);
+  }
+  .b-vt-servicos img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--raio-lg);
+    object-fit: cover;
+  }
+  .b-vt-servicos span {
+    display: grid;
+    line-height: 1.2;
+  }
+  .b-vt-servicos small {
+    color: var(--tinta-2);
+    font-size: 0.75rem;
+  }
+  .b-vt-rot {
+    margin: 0.25rem 0 0;
+    padding-inline: 0.875rem;
+    color: var(--tinta-2);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .b-vt-horas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding-inline: 0.875rem;
+  }
+  .b-vt-horas span {
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    box-shadow: inset 0 0 0 1.5px #e6e5e1;
+    font-weight: 600;
+    font-size: 0.8125rem;
+  }
+  .b-vt-horas .is-sel {
+    background: var(--laranja);
+    color: #fff;
+    box-shadow: none;
+  }
+  .b-agendar {
+    margin: 0.25rem 0.875rem 0;
+    padding: 0.75rem;
+    border-radius: var(--raio-lg);
+    background: var(--laranja);
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+    animation: b-pulso 2.4s ease-in-out infinite;
+  }
+  .b-vt-galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.375rem;
+    padding-inline: 0.875rem;
+  }
+  .b-vt-galeria img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--raio-lg);
+  }
+  .b-vt-aval {
+    margin: 0.25rem 0.875rem 0;
+    padding: 0.75rem;
+    border-radius: var(--raio-lg);
+    background: #f3f4f6;
+  }
+  .b-vt-estrelas {
+    color: #f5a623;
+    letter-spacing: 0.1em;
+  }
+  .b-vt-aval p {
+    margin: 0.25rem 0 0;
+    font-weight: 500;
+  }
+  .b-vt-aval small {
+    color: var(--tinta-2);
+    font-size: 0.75rem;
+  }
+  @keyframes b-pulso {
+    50% { box-shadow: 0 0 0 6px rgb(255 90 36 / 0.18); }
+  }
+
+  /* ---------- lembrete */
+  .b-conversa {
+    background: #efe7de;
   }
   .b-wpp {
     max-width: 88%;
@@ -240,7 +708,7 @@ import fSalao from "../assets/fotos/salao.jpg";
   .b-wpp time {
     display: block;
     text-align: right;
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
     color: var(--tinta-3);
   }
   .b-wpp-cli {
@@ -260,7 +728,7 @@ import fSalao from "../assets/fotos/salao.jpg";
     100% { opacity: 0; }
   }
 
-  /* vaga */
+  /* ---------- vaga */
   .b-slot {
     display: flex;
     align-items: center;
@@ -268,7 +736,7 @@ import fSalao from "../assets/fotos/salao.jpg";
   }
   .b-hora {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.125rem;
   }
   .b-estado {
     position: relative;
@@ -287,20 +755,20 @@ import fSalao from "../assets/fotos/salao.jpg";
     animation: b-tres 6s ease infinite;
   }
   .b-estado .e1 {
-    background: #fde3e1;
-    color: #9b2c22;
+    background: #fee2e2;
+    color: #991b1b;
     text-decoration: line-through;
   }
   .b-estado .e2 {
     background: #fff;
-    color: var(--tinta-3);
+    color: var(--tinta-2);
     outline: 1.5px dashed rgb(19 19 22 / 0.25);
     outline-offset: -1.5px;
     animation-delay: 2s;
   }
   .b-estado .e3 {
-    background: var(--amora);
-    color: var(--louca);
+    background: #1da851;
+    color: #fff;
     animation-delay: 4s;
   }
   @keyframes b-tres {
@@ -309,157 +777,42 @@ import fSalao from "../assets/fotos/salao.jpg";
     36%, 100% { opacity: 0; transform: translateY(-6px); }
   }
 
-  /* vitrine */
-  .b-vitrine {
-    align-content: start;
-    justify-items: center;
-    text-align: center;
-    padding-top: 0;
-  }
-  .b-capa {
-    justify-self: stretch;
-    height: 4.2rem;
-    margin: 0 -1rem;
-    background:
-      radial-gradient(60% 90% at 20% 10%, var(--lavanda), transparent 70%),
-      radial-gradient(60% 90% at 90% 30%, var(--nude), transparent 70%),
-      var(--amora);
-  }
-  .b-logo {
-    display: grid;
-    place-items: center;
-    width: 3rem;
-    height: 3rem;
-    margin-top: -1.6rem;
-    border-radius: 50%;
-    background: var(--tinta);
-    color: var(--louca);
-    font-weight: 700;
-    box-shadow: 0 0 0 3px #fff;
-  }
-  .b-vitrine strong {
-    font-size: 1rem;
-  }
-  .b-vitrine ul {
-    list-style: none;
-    margin: 0.2rem 0 0;
-    padding: 0;
-    width: 100%;
-    display: grid;
-    gap: 0.35rem;
-  }
-  .b-vitrine li {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.45rem 0.65rem;
-    border-radius: var(--raio-lg);
-    background: var(--porcelana);
-  }
-  .b-agendar {
-    justify-self: stretch;
-    margin-top: 0.35rem;
-    padding: 0.55rem;
-    border-radius: var(--raio-lg);
-    background: var(--laranja);
-    color: var(--tinta);
-    font-weight: 700;
-    animation: b-pulso 2.4s ease-in-out infinite;
-  }
-  @keyframes b-pulso {
-    50% { box-shadow: 0 0 0 6px rgb(255 90 36 / 0.18); }
-  }
-
-  .b-fotos {
-    justify-self: stretch;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-    margin-top: 0.4rem;
-  }
-  .b-fotos img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: var(--raio-lg);
-  }
-  .b-aberto {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin-top: 0.2rem;
-    color: var(--tinta-3);
-  }
-  .b-on {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background: #1da851;
-  }
-  .b-nome {
-    color: var(--tinta-3);
-    font-size: 0.75rem;
-  }
-
-  /* agenda por profissional */
-  .b-cols {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-    align-content: stretch;
-  }
-  .b-col {
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-    justify-items: center;
-    gap: 0.3rem;
-  }
-  .b-trilho {
-    position: relative;
-    width: 100%;
-    min-height: 11rem;
-    margin-top: 0.3rem;
-    border-radius: var(--raio-lg);
-    background: repeating-linear-gradient(180deg, transparent 0 calc(100% / 8 - 1px), rgb(19 19 22 / 0.07) calc(100% / 8 - 1px) calc(100% / 8));
-  }
-  .b-trilho i {
-    position: absolute;
-    left: 4px;
-    right: 4px;
-    top: calc(var(--ini) * 100% / 8 + 2px);
-    height: calc(var(--dur) * 100% / 8 - 4px);
-    border-radius: var(--raio-sm);
-    transform-origin: top;
-    animation: b-cresce 0.5s cubic-bezier(0.2, 1.2, 0.4, 1) both;
-    animation-delay: calc(var(--ini) * 90ms + 200ms);
-  }
-  @keyframes b-cresce {
-    from { transform: scaleY(0); opacity: 0; }
-  }
-
-  /* caixa */
+  /* ---------- caixa */
   .b-pix {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    margin: 0;
+  }
+  .b-ok {
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.25rem;
+    border-radius: 50%;
+    background: #1a9f55;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
   }
   .b-pix b {
-    font-size: 1.35rem;
+    font-size: 1.375rem;
     font-weight: 750;
     letter-spacing: -0.02em;
   }
   .b-divide {
     display: flex;
-    height: 0.8rem;
+    height: 0.75rem;
     border-radius: 9999px;
     overflow: hidden;
-    background: var(--porcelana);
+    background: #e5e7eb;
   }
   .b-divide i {
     transform-origin: left;
     animation: b-barra 0.8s cubic-bezier(0.2, 0.9, 0.2, 1) both 0.3s;
   }
-  .b-divide .d1 { width: 40%; background: var(--lavanda); }
+  .b-divide .d1 { width: 40%; background: var(--laranja); }
   .b-divide .d2 { width: 60%; background: var(--tinta); animation-delay: 0.6s; }
   @keyframes b-barra {
     from { transform: scaleX(0); }
@@ -468,6 +821,7 @@ import fSalao from "../assets/fotos/salao.jpg";
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem 1rem;
+    margin: 0;
     color: var(--tinta-2);
   }
   .b-legenda span {
@@ -476,30 +830,27 @@ import fSalao from "../assets/fotos/salao.jpg";
     gap: 0.35rem;
   }
   .b-legenda i {
-    width: 0.6rem;
-    height: 0.6rem;
+    width: 0.625rem;
+    height: 0.625rem;
     border-radius: 3px;
   }
-  .b-legenda .p1 { background: var(--lavanda); }
+  .b-legenda .p1 { background: var(--laranja); }
   .b-legenda .p2 { background: var(--tinta); }
 
-  /* chamar hoje */
+  /* ---------- chamar hoje */
   .b-linha {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.35rem 0.4rem;
+    padding: 0.4rem 0.5rem;
     border-radius: var(--raio-lg);
     background: #fff;
-    box-shadow: 0 0 0 1px rgb(19 19 22 / 0.06);
+    box-shadow: inset 0 0 0 1px #e5e7eb;
     animation: b-desliza 0.5s cubic-bezier(0.2, 1, 0.3, 1) both;
     animation-delay: calc(var(--k) * 120ms + 200ms);
   }
   @keyframes b-desliza {
     from { opacity: 0; transform: translateX(16px); }
-  }
-  .b-av-p {
-    background: var(--nude);
   }
   .b-quem {
     flex: 1;
@@ -507,37 +858,49 @@ import fSalao from "../assets/fotos/salao.jpg";
     min-width: 0;
   }
   .b-quem small {
-    color: var(--tinta-3);
+    color: var(--tinta-2);
     font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .b-motivo {
+    display: none;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background: #f3e8ff;
+    color: var(--tinta);
+    font-size: 0.75rem;
+    font-weight: 600;
   }
   .b-chama {
-    padding: 0.3rem 0.65rem;
+    padding: 0.375rem 0.75rem;
     border-radius: 9999px;
     background: #1da851;
-    color: #08311b;
+    color: #fff;
     font-weight: 700;
     font-size: 0.75rem;
   }
 
-  /* clube */
+  /* ---------- clube */
   .b-cartao {
     align-content: end;
     gap: 0.25rem;
-    color: var(--louca);
+    color: #fff;
     background:
-      radial-gradient(80% 70% at 100% 0%, rgb(255 180 143 / 0.7), transparent 70%),
+      radial-gradient(80% 70% at 100% 0%, rgb(255 140 90 / 0.75), transparent 70%),
       radial-gradient(60% 60% at 0% 100%, rgb(255 90 36 / 0.35), transparent 70%),
       var(--tinta);
     animation: b-flutua 5s ease-in-out infinite;
   }
   .b-cartao small {
-    opacity: 0.75;
+    opacity: 0.8;
     font-size: 0.75rem;
   }
   .b-cartao strong {
     font-family: var(--f-display);
     font-weight: 750;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
   .b-usos {
     display: flex;
@@ -548,47 +911,143 @@ import fSalao from "../assets/fotos/salao.jpg";
     width: 1.3rem;
     height: 0.45rem;
     border-radius: 9999px;
-    background: rgb(250 250 248 / 0.25);
+    background: rgb(255 255 255 / 0.25);
   }
   .b-usos i.u {
-    background: var(--louca);
+    background: #fff;
   }
   @keyframes b-flutua {
     50% { transform: translateY(-4px) rotate(-1deg); }
   }
 
-  /* equipe */
+  /* ---------- equipe */
   .b-meu {
     grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.5rem 0.875rem;
   }
-  .b-meu .b-av {
-    width: 2.8rem;
-    height: 2.8rem;
-    font-size: 1rem;
+  .b-meu-foto {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--laranja);
   }
   .b-meu p {
     display: grid;
     margin: 0;
   }
   .b-meu small {
-    color: var(--tinta-3);
+    color: var(--tinta-2);
+    font-size: 0.8125rem;
   }
   .b-meu b {
-    font-size: 1.6rem;
+    font-size: 1.625rem;
     font-weight: 750;
     letter-spacing: -0.02em;
+  }
+  .b-semana {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.375rem;
+    height: 3rem;
+  }
+  .b-semana i {
+    flex: 1;
+    height: calc(var(--v) * 1%);
+    border-radius: 0.375rem 0.375rem 0.125rem 0.125rem;
+    background: rgb(255 90 36 / 0.25);
+    transform-origin: bottom;
+    animation: b-sobe 0.6s cubic-bezier(0.2, 1.1, 0.3, 1) both;
+    animation-delay: calc(var(--k) * 80ms + 300ms);
+  }
+  .b-semana i:nth-child(5) {
+    background: var(--laranja);
+  }
+  @keyframes b-sobe {
+    from { transform: scaleY(0); }
+  }
+
+  /* ---------- valor */
+  .b-valor {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgb(255 140 90 / 0.9), transparent 70%),
+      linear-gradient(135deg, #ff5a24, #e84e1a);
+    box-shadow: 0 24px 50px -24px rgb(255 90 36 / 0.7);
+  }
+  .b-valor-rot {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .b-valor-preco {
+    margin: 0.5rem 0 0;
+    font-family: var(--f-display);
+    font-weight: 780;
+    font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3rem);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .b-valor-preco small {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    opacity: 0.9;
+  }
+  .b-valor-preco small:first-child {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .b-valor-lista {
+    list-style: none;
+    margin: 1.125rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.375rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .b-valor-lista li::before {
+    content: "✓";
+    display: inline-grid;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-right: 0.375rem;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.22);
+    font-size: 0.6875rem;
+  }
+  .b-valor-cta {
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.25em;
   }
 
   @media (min-width: 640px) {
     .bento {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .b-lembrete,
     .b-agenda,
-    .b-chamar {
+    .b-chamar,
+    .b-valor {
       grid-column: span 2;
+    }
+    .b-motivo {
+      display: inline-block;
     }
   }
   @media (min-width: 1080px) {
@@ -601,8 +1060,44 @@ import fSalao from "../assets/fotos/salao.jpg";
       grid-template-columns: repeat(4, minmax(0, 1fr));
       grid-auto-flow: dense;
     }
+    .b-agenda {
+      grid-column: span 3;
+    }
     .b-link {
       grid-row: span 2;
+    }
+    .b-chamar {
+      grid-column: span 2;
+    }
+    .b-equipe {
+      grid-column: span 1;
+    }
+    /* faixa de valor fechando o mosaico */
+    .b-valor {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      grid-template-rows: auto auto 1fr;
+      column-gap: 3rem;
+      padding: 1.75rem 2rem;
+    }
+    .b-valor-lista {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      align-self: center;
+      margin: 0;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem 1rem;
+      font-size: 0.9375rem;
+    }
+    .b-valor-cta {
+      padding-top: 1rem;
+    }
+    .b-dia-cols {
+      overflow: visible;
+      grid-auto-columns: minmax(0, 1fr);
+      margin-inline: 0;
+      padding-inline: 0;
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -610,9 +1105,12 @@ import fSalao from "../assets/fotos/salao.jpg";
       animation: none !important;
       opacity: 1;
     }
-    .b-estado .e2,
-    .b-estado .e3 {
+    .b-estado .e1,
+    .b-estado .e2 {
       display: none;
+    }
+    .b-estado .e3 {
+      opacity: 1;
     }
   }
 </style>

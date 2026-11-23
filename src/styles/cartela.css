@@ -18,7 +18,7 @@ body.cartela {
   --tinta-2: #56565c;
   --tinta-3: #6b6b72;
   --laranja: #ff5a24;
-  --laranja-hover: #ff7240;
+  --laranja-hover: #e84e1a;
   --amora: #d94515;
   --nude: #ffd3b8;
   --lavanda: #ffb48f;
@@ -118,7 +118,7 @@ body.cartela h3 {
 
 .c-btn-laranja {
   background: var(--laranja);
-  color: var(--tinta);
+  color: #fff;
   box-shadow: 0 1px 0 rgb(255 255 255 / 0.35) inset, 0 10px 24px -12px rgb(255 90 36 / 0.9);
 }
 .c-btn-laranja:hover {
@@ -176,6 +176,11 @@ body.cartela h3 {
   letter-spacing: -0.02em;
   color: var(--tinta);
   text-decoration: none;
+}
+.c-logo {
+  display: block;
+  height: 2rem;
+  width: auto;
 }
 .c-nav-links {
   display: none;
