@@ -15,15 +15,19 @@ const TEXTOS: Record<string, { titulo: string; texto: string; menu?: string }> =
   semana: { titulo: "Semana", texto: "Quanto de cada dia já está ocupado e quanto ainda vai entrar na semana.", menu: "Semana" },
   whatsapp: { titulo: "Secretária no WhatsApp", texto: "A IA atende sozinha. Quando precisa de você, a conversa cai aqui com o motivo, e você responde quando puder.", menu: "Secretária no WhatsApp" },
   chat: { titulo: "Conversa", texto: "Você lê tudo o que a IA já falou, responde por ali mesmo e devolve a conversa pra ela com um toque." },
-  clientes: { titulo: "Clientes", texto: "Quem está na hora de voltar e quem faz aniversário, cada uma com o botão de chamar no WhatsApp.", menu: "Clientes" },
-  ficha: { titulo: "Ficha da cliente", texto: "Quanto ela já gastou, de quanto em quanto tempo volta, o que costuma fazer e o próximo passo sugerido.", menu: "Ficha da cliente" },
+  clientes: { titulo: "Clientes", texto: "Quem está na hora de voltar e quem faz aniversário, cada um com o botão de chamar no WhatsApp.", menu: "Clientes" },
+  ficha: { titulo: "Ficha do cliente", texto: "Quanto já gastou, de quanto em quanto tempo volta, o que costuma fazer e o próximo passo sugerido.", menu: "Ficha do cliente" },
   caixa: { titulo: "Caixa", texto: "As entradas do dia separadas por Pix, cartão e dinheiro. O que é pago no atendimento já cai aqui.", menu: "Caixa" },
   comissoes: { titulo: "Comissões", texto: "Cada atendimento pago já calcula a comissão de cada profissional. Você só registra o acerto.", menu: "Comissões" },
   mais: { titulo: "Mais", texto: "Tudo o que configura o salão num lugar só: horários, serviços, equipe, clube de assinatura e WhatsApp." },
-  vitrine: { titulo: "Vitrine", texto: "A página do seu salão pra bio do Instagram, com serviços, fotos e o botão de agendar.", menu: "Vitrine" },
+  vitrine: { titulo: "Vitrine", texto: "O agendamento online: a página do seu negócio pra bio do Instagram, com serviços, fotos e os horários livres. Seu cliente marca sozinho.", menu: "Vitrine" },
 };
 const telas = tour.telas.filter((t) => img(t.id) && TEXTOS[t.id]);
-const menu = telas.filter((t) => TEXTOS[t.id].menu);
+// ordem dos botões: agenda, IA e agendamento online primeiro; depois clientes e dinheiro
+const ORDEM = ["meudia", "semana", "whatsapp", "vitrine", "clientes", "ficha", "caixa", "comissoes"];
+const menu = telas
+  .filter((t) => TEXTOS[t.id].menu)
+  .sort((a, b) => (ORDEM.indexOf(a.id) + 99) % 99 - (ORDEM.indexOf(b.id) + 99) % 99);
 const rotuloDe = (id: string) => TEXTOS[id]?.titulo ?? id;
 ---
 <section id="tour" class="c-sec tour c-mesh" style="--m1x:88%;--m1y:40%;--m2x:8%;--m2y:95%" aria-labelledby="tour-titulo">

@@ -44,7 +44,7 @@ const FAIXAS = [
         </div>
       </div>
       <div class="calc-linha">
-        <span id="calc-unid-rotulo">Unidades <small>(a 1ª não paga)</small></span>
+        <span id="calc-unid-rotulo">Unidades <small>(1ª inclusa, R$ 59,90 cada extra)</small></span>
         <div class="calc-stepper" role="group" aria-labelledby="calc-unid-rotulo">
           <button type="button" data-passo="units" data-delta="-1" aria-label="Menos uma unidade">−</button>
           <output data-units aria-live="polite">1</output>
@@ -254,8 +254,8 @@ const FAIXAS = [
       const anualTotal = mensal * 12 * 0.92;
       $("[data-valor]").textContent = fmt(estado.anual ? anualTotal / 12 : mensal);
       $("[data-nota]").textContent = estado.anual
-        ? `R$ ${fmt(anualTotal)} cobrados uma vez por ano.`
-        : "Cobrado todo mês.";
+        ? `R$ ${fmt(anualTotal)} cobrados uma vez por ano. Você economiza R$ ${fmt(mensal * 12 - anualTotal)}.`
+        : `Cobrado todo mês. No anual, sai R$ ${fmt(mensal * 0.92)} por mês.`;
       $("[data-profs]").textContent = String(estado.profs);
       $("[data-units]").textContent = String(estado.units);
       raiz.querySelectorAll<HTMLButtonElement>("[data-passo]").forEach((b) => {

@@ -59,15 +59,15 @@ const servicos = [
   { foto: fPes, nome: "Spa dos pés", tempo: "50min", preco: "R$ 80" },
 ];
 
-const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de agendamento", "Caixa e comissão", "Clube de assinatura", "Quem chamar hoje", "App da equipe"];
+const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de agendamento", "Fila de espera", "Caixa e comissão", "Produtos e estoque", "Clube de assinatura", "Histórico do cliente", "Quem chamar hoje", "App da equipe", "Avaliação do atendimento"];
 ---
 <section class="c-sec junto c-pontos" aria-labelledby="junto-titulo">
   <div class="c-wrap">
     <div class="junto-topo">
       <h2 id="junto-titulo" class="c-h2" data-revela>O resto vem junto, no mesmo preço.</h2>
       <p class="c-lead" data-sobe>
-        A IA no WhatsApp não é extra pago à parte. Ela e tudo isto estão em todo plano: oito
-        ferramentas que o salão usaria separadas, numa assinatura só.
+        A IA no WhatsApp não é extra pago à parte. Ela e tudo isto estão em todo plano: o que o
+        seu negócio usaria em vários apps separados, numa assinatura só.
       </p>
     </div>
 
@@ -76,7 +76,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-agenda" data-sobe style="--d:0">
         <span class="b-tag" style="--tom:var(--laranja)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.agenda} /></svg>Agenda</span>
         <h3>A agenda de cada profissional</h3>
-        <p>Cada uma com os próprios horários, folgas e o tempo de cada serviço. Você vê todas numa tela.</p>
+        <p>Cada profissional com os próprios horários, folgas e o tempo de cada serviço. Você vê a equipe toda numa tela.</p>
         <div class="b-mini b-dia">
           <div class="b-dia-topo">
             <b>Hoje, qua 25</b>
@@ -115,7 +115,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-link" data-sobe style="--d:1">
         <span class="b-tag" style="--tom:#2563eb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.link} /></svg>Vitrine</span>
         <h3>Seu link de agendamento</h3>
-        <p>Fotos, serviços com preço e os horários livres. A cliente marca sozinha pela bio do Instagram.</p>
+        <p>Fotos, serviços com preço e os horários livres. Seu cliente marca sozinho pela bio do Instagram.</p>
         <div class="b-mini b-vitrine">
           <div class="b-vt-capa">
             <Image src={fSalao} alt="" widths={[480, 720]} sizes="(min-width: 1080px) 22vw, 90vw" loading="lazy" />
@@ -155,7 +155,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-lembrete" data-sobe style="--d:2">
         <span class="b-tag" style="--tom:#1da851"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.wpp} /></svg>WhatsApp</span>
         <h3>Lembrete na véspera</h3>
-        <p>A cliente recebe o link do horário pra confirmar ou remarcar, sem você mandar nada.</p>
+        <p>Cada cliente recebe o link do horário pra confirmar ou remarcar, sem você mandar nada.</p>
         <div class="b-mini b-conversa">
           <div class="b-wpp">
             <p>Oi, Ana! Amanhã às 14h tem <b>pé e mão</b> com a Bruna. Confirma ou remarca por aqui:</p>
@@ -187,7 +187,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-caixa" data-sobe style="--d:0">
         <span class="b-tag" style="--tom:#1a9f55"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.caixa} /></svg>Financeiro</span>
         <h3>Caixa e comissão</h3>
-        <p>Recebe em Pix ou cartão e a comissão de cada uma já sai separada.</p>
+        <p>Recebe em Pix ou cartão e a comissão de cada profissional já sai separada.</p>
         <div class="b-mini">
           <p class="b-pix"><span><span class="b-ok">✓</span> Pix recebido</span><b>R$ 120,00</b></p>
           <div class="b-divide"><i class="d1"></i><i class="d2"></i></div>
@@ -199,7 +199,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-chamar" data-sobe style="--d:1">
         <span class="b-tag" style="--tom:#7c3aed"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.clientes} /></svg>Clientes</span>
         <h3>Quem chamar hoje</h3>
-        <p>Quem sumiu, faz aniversário ou está na hora da manutenção, pronta pra você mandar mensagem.</p>
+        <p>Quem sumiu, faz aniversário ou está na hora de voltar, numa lista pronta pra você mandar mensagem.</p>
         <div class="b-mini">
           {[
             ["Marina S.", "38 dias sem vir", "Sumida"],
@@ -220,7 +220,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-clube" data-sobe style="--d:2">
         <span class="b-tag" style="--tom:#d97706"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.clube} /></svg>Clube</span>
         <h3>Clube de assinatura</h3>
-        <p>A cliente paga por mês e você sabe quanto entra antes do mês começar.</p>
+        <p>O cliente paga por mês e você sabe quanto entra antes do mês começar.</p>
         <div class="b-mini b-cartao">
           <small>Clube Studio Camila</small>
           <strong>Mãos sempre feitas</strong>
@@ -233,7 +233,7 @@ const inclusos = ["IA no WhatsApp", "Agenda da equipe", "Lembretes", "Link de ag
       <li class="b b-equipe" data-sobe style="--d:0">
         <span class="b-tag" style="--tom:var(--tinta)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES.equipe} /></svg>Equipe</span>
         <h3>A equipe no celular</h3>
-        <p>Cada uma vê a própria agenda e quanto já fez no mês, sem te perguntar.</p>
+        <p>Cada profissional vê a própria agenda e quanto já fez no mês, sem te perguntar.</p>
         <div class="b-mini b-meu">
           <Image src={fSalao} alt="" widths={[120]} sizes="56px" class="b-meu-foto" style="object-position:68% 22%" loading="lazy" />
           <p><small>Lívia, este mês</small><b data-conta="1860">R$ 1.860</b><small>em comissão · 42 atendimentos</small></p>

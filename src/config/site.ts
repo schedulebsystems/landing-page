@@ -23,7 +23,7 @@ export const SITE = {
   defaultTitle: "Skedoole | Agenda com IA no WhatsApp pra Barbearia e Salão",
   description:
     "Agenda online, lembrete automático e uma IA que atende e agenda pelo WhatsApp — sozinha, 24h, inclusa no plano. Menos no-show, mais horário ocupado, sem planilha. Teste grátis por 14 dias.",
-  ogImage: "/og.svg",
+  ogImage: "/og.png",
   /**
    * TODO: placeholder até a 4Asset/Skedoole informar o CNPJ real.
    * Não inventar um número — substituir antes de publicar em produção.

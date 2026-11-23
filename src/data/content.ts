@@ -269,6 +269,30 @@ export const FAQS: Faq[] = [
     a: "R$ 59,90/mês para o primeiro profissional e R$ 39,90 por profissional a mais, com desconto por volume a partir do 6º. Tudo incluso: agenda, lembretes e a IA no WhatsApp — sem add-on e sem taxa extra por IA. Você testa 14 dias grátis, sem cartão, já com a IA no WhatsApp atendendo.",
   },
   {
+    q: "Preciso de um número de WhatsApp só pra isso?",
+    a: "Não. Você conecta o WhatsApp da sua loja lendo um QR code, como no WhatsApp Web, e continua usando o celular normalmente. A IA responde nesse mesmo número.",
+  },
+  {
+    q: "A IA pode marcar errado?",
+    a: "Ela só oferece horários que estão livres na sua agenda, confirma com o cliente antes de cancelar ou remarcar e passa a conversa pra você quando não tem certeza. Você lê tudo o que ela falou e pode pausar e assumir a conversa quando quiser.",
+  },
+  {
+    q: "Ainda posso agendar do meu jeito?",
+    a: "Pode. Você e a equipe marcam pelo app, como sempre. A IA e o seu link de agendamento só oferecem os horários que continuam livres.",
+  },
+  {
+    q: "Funciona com mais de uma unidade?",
+    a: "Sim. Cada unidade tem a própria agenda e equipe, e você acompanha todas na mesma conta. A primeira unidade está inclusa e cada unidade a mais custa R$ 59,90 por mês.",
+  },
+  {
+    q: "Posso cancelar quando quiser?",
+    a: "Pode. Não tem fidelidade nem multa: você cancela pelo próprio app, e o acesso continua até o fim do período que já foi pago.",
+  },
+  {
+    q: "O que acontece quando acaba o teste grátis?",
+    a: "Nada é cobrado sozinho, porque o teste não pede cartão. A IA para de responder e, pra continuar marcando, você escolhe o plano. Sua agenda, seus clientes e seus serviços continuam lá.",
+  },
+  {
     q: "Meus dados e os dos meus clientes ficam seguros?",
     a: "Seguimos a LGPD. Os dados são seus: não vendemos lista, não usamos seus clientes em campanha e você exporta tudo quando quiser.",
   },
