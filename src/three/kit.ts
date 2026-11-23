@@ -8,13 +8,16 @@ import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.j
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 export const COR = {
-  porcelana: 0xece7ef,
-  louca: 0xf8f6fa,
-  tinta: 0x24142e,
+  porcelana: 0xf3f2ef,
+  louca: 0xfafaf8,
+  tinta: 0x131316,
   laranja: 0xff5a24,
-  amora: 0x7a1240,
-  nude: 0xe4ae98,
-  lavanda: 0xa99af0,
+  amora: 0xd94515,
+  nude: 0xffd3b8,
+  lavanda: 0xffb48f,
+  // tons de status do app (info/success em versão suave) para variar as peças
+  azul: 0x9fbcff,
+  verde: 0x9bdcb6,
 } as const;
 
 /** Cores das peças laqueadas (horários marcados). */
@@ -42,7 +45,7 @@ export function louca(color: number = COR.louca) {
 }
 
 export function cromo() {
-  return new THREE.MeshPhysicalMaterial({ color: 0xd9d6de, roughness: 0.18, metalness: 1 });
+  return new THREE.MeshPhysicalMaterial({ color: 0xdcdbd6, roughness: 0.18, metalness: 1 });
 }
 
 /**
@@ -111,13 +114,13 @@ export const HORAS = [9, 10, 11, 13, 14, 15];
 export const SERVICOS = [
   { nome: "Pé e mão", cor: COR.amora },
   { nome: "Corte", cor: COR.tinta },
-  { nome: "Lash lift", cor: COR.lavanda },
+  { nome: "Lash lift", cor: COR.azul },
   { nome: "Sobrancelha", cor: COR.nude },
-  { nome: "Spa dos pés", cor: COR.nude },
+  { nome: "Spa dos pés", cor: COR.verde },
   { nome: "Escova", cor: COR.amora },
   { nome: "Barba", cor: COR.tinta },
-  { nome: "Alongamento", cor: COR.lavanda },
-  { nome: "Podologia", cor: COR.nude },
+  { nome: "Alongamento", cor: COR.azul },
+  { nome: "Podologia", cor: COR.verde },
   { nome: "Esmaltação", cor: COR.amora },
 ] as const;
 export const CLIENTES = [
@@ -145,7 +148,7 @@ const PASSO_Z = 0.98;
 const COL_HORA = 0.95;
 const TILE = { w: 1.14, h: 0.24, d: 0.8, r: 0.085 };
 
-const FONTE = "'Hanken Grotesk Variable', system-ui, sans-serif";
+const FONTE = "'Fustat', system-ui, sans-serif";
 
 function canvasTex(c: HTMLCanvasElement) {
   const tex = new THREE.CanvasTexture(c);
@@ -221,7 +224,7 @@ export function agenda(opts: { prefill?: number[] } = {}) {
   const ALT = 0.42;
 
   // ---- bandeja: base com bisel + borda elevada (lábio)
-  const base = new THREE.Mesh(extrudar(formaArredondada(w, d, 0.42), ALT, 0.05), louca(0xeee9f2));
+  const base = new THREE.Mesh(extrudar(formaArredondada(w, d, 0.42), ALT, 0.05), louca(0xecebe7));
   base.castShadow = true;
   base.receiveShadow = true;
   group.add(base);
@@ -229,7 +232,7 @@ export function agenda(opts: { prefill?: number[] } = {}) {
   const borda = 0.16;
   const labio = formaArredondada(w, d, 0.42);
   labio.holes.push(formaArredondada(w - borda * 2, d - borda * 2, 0.3) as unknown as THREE.Path);
-  const lip = new THREE.Mesh(extrudar(labio, 0.11, 0.035), louca(0xfdfcfe));
+  const lip = new THREE.Mesh(extrudar(labio, 0.11, 0.035), louca(0xfdfdfc));
   lip.position.y = ALT - 0.01;
   lip.castShadow = true;
   lip.receiveShadow = true;
@@ -253,7 +256,7 @@ export function agenda(opts: { prefill?: number[] } = {}) {
   const xf = px(x0 + (cols - 0.5) * PASSO_X - 0.02);
   for (let r = 0; r <= rows; r++) {
     const y = pz(z0 + (r - 0.5) * PASSO_Z);
-    pg.fillStyle = "rgba(36,20,46,0.10)";
+    pg.fillStyle = "rgba(19,19,22,0.10)";
     pg.fillRect(xi, y - 1.5, xf - xi, 2.5);
     pg.fillStyle = "rgba(255,255,255,0.8)";
     pg.fillRect(xi, y + 1, xf - xi, 2);
@@ -261,11 +264,11 @@ export function agenda(opts: { prefill?: number[] } = {}) {
   // colunas: fio vertical bem leve
   for (let c = 1; c < cols; c++) {
     const x = px(x0 + (c - 0.5) * PASSO_X);
-    pg.fillStyle = "rgba(36,20,46,0.06)";
+    pg.fillStyle = "rgba(19,19,22,0.06)";
     pg.fillRect(x - 1, pz(z0 - PASSO_Z / 2), 2.5, pz(z0 + (rows - 0.5) * PASSO_Z) - pz(z0 - PASSO_Z / 2));
   }
   // horas
-  pg.fillStyle = "#6d607a";
+  pg.fillStyle = "#6b6b72";
   pg.textAlign = "right";
   pg.textBaseline = "middle";
   pg.font = `600 ${Math.round(0.27 * k)}px ${FONTE}`;
@@ -301,11 +304,11 @@ export function agenda(opts: { prefill?: number[] } = {}) {
     const largNum = g.measureText(String(DATAS[col])).width;
     let x = 256 - (largDia + largNum) / 2;
     g.font = `500 88px ${FONTE}`;
-    g.fillStyle = hoje ? "rgba(248,246,250,0.72)" : "#6d607a";
+    g.fillStyle = hoje ? "rgba(250,250,248,0.72)" : "#6b6b72";
     g.fillText(dia, x, 168);
     x += largDia;
     g.font = `750 120px ${FONTE}`;
-    g.fillStyle = hoje ? "#f8f6fa" : "#24142e";
+    g.fillStyle = hoje ? "#fafaf8" : "#131316";
     g.fillText(String(DATAS[col]), x, 170);
     const label = new THREE.Mesh(
       new THREE.PlaneGeometry(1.0, 0.5),
@@ -343,10 +346,10 @@ export function agenda(opts: { prefill?: number[] } = {}) {
     const sv = SERVICOS[(col * 7 + row * 3) % SERVICOS.length];
     const cliente = CLIENTES[(i * 11) % CLIENTES.length];
     info.push({ servico: sv.nome, cliente, cor: sv.cor });
-    const claro = sv.cor === COR.nude || sv.cor === COR.lavanda;
+    const claro = !([COR.tinta, COR.amora, COR.laranja] as number[]).includes(sv.cor);
     const cx = (i % AC) * CW;
     const cy = Math.floor(i / AC) * CH;
-    const tinta = claro ? "rgba(36,20,46," : "rgba(248,246,250,";
+    const tinta = claro ? "rgba(19,19,22," : "rgba(250,250,248,";
     // fio de destaque à esquerda
     ag.fillStyle = tinta + "0.55)";
     rr(ag, cx + 18, cy + 26, 9, CH - 52, 5);
@@ -368,7 +371,7 @@ export function agenda(opts: { prefill?: number[] } = {}) {
   // ---- encaixes e peças
   const wellGeo = new RoundedBoxGeometry(TILE.w + 0.04, 0.05, TILE.d + 0.04, 4, 0.025);
   const tileGeo = new RoundedBoxGeometry(TILE.w, TILE.h, TILE.d, 6, TILE.r);
-  const wellMat = louca(0xfbfafc);
+  const wellMat = louca(0xfbfbf9);
   const lacaPorCor = new Map<number, THREE.Material>();
   const lacaDe = (c: number) => {
     if (!lacaPorCor.has(c)) lacaPorCor.set(c, laca(c));
@@ -427,7 +430,7 @@ export function agenda(opts: { prefill?: number[] } = {}) {
   // ---- sombra de contato (o brilho colorido de fundo fica no CSS do hero, que não tem borda de canvas)
   const contato = new THREE.Mesh(
     new THREE.PlaneGeometry(w * 1.25, d * 1.3),
-    new THREE.MeshBasicMaterial({ map: halo("rgba(36,20,46,0.38)"), transparent: true, depthWrite: false, toneMapped: false })
+    new THREE.MeshBasicMaterial({ map: halo("rgba(19,19,22,0.38)"), transparent: true, depthWrite: false, toneMapped: false })
   );
   contato.rotation.x = -Math.PI / 2;
   contato.position.y = 0.01;
@@ -535,7 +538,7 @@ export function toalhas(cores: [number, number] = [COR.nude, COR.lavanda]) {
     const cor = new THREE.Color(cores[i === 2 ? 1 : 0]);
     const tecido = new THREE.MeshPhysicalMaterial({ color: cor, roughness: 0.95, sheen: 1, sheenRoughness: 0.6, sheenColor: 0xffffff });
     const ponta = new THREE.MeshPhysicalMaterial({
-      map: espiralTexture("#" + cor.getHexString(), "rgba(36,20,46,0.28)"),
+      map: espiralTexture("#" + cor.getHexString(), "rgba(19,19,22,0.28)"),
       roughness: 0.95, sheen: 1, sheenRoughness: 0.6, sheenColor: 0xffffff,
     });
     const m = new THREE.Mesh(geo, [tecido, ponta, ponta]);

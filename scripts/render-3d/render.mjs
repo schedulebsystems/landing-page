@@ -19,8 +19,9 @@ const out = await build({
   bundle: true, format: "esm", write: false, target: "es2022",
 });
 const js = out.outputFiles[0].text;
-const fontCss = resolve(root, "node_modules/@fontsource-variable/hanken-grotesk/index.css");
-const fontDir = resolve(root, "node_modules/@fontsource-variable/hanken-grotesk/files");
+// Mesma fonte do app (Fustat), servida do próprio repositório.
+const fontFile = resolve(root, "src/assets/fontes/Fustat-latin.woff2");
+const fontCss = `@font-face{font-family:"Fustat";font-weight:300 800;src:url(/files/fustat.woff2) format("woff2")}`;
 
 const server = createServer((req, res) => {
   if (req.url === "/") {
@@ -28,8 +29,8 @@ const server = createServer((req, res) => {
     return res.end(`<!doctype html><link rel="stylesheet" href="/font.css"><body style="margin:0"><script type="module" src="/app.js"></script>`);
   }
   if (req.url === "/app.js") { res.setHeader("content-type", "text/javascript"); return res.end(js); }
-  if (req.url === "/font.css") { res.setHeader("content-type", "text/css"); return res.end(readFileSync(fontCss)); }
-  if (req.url.startsWith("/files/")) { res.setHeader("content-type", "font/woff2"); return res.end(readFileSync(resolve(fontDir, req.url.slice(7)))); }
+  if (req.url === "/font.css") { res.setHeader("content-type", "text/css"); return res.end(fontCss); }
+  if (req.url.startsWith("/files/")) { res.setHeader("content-type", "font/woff2"); return res.end(readFileSync(fontFile)); }
   res.statusCode = 404; res.end();
 }).listen(0, "127.0.0.1");
 await new Promise((r) => server.once("listening", r));

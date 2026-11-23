@@ -3,7 +3,9 @@
  * "Em dois palitos tá rodando": os três passos reais do cadastro (conta → serviços → WhatsApp)
  * tocando rápido quando a seção aparece. Passa a sensação do app: pequeno, direto, sem técnico.
  */
+import { Image } from "astro:assets";
 import { SITE } from "@config/site";
+import fDona from "../assets/fotos/dona-celular.jpg";
 
 const servicos = [
   { n: "Corte", p: "45" },
@@ -15,11 +17,17 @@ const servicos = [
 <section class="c-sec rap c-mesh" aria-labelledby="rap-titulo" style="--m1x:90%;--m1y:30%;--m2x:5%;--m2y:70%">
   <div class="c-wrap">
     <div class="rap-topo">
-      <h2 id="rap-titulo" class="c-h2" data-revela>Em dois palitos tá rodando.</h2>
-      <p class="c-lead" data-sobe>
-        Não instala nada, não chama técnico, não assina contrato. Você faz pelo celular, entre uma
-        cliente e outra, e a IA já começa a responder.
-      </p>
+      <div class="rap-texto">
+        <h2 id="rap-titulo" class="c-h2" data-revela>Em dois palitos tá rodando.</h2>
+        <p class="c-lead" data-sobe>
+          Não instala nada, não chama técnico, não assina contrato. Você faz pelo celular, entre uma
+          cliente e outra, e a IA já começa a responder.
+        </p>
+      </div>
+      <figure class="rap-foto c-abre" data-sobe style="--d:1">
+        <Image src={fDona} alt="Profissional de salão mexendo no celular entre um atendimento e outro" widths={[480, 720, 960]} sizes="(min-width: 860px) 40vw, 100vw" loading="lazy" />
+        <figcaption class="rap-selo"><span class="rap-ponto rap-ponto-vivo"></span> WhatsApp conectado</figcaption>
+      </figure>
     </div>
 
     <ol class="rap-passos" data-rap>
@@ -76,7 +84,41 @@ const servicos = [
   }
   .rap-topo {
     display: grid;
+    gap: 2rem;
+  }
+  .rap-texto {
+    display: grid;
     gap: 1.5rem;
+    align-content: end;
+  }
+  .rap-foto {
+    position: relative;
+    margin: 0;
+  }
+  .rap-foto img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card);
+  }
+  .rap-selo {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: 0 6px 18px -8px rgb(19 19 22 / 0.35);
   }
   .rap-passos {
     list-style: none;
@@ -90,12 +132,12 @@ const servicos = [
   .rap-passo {
     position: relative;
     padding: 1.4rem 1.4rem 1.5rem;
-    border-radius: 26px;
-    background: rgb(248 246 250 / 0.72);
+    border-radius: var(--raio-card);
+    background: rgb(250 250 248 / 0.72);
     backdrop-filter: blur(16px) saturate(1.3);
     -webkit-backdrop-filter: blur(16px) saturate(1.3);
     border: 1px solid rgb(255 255 255 / 0.8);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 24px 50px -30px rgb(36 20 46 / 0.45);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 24px 50px -30px rgb(19 19 22 / 0.45);
   }
   .rap-passo h3 {
     font-size: var(--t-h3);
@@ -119,7 +161,7 @@ const servicos = [
   .rap-mini {
     margin-top: 1.1rem;
     padding: 0.9rem;
-    border-radius: 18px;
+    border-radius: var(--raio-xl);
     background: #fff;
     box-shadow: 0 0 0 1px var(--linha);
     min-height: 9.5rem;
@@ -132,7 +174,7 @@ const servicos = [
     display: grid;
     gap: 0.25rem;
     padding: 0.55rem 0.75rem;
-    border-radius: 12px;
+    border-radius: var(--raio-lg);
     box-shadow: 0 0 0 1.5px var(--tinta);
   }
   .rap-campo small {
@@ -162,7 +204,7 @@ const servicos = [
     justify-self: stretch;
     text-align: center;
     padding: 0.6rem;
-    border-radius: 12px;
+    border-radius: var(--raio-lg);
     background: var(--laranja);
     color: var(--tinta);
     font-weight: 650;
@@ -187,7 +229,7 @@ const servicos = [
     display: flex;
     justify-content: space-between;
     padding: 0.4rem 0.7rem;
-    border-radius: 10px;
+    border-radius: var(--raio-lg);
     background: var(--porcelana);
     opacity: 0;
     transform: translateY(8px) scale(0.97);
@@ -212,7 +254,7 @@ const servicos = [
     width: 6.4rem;
     aspect-ratio: 1;
     padding: 6px;
-    border-radius: 12px;
+    border-radius: var(--raio-lg);
     box-shadow: 0 0 0 1px var(--linha);
   }
   .rap-qr i {
@@ -232,7 +274,7 @@ const servicos = [
     inset: 0;
     display: grid;
     place-items: center;
-    border-radius: 12px;
+    border-radius: var(--raio-lg);
     background: var(--ok);
     color: #fff;
     opacity: 0;
@@ -254,18 +296,18 @@ const servicos = [
     width: 0.55rem;
     height: 0.55rem;
     border-radius: 50%;
-    background: #c9bfd2;
+    background: #cfcec9;
     transition: background-color 0.2s ease;
   }
   [data-rap].is-passo3 .rap-status .rap-ponto,
   .rap-ponto-vivo {
-    background: #2fbf71;
-    box-shadow: 0 0 0 0 rgb(47 191 113 / 0.6);
+    background: #1da851;
+    box-shadow: 0 0 0 0 rgb(29 168 81 / 0.6);
     animation: rap-pulsa 1.6s ease-out infinite;
   }
   @keyframes rap-pulsa {
     to {
-      box-shadow: 0 0 0 10px rgb(47 191 113 / 0);
+      box-shadow: 0 0 0 10px rgb(29 168 81 / 0);
     }
   }
   .rap-fim {
@@ -289,6 +331,9 @@ const servicos = [
       align-items: end;
       gap: 3rem;
     }
+    .rap-foto img {
+      aspect-ratio: 4 / 3;
+    }
     .rap-passos {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1.25rem;
@@ -302,7 +347,7 @@ const servicos = [
       top: 2.4rem;
       height: 3px;
       border-radius: 3px;
-      background: linear-gradient(90deg, var(--ok) var(--prog, 0%), rgb(36 20 46 / 0.1) var(--prog, 0%));
+      background: linear-gradient(90deg, var(--ok) var(--prog, 0%), rgb(19 19 22 / 0.1) var(--prog, 0%));
       z-index: 0;
       transition: --prog 0.6s ease;
     }

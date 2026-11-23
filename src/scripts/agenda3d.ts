@@ -42,9 +42,9 @@ function texturaOnda() {
   c.width = 256;
   c.height = 192;
   const g = c.getContext("2d")!;
-  g.shadowColor = "rgba(169,154,240,1)";
+  g.shadowColor = "rgba(255,180,143,1)";
   g.shadowBlur = 18;
-  g.strokeStyle = "rgba(122,18,64,0.9)";
+  g.strokeStyle = "rgba(217,69,21,0.9)";
   g.lineWidth = 7;
   g.beginPath();
   g.roundRect(26, 26, 204, 140, 24);
@@ -68,7 +68,7 @@ function texturaPonto() {
 }
 
 export async function montarAgenda({ container, reduzido, onMarcar, onPronto }: Opcoes) {
-  await document.fonts.load("600 84px 'Hanken Grotesk Variable'").catch(() => undefined);
+  await document.fonts.load("600 84px 'Fustat'").catch(() => undefined);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

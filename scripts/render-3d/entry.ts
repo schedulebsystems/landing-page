@@ -35,7 +35,7 @@ const CENAS: Record<string, () => Cena> = {
 };
 
 (window as any).__render = async (nome: string) => {
-  await document.fonts.load("600 64px 'Hanken Grotesk Variable'");
+  await document.fonts.load("600 64px 'Fustat'");
   const cena = CENAS[nome]();
   const [w, h] = cena.size;
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
