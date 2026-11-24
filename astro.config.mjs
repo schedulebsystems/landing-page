@@ -11,6 +11,9 @@ const SITE = process.env.SITE_URL ?? "https://skedoole.com.br";
 export default defineConfig({
   site: SITE,
   output: "static",
+  redirects: {
+    "/v2": "/",
+  },
   trailingSlash: "ignore",
   build: {
     inlineStylesheets: "auto",
